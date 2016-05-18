@@ -1,6 +1,6 @@
 ---
 - name: Install and configure OpenLDAP
-  hosts: all
+  hosts: ldap-servers
   become: yes
   gather_facts: yes
   roles:
