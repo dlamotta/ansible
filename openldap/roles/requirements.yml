@@ -1,7 +1,4 @@
 ---
-- src: https://github.com/wtcross/ansible-example-role-base.git
-  name: base
-  version: master
 - src: https://github.com/dajobe/ansible_role_openldap_server.git
-  name: openldap_server
+  name: bennojoy.openldap_server
   version: master
