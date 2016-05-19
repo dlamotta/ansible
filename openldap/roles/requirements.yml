@@ -1,4 +1,0 @@
----
-- src: https://github.com/dajobe/ansible_role_openldap_server.git
-  name: bennojoy.openldap_server
-  version: master
