@@ -4,5 +4,4 @@
   become: yes
   gather_facts: yes
   roles:
-    - base
-    - openldap_server
+    - bennojoy.openldap_server
