@@ -6,7 +6,7 @@
     hostname: fqdn
   
   tasks:
-  - name: Applies the hostname to a single host called 'self'
+  - name: Applies the hostname to a single host in the self group
     hostname:
       name: "{{hostname}}"
 ...
