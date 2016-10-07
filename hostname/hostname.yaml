@@ -2,7 +2,8 @@
 - name: Sets the hostname 
   hosts: self
   remote_user: root
-  vars: hostname
+  vars: 
+    hostname: fqdn
   
   tasks:
   - name: Applies the hostname to a single host called 'self'
