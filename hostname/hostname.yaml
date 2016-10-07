@@ -8,3 +8,4 @@
   - name: Applies the hostname to a single host called 'self'
     hostname:
       name: {{hostname}}
+...
