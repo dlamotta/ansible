@@ -1,0 +1,8 @@
+---
+- name: Perform a yum update on the system
+  hosts: all
+  remote_user: root
+  - task:
+    yum:
+      name: *
+...
