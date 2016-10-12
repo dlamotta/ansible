@@ -1,8 +1,12 @@
 ---
-- name: Perform a yum update on the system
+- name: Installs packages via yum. Use an asterisk (*) to perform a yum -y update
   hosts: all
   remote_user: root
-  - task:
+  vars: 
+    packages: *
+  
+  tasks:
+  - name: Install one or more packages
     yum:
-      name: *
+      name: "{{packages}}"
 ...
