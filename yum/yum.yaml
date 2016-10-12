@@ -3,7 +3,7 @@
   hosts: all
   remote_user: root
   vars: 
-    packages: *
+    packages: "*"
   
   tasks:
   - name: Install one or more packages
