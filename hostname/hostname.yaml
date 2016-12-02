@@ -1,7 +1,6 @@
 ---
 - name: Sets the hostname 
   hosts: all
-  remote_user: root
   vars: 
     hostname: fqdn
   
@@ -9,4 +8,5 @@
   - name: Applies the hostname to a single host in the self group
     hostname:
       name: "{{hostname}}"
+    register: host
 ...
