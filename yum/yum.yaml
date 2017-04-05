@@ -1,7 +1,8 @@
 ---
 - name: Installs packages via yum. Use an asterisk (*) to perform a yum -y update
   hosts: all
-  remote_user: root
+  remote_user: cloud-user
+  become: yes
   vars: 
     packages: "*"
   
