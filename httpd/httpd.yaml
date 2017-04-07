@@ -1,0 +1,14 @@
+---
+- name: Installs httpd and starts the service
+  hosts: all
+  remote_user: cloud-user
+  become: yes
+  
+  tasks:
+  - name: Install httpd
+    yum:
+      name: httpd
+  - name: Starts httpd service
+    service:
+      name: httpd
+      state: started
