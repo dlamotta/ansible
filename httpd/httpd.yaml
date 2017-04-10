@@ -5,6 +5,10 @@
   become: yes
   
   tasks:
+  - name: Let subscription manager catch-up
+    pause:
+      seconds: 10
+      
   - name: Install httpd
     yum:
       name: httpd
