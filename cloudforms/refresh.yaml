@@ -1,0 +1,16 @@
+---
+- name: Refresh the given provider
+  host: localhost
+  vars:
+    provider: 20000000000015
+  
+  tasks:
+  - name: Update provider
+    uri:
+      url: "https://10.9.61.208/api/providers/{{ provider }}"
+      method: POST
+      user: username
+      password: passwd
+      force_basic_auth: yes
+      body_format: json
+      body: { "action": "refresh" }
