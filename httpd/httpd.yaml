@@ -4,11 +4,7 @@
   remote_user: cloud-user
   become: yes
   
-  tasks:
-  - name: Let subscription manager catch-up
-    pause:
-      seconds: 10
-      
+  tasks:      
   - name: Install httpd
     yum:
       name: httpd
