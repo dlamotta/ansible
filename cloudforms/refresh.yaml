@@ -3,14 +3,17 @@
   host: localhost
   vars:
     provider: 20000000000015
+    user: username
+    passwd: password
   
   tasks:
   - name: Update provider
     uri:
       url: "https://10.9.61.208/api/providers/{{ provider }}"
+      validate_certs: False
       method: POST
-      user: username
-      password: passwd
+      user: "{{ username }}"
+      password: "{{ passwd }}"
       force_basic_auth: yes
       body_format: json
       body: { "action": "refresh" }
