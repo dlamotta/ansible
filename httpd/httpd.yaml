@@ -8,7 +8,7 @@
   - name: Install httpd
     yum:
       name: httpd
-      status: latest
+      state: latest
   - name: Starts httpd service
     service:
       name: httpd
