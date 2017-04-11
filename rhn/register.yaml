@@ -1,0 +1,14 @@
+---
+- name: subscription registration
+  hosts: all
+  vars:
+    username: user
+    passwd: passwd
+    pool: pool
+  tasks:
+    - name: register with red hat network
+      redhat_subscription:
+        state: present
+        username: "{{ username }}"
+        password: "{{ passwd }}"
+        pool: "{{ pool }}"
