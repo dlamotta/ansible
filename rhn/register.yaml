@@ -20,6 +20,18 @@
       delay: 5
       register: result
       until: result.rc == 0
+      async: 180
+      poll: 0
+      register: registration
+
+    - name: check on registration
+      async_status:
+        jid: "{{ item.ansible_job_id }}"
+      register: job
+      until: job.finished
+      retries: 30
+      with_items: "{{ registration.results }}"
+      
     - name: let subscription manager settle
       pause:
         seconds: 30
