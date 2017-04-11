@@ -3,9 +3,12 @@
   hosts: all
   remote_user: cloud-user
   become: yes
+  vars:
+    image1: <img src=http://i.memecaptain.com/gend_images/Ms44TQ.jpg></image>
+    image2: <img src=https://d30lzfgky0hu0p.cloudfront.net/images/issuers/BlueCross+BlueShield+of+South+Carolina.png></image>
   
   tasks:      
   - name: set default index.html
     copy:
-      content: "<center><br/><br/><img src=http://i.memecaptain.com/gend_images/Ms44TQ.jpg></image><br/><br/><img src=https://d30lzfgky0hu0p.cloudfront.net/images/issuers/BlueCross+BlueShield+of+South+Carolina.png></image></center>"
+      content: "<center><br/><br/>{{ image1 }}<br/><br/>{{ image2 }}</center>"
       dest: /var/www/html/index.html
