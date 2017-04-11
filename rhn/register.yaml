@@ -18,4 +18,4 @@
       ignore_errors: yes  
     - name: let subscription manager settle
       pause:
-        seconds: 15
+        seconds: 30
