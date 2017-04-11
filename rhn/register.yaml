@@ -6,6 +6,10 @@
     passwd: passwd
     pool: pool
   tasks:
+    - name: wait for sshd  
+      wait_for:
+        port: 22
+        delay: 5
     - name: register with red hat network
       redhat_subscription:
         state: present
