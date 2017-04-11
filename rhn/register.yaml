@@ -17,6 +17,7 @@
         username: "{{ username }}"
         password: "{{ passwd }}"
         pool: "{{ pool }}"
+        force_register: True
     - name: let subscription manager settle
       pause:
         seconds: 30
