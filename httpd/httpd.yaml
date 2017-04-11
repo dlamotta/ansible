@@ -5,7 +5,7 @@
   become: yes
   
   tasks:      
-  - name: Install httpd
+  - name: install httpd
     yum:
       name: httpd
       state: latest
@@ -15,7 +15,12 @@
     register: result
     until: result.rc == 0
       
-  - name: Starts httpd service
+  - name: start httpd service
     service:
       name: httpd
       state: started
+      
+  - name: set default index.html
+    copy:
+      content:"<center><br/><br/><img src=http://i.memecaptain.com/gend_images/Ms44TQ.jpg></image><br/><br/><img src=https://d30lzfgky0hu0p.cloudfront.net/images/issuers/BlueCross+BlueShield+of+South+Carolina.png></image></center>"
+      dest: /var/www/html/index.html
