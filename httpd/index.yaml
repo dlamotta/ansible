@@ -5,7 +5,7 @@
   become: yes
   vars:
     image1: <img src=http://i.memecaptain.com/gend_images/Ms44TQ.jpg></image>
-    image2: <img src=https://d30lzfgky0hu0p.cloudfront.net/images/issuers/BlueCross+BlueShield+of+South+Carolina.png></image>
+    image2: <img src=https://s-media-cache-ak0.pinimg.com/736x/02/48/fc/0248fc99eb40bdafb7d4df584bfb598e.jpg></image>
   
   tasks:      
   - name: set default index.html
