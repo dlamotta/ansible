@@ -12,6 +12,8 @@
     ignore_errors: yes
     retries: 3
     delay: 5      
+    register: result
+    until: result.rc == 0
       
   - name: Starts httpd service
     service:
