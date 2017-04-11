@@ -1,5 +1,5 @@
 ---
-- name: Installs httpd and starts the service
+- name: install httpd and start the service
   hosts: all
   remote_user: cloud-user
   become: yes
@@ -9,6 +9,18 @@
     yum:
       name: httpd
       state: latest
+    async: 180
+    poll: 0
+    register: installation
+
+  - name: check on installation
+    async_status:
+      jid: "{{ item.ansible_job_id }}"
+    register: job
+    until: job.finished
+    retries: 30
+    with_items: "{{ installation.results }}"
+      
   - name: Starts httpd service
     service:
       name: httpd
