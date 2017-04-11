@@ -9,6 +9,9 @@
     yum:
       name: httpd
       state: latest
+    ignore_errors: yes
+    retries: 3
+    delay: 5      
       
   - name: Starts httpd service
     service:
