@@ -51,6 +51,9 @@
         body_format: json
         body: { "action": "refresh" }
 
-    - name: let sshd settle
-      pause:
-        seconds: 30
+    - name: wait for sshd  
+      wait_for:
+        host: "{{ tenant }}{{ item }}"
+        port: 22
+        delay: 5
+      with_sequence: count={{ instances }}      
