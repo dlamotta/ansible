@@ -1,6 +1,7 @@
 ---
 - name: subscription registration
   hosts: all
+  gather_facts: no
   vars:
     username: user
     passwd: passwd
@@ -16,3 +17,6 @@
         username: "{{ username }}"
         password: "{{ passwd }}"
         pool: "{{ pool }}"
+    - name: let subscription manager settle
+      pause:
+        seconds: 30
