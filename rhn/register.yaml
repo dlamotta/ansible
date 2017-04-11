@@ -11,6 +11,7 @@
       wait_for:
         port: 22
         delay: 5
+        
     - name: register with red hat network
       shell: 
         subscription-manager register --username={{ username }} --password={{ passwd }} --force &&
