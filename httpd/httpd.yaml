@@ -22,5 +22,5 @@
       
   - name: set default index.html
     copy:
-      content:"<center><br/><br/><img src=http://i.memecaptain.com/gend_images/Ms44TQ.jpg></image><br/><br/><img src=https://d30lzfgky0hu0p.cloudfront.net/images/issuers/BlueCross+BlueShield+of+South+Carolina.png></image></center>"
+      content: "<center><br/><br/><img src=http://i.memecaptain.com/gend_images/Ms44TQ.jpg></image><br/><br/><img src=https://d30lzfgky0hu0p.cloudfront.net/images/issuers/BlueCross+BlueShield+of+South+Carolina.png></image></center>"
       dest: /var/www/html/index.html
