@@ -13,7 +13,7 @@
         delay: 5
     - name: register with red hat network
       shell: 
-        subscription-manager register --username={{ username }} --password={{ passwd }}
+        subscription-manager register --username={{ username }} --password={{ passwd }}\n
         subscription-manager attach --pool={{ pool }}
     - name: let subscription manager settle
       pause:
