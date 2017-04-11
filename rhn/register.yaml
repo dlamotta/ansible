@@ -15,6 +15,7 @@
       shell: 
         subscription-manager register --username={{ username }} --password={{ passwd }} --force &&
         subscription-manager attach --pool={{ pool }}
+      ignore_errors: yes  
     - name: let subscription manager settle
       pause:
         seconds: 15
