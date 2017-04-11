@@ -12,12 +12,9 @@
         port: 22
         delay: 5
     - name: register with red hat network
-      redhat_subscription:
-        state: present
-        username: "{{ username }}"
-        password: "{{ passwd }}"
-        pool: "{{ pool }}"
-        force_register: True
+      shell:|
+        subscription-manager register --username="{{ username }}" --password="{{ passwd }}"
+        subscription-manager attach --pool="{{ pool }}"
     - name: let subscription manager settle
       pause:
-        seconds: 30
+        seconds: 15
