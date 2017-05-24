@@ -1,7 +1,7 @@
 ---
 - name: Reboot Windows servers
-  hosts: Windows
-
+  hosts: all 
+  gather_facts: true
   tasks:
   - name: Reboot
     win_reboot:
