@@ -1,0 +1,12 @@
+---
+- name: Get PowerShell version
+  hosts: all 
+  gather_facts: true
+  
+  tasks:
+  - name: Version
+    win_shell: Get-Host | Select Version
+    register: psversion
+    
+  - debug:
+    var: psversion
