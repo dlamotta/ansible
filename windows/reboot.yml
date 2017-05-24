@@ -1,0 +1,7 @@
+---
+- name: Reboot Windows servers
+  hosts: Windows
+
+  tasks:
+  - name: Reboot
+    win_reboot:
