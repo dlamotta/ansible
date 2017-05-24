@@ -10,8 +10,8 @@
   tasks:
   - name: Provision
     ec2:
-      aws_access_key: "{{ accesskey }}"
-      aws_secret_key: "{{ secretkey }}"
+      aws_access_key: "{{ access_key }}"
+      aws_secret_key: "{{ secret_key }}"
       instance_type: t2.micro
       image: ami-0ea6af64
       wait: yes
