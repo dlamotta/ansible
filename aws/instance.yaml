@@ -15,6 +15,6 @@
       instance_type: t2.micro
       image: ami-0ea6af64
       wait: yes
-      count: {{ count }}
+      count: "{{ count }}"
       vpc_subnet_id: "{{ vpc }}"
       assign_public_ip: no
