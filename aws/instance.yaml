@@ -2,14 +2,16 @@
 - name: Provision instance in AWS EC2
   hosts: all
   vars:
-    key: keyname
+    access_key: accesskey
+    secret_key: secretkey
     count: 1
-    vpc: vpc-98a785fc
+    vpc: vpc
     
   tasks:
   - name: Provision
     ec2:
-      key_name: "{{ key }}"
+      aws_access_key: "{{ accesskey }}"
+      aws_secret_key: "{{ secretkey }}"
       instance_type: t2.micro
       image: ami-0ea6af64
       wait: yes
