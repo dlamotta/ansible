@@ -19,3 +19,4 @@
       count: "{{ count }}"
       vpc_subnet_id: "{{ vpc }}"
       assign_public_ip: no
+      region: us-east-1
