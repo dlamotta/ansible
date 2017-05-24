@@ -1,0 +1,18 @@
+---
+- name: Provision instance in AWS EC2
+  hosts: all
+  vars:
+    key: keyname
+    count: 1
+    vpc: vpc-98a785fc
+    
+  tasks:
+  - name: Provision
+    ec2:
+      key_name: "{{ key }}"
+      instance_type: t2.micro
+      image: ami-0ea6af64
+      wait: yes
+      count: {{ count }}
+      vpc_subnet_id: "{{ vpc }}"
+      assign_public_ip: no
