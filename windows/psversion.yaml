@@ -4,9 +4,10 @@
   gather_facts: true
   
   tasks:
-  - name: Version
+  - name: Get Version
     win_shell: Get-Host | Select Version
     register: psversion
     
-  - debug:
-    var: psversion
+  - name: Show Version
+    debug:
+      var: psversion
