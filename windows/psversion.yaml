@@ -10,4 +10,4 @@
     
   - name: Show Version
     debug:
-      var: psversion
+      var: psversion.stdout_lines
