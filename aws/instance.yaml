@@ -6,7 +6,7 @@
     access_key: accesskey
     secret_key: secretkey
     count: 1
-    vpc: vpc
+    subnet: subnet
     
   tasks:
   - name: Provision
@@ -17,6 +17,6 @@
       image: ami-0ea6af64
       wait: yes
       count: "{{ count }}"
-      vpc_subnet_id: "{{ vpc }}"
+      vpc_subnet_id: "{{ subnet }}"
       assign_public_ip: no
       region: us-east-1
