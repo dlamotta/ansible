@@ -1,6 +1,7 @@
 ---
 - name: Provision instance in AWS EC2
   hosts: localhost
+  connection: local
   gather_facts: False
   vars:
     access_key: accesskey
