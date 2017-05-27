@@ -3,21 +3,23 @@
   hosts: all
   gather_facts: true
   vars:
-    destination: 'C:\tmp'
+    source: files/ShowCalendar.psm1
+    destination: 'C:\Program Files\WindowsPowerShell\Modules\ShowCalendar.psm1'
+    module: Show-Calendar
   
   tasks:
   - name: Copy module to host
     win_copy: 
       force: yes
-      src: files/ShowCalendar.psm1
-      dest: "{{ destination }}/ShowCalendar.psm1"
+      src: "{{ source }}"
+      dest: "{{ destination }}"
   
   - name: Import module
-    win_shell: Import-Module "{{ destination }}/ShowCalendar.psm1"
+    win_shell: "Import-Module {{ destination }}" 
     
   - name: Test module
-    win_shell: Show-Calendar
-    register: cal
+    win_shell: "{{ module }}"
+    register: result
     
   - debug:
-      var: cal
+      var: result.stdout
