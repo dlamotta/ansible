@@ -3,7 +3,7 @@
   hosts: all
   gather_facts: true
   vars:
-    destination: '%SystemRoot%\users\Administration\Documents\WindowsPowerShell\Modules\'
+    destination: 'C:\tmp'
   
   tasks:
   - name: Copy module to host
@@ -13,4 +13,11 @@
       dest: "{{ destination }}/ShowCalendar.psm1"
   
   - name: Import module
-    win_shell: Import-Module Show-Calendar
+    win_shell: Import-Module "{{ destination }}/ShowCalendar.psm1"
+    
+  - name: Test module
+    win_shell: Show-Calendar
+    register: cal
+    
+  - debug:
+      var: cal
