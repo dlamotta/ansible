@@ -3,7 +3,7 @@
   hosts: all
   gather_facts: true
   vars:
-    destination: %SystemRoot%\users\Administration\Documents\WindowsPowerShell\Modules\
+    destination: '%SystemRoot%\users\Administration\Documents\WindowsPowerShell\Modules\'
   
   tasks:
   - name: Copy module to host
