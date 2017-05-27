@@ -13,4 +13,4 @@
       dest: "{{ destination }}/ShowCalendar.psm1"
   
   - name: Import module
-    win_shell: Import-Module ShowCalendar
+    win_shell: Import-Module Show-Calendar
