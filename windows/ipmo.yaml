@@ -1,0 +1,16 @@
+---
+- name: Imports a PowerShell module on the remote host
+  hosts: all
+  gather_facts: true
+  vars:
+    destination: %SystemRoot%\users\Administration\Documents\WindowsPowerShell\Modules\
+  
+  tasks:
+  - name: Copy module to host
+    win_copy: 
+      force: yes
+      src: files/ShowCalendar.psm1
+      dest: "{{ destination }}"
+  
+  - name: Import module
+    win_shell: Import-Module ShowCalendar
