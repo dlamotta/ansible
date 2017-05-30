@@ -15,7 +15,7 @@
       dest: "{{ destination }}"
   
   - name: Import module
-    win_shell: "Import-Module {{ destination }}; {{ module }}" 
+    win_shell: "Import-Module '{{ destination }}'; {{ module }}" 
     register: result
     
   - debug:
