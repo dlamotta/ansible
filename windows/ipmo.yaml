@@ -18,12 +18,5 @@
     win_shell: "ipmo '{{ destination }}'; {{ module }}" 
     register: result
     
-  - name: Test module
-    win_shell: "{{ module }}"
-    register: result2
-    
   - debug:
       var: result.stdout
-
-  - debug:
-      var: result2.stdout
