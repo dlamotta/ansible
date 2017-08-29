@@ -6,6 +6,7 @@
   vars:
     access_key: accesskey
     secret_key: secretkey
+    flavor: t2.micro
     count: 1
     subnet: subnet
     
@@ -14,7 +15,7 @@
     ec2:
       aws_access_key: "{{ access_key }}"
       aws_secret_key: "{{ secret_key }}"
-      instance_type: t2.micro
+      instance_type: "{{ flavor }}"
       image: ami-0ea6af64
       wait: yes
       count: "{{ count }}"
