@@ -7,7 +7,7 @@
     access_key: accesskey
     secret_key: secretkey
     instance_id: instance
-    region: us-east-1a
+    region: us-east-1
     
   tasks:
   - name: Provision
