@@ -1,0 +1,4 @@
+- name: List available offers
+  azure_rm_virtualmachineimage_facts:
+    location: eastus
+    image: rhel72-osDisk.de694368-6113-4b72-b227-4415dd568f39.vhd
