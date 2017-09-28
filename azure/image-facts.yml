@@ -1,5 +1,13 @@
 ---
 - name: List available offers
-  azure_rm_virtualmachineimage_facts:
-    location: eastus
-    image: image_name
+  hosts: localhost
+  connection: local
+  gather_facts: False
+  vars:
+    image: img
+  
+  tasks:
+  - name: Image facts
+    azure_rm_virtualmachineimage_facts:
+      location: eastus
+      image: "{{ image }}"
