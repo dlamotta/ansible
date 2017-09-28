@@ -1,0 +1,25 @@
+---
+- name: Create a VM
+  vars:
+    resource_group: group
+    vm_size: Standard_D4
+    storage_account: storage
+    admin_username: username
+    admin_password: password
+    virtual_network_name: network
+    image: image_name
+
+  azure_rm_virtualmachine:
+    resource_group: "{{ resource_group }}"
+    name: "{{ name }}"
+    vm_size: "{{ vm_size }}"
+    storage_account: "{{ storage_account }}"
+    admin_username: "{{ admin_username }}"
+    admin_password: "{{ admin_password }}"
+    started: True
+    state: present
+    public_ip_allocation_method: Dynamic
+    virtual_network_name: "{{ network }}"
+    image:
+      offer: "{{ image_name }}"
+      version: latest
