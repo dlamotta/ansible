@@ -25,7 +25,7 @@
       started: True
       state: present
       public_ip_allocation_method: Dynamic
-      virtual_network_name: "{{ network }}"
+      virtual_network_name: "{{ virtual_network_name }}"
       image:
         offer: "{{ image_name }}"
         version: latest
