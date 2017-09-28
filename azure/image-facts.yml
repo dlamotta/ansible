@@ -1,3 +1,4 @@
+---
 - name: List available offers
   azure_rm_virtualmachineimage_facts:
     location: eastus
