@@ -11,7 +11,7 @@
     admin_username: username
     admin_password: password
     virtual_network_name: network
-    image: image_name
+    image_name: image_name
   
   tasks:
   - name: Provision instance
