@@ -5,6 +5,7 @@
   gather_facts: False
   vars:
     resource_group: group
+    vm_name: name
     vm_size: Standard_D4
     storage_account: storage
     admin_username: username
@@ -16,7 +17,7 @@
   - name: Provision instance
     azure_rm_virtualmachine:
       resource_group: "{{ resource_group }}"
-      name: "{{ name }}"
+      name: "{{ vm_name }}"
       vm_size: "{{ vm_size }}"
       storage_account: "{{ storage_account }}"
       admin_username: "{{ admin_username }}"
