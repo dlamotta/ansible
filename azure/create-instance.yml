@@ -30,7 +30,7 @@
       resource_group: "{{ resource_group }}"
       name: "{{ vm_name }}"
       vm_size: "{{ vm_size }}"
-      storage_account: "{{ storage_account }}"
+      storage_account_name: "{{ storage_account }}"
       admin_username: "{{ admin_username }}"
       admin_password: "{{ admin_password }}"
       started: True
