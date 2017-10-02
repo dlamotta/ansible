@@ -9,6 +9,7 @@
     sub: subid
     tenant: tenant
     publisher: RedHat
+    sku: Stable
   
   tasks:
   - name: Image facts
@@ -19,3 +20,4 @@
       subscription_id: "{{ sub }}"
       tenant: "{{ tenant }}"
       publisher: "{{ publisher }}"
+      sku: "{{ sku }}"
