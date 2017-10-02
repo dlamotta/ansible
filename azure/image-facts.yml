@@ -9,7 +9,6 @@
     sub: subid
     tenant: tenant
     publisher: Red Hat
-    version: 7.3
   
   tasks:
   - name: Image facts
@@ -20,4 +19,3 @@
       subscription_id: "{{ sub }}"
       tenant: "{{ tenant }}"
       publisher: "{{ publisher }}"
-      version: "{{ version }}"
