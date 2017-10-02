@@ -8,7 +8,7 @@
     secret: clientsecret
     sub: subid
     tenant: tenant
-    publisher: Red Hat
+    offer: Red Hat
   
   tasks:
   - name: Image facts
@@ -18,4 +18,4 @@
       secret: "{{ secret }}"
       subscription_id: "{{ sub }}"
       tenant: "{{ tenant }}"
-      publisher: "{{ publisher }}"
+      offer: "{{ offer }}"
