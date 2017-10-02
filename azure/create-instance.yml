@@ -16,8 +16,9 @@
     sub: subid
     tenant: tenant
     publisher: RedHat
-    offer: os
+    offer: rhel_byol
     version: Latest
+    sku: 7.3
   
   tasks:
   - name: Provision instance
@@ -40,3 +41,4 @@
         publisher: "{{ publisher }}"
         offer: "{{ offer }}"
         version: "{{ version }}"
+        sku: "{{ sku }}"
