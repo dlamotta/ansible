@@ -1,0 +1,17 @@
+- name: Create project
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  vars:
+    project: name
+    token: ocptoken
+  
+  tasks:  
+    oc:
+      state: present
+      inline:
+        kind: ProjectRequest
+        metadata:
+          name: "{{ project }}"
+        description: This project was created using Ansible
+      token: "{{ token }}"
