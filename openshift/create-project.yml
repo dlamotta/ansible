@@ -1,7 +1,5 @@
 - name: Create OpenShift project
-  hosts: localhost
-  connection: local
-  gather_facts: false
+  hosts: all
   vars:
     project: name
     token: ocptoken
