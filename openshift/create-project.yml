@@ -3,11 +3,13 @@
   vars:
     project: name
     token: ocptoken
+    host: ocpapi
   
   tasks:  
   - name: Create project
     oc:
       state: present
+      host: "{{ host }}"
       inline:
         kind: ProjectRequest
         metadata:
