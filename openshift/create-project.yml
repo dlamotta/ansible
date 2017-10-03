@@ -1,4 +1,4 @@
-- name: Create project
+- name: Create OpenShift project
   hosts: localhost
   connection: local
   gather_facts: false
@@ -7,6 +7,7 @@
     token: ocptoken
   
   tasks:  
+  - name: Create project
     oc:
       state: present
       inline:
