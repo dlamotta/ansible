@@ -5,7 +5,7 @@
   gather_facts: False
   vars:
     namespace: ns
-    route: name
+    name: name
     token: ocptoken
     host: ocpapi
     
@@ -15,7 +15,7 @@
       host: "{{ host }}"
       validate_certs: False
       state: present
-      name: "{{ route }}"
+      name: "{{ name }}"
       namespace: "{{ namespace }}"
       kind: Route
       token: "{{ token }}"
