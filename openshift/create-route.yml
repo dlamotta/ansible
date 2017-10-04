@@ -12,6 +12,7 @@
   - name: Create a route
     oc:
       host: "{{ host }}"
+      validate_certs: False
       state: present
       name: "{{ route }}"
       namespace: "{{ namespace }}"
