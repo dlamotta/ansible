@@ -1,17 +1,10 @@
 ---
 - name: Create parksmap instance in OpenShift
-  hosts: all
-  user: ec2-user
-  
+  hosts: localhost
+  connection: local
+  user: cloud-user
+  gather_facts: no
   tasks:
-  - name: Invoke shell script
-    shell: /home/ec2-user/scripts/dockerimage.sh
-
-  - name: tail file
-    command: tail -1 /home/ec2-user/parksmap
-    register: url
-
-  - name: show url
-    debug:
-      var: url.stdout
+    - name: invoke remote shell script
+      raw: ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ec2-user@ocp.lamotta.co /home/ec2-user/scripts/dockerimage.sh
 ...
