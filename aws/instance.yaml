@@ -17,6 +17,7 @@
       aws_secret_key: "{{ secret_key }}"
       instance_type: "{{ flavor }}"
       image: ami-0ea6af64
+      key_name: OpenShift
       wait: yes
       count: "{{ count }}"
       vpc_subnet_id: "{{ subnet }}"
