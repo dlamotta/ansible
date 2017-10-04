@@ -4,7 +4,7 @@
   connection: local
   gather_facts: False
   vars:
-    service: service
+    namespace: ns
     name: name
     hostname: url
     token: ocptoken
@@ -20,6 +20,6 @@
         kind: Route
         metadata:
           name: "{{ name }}"
-          service: "{{ service }}"
+          namespace: "{{ namespace }}"
           hostname: "{{ hostname }}"
       token: "{{ token }}"
