@@ -6,7 +6,7 @@
   
   tasks:
   - name: Invoke shell script
-    command: /home/ec2-user/scripts/dockerimage.sh
+    shell: /home/ec2-user/scripts/dockerimage.sh
 
   - name: tail file
     command: tail -1 /home/ec2-user/parksmap
