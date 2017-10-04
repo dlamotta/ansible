@@ -11,6 +11,7 @@
     oc:
       state: present
       host: "{{ host }}"
+      validate_certs: False
       inline:
         kind: ProjectRequest
         metadata:
