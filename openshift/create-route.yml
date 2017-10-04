@@ -4,18 +4,22 @@
   connection: local
   gather_facts: False
   vars:
-    namespace: ns
+    service: service
     name: name
+    hostname: url
     token: ocptoken
     host: ocpapi
-    
-  tasks:
+  
+  tasks:  
   - name: Create a route
     oc:
+      state: present
       host: "{{ host }}"
       validate_certs: False
-      state: present
-      name: "{{ name }}"
-      namespace: "{{ namespace }}"
-      kind: Route
+      inline:
+        kind: Route
+        metadata:
+          name: "{{ name }}"
+          service: "{{ service }}"
+          hostname: "{{ hostname }}"
       token: "{{ token }}"
