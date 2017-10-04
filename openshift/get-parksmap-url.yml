@@ -1,0 +1,13 @@
+---
+- name: get parksmap url
+  hosts: all
+  user: ec2-user
+  tasks:
+    - name: tail file
+      command: tail -1 /home/ec2-user/parksmap
+      register: url
+
+    - name: show url
+      debug:
+        var: url.stdout
+...
