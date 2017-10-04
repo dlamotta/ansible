@@ -2,7 +2,6 @@
 - name: Create parksmap instance in OpenShift
   hosts: all
   user: ec2-user
-  gather_facts: no
   
   tasks:
   - name: Invoke shell script
