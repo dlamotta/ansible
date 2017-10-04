@@ -6,5 +6,5 @@
   gather_facts: no
   tasks:
     - name: invoke remote shell script
-      raw: ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /home/ec2-user/ocp.pem ec2-user@ocp.lamotta.co /home/ec2-user/scripts/dockerimage.sh
+      raw: ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /home/cloud-user/ocp.pem ec2-user@ocp.lamotta.co /home/ec2-user/scripts/dockerimage.sh
 ...
