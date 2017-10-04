@@ -18,6 +18,7 @@
       instance_type: "{{ flavor }}"
       image: ami-0ea6af64
       key_name: OpenShift
+      group: wideopen
       wait: yes
       count: "{{ count }}"
       vpc_subnet_id: "{{ subnet }}"
