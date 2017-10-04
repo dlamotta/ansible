@@ -5,8 +5,8 @@
   gather_facts: no
   
   tasks:
-    - name: Invoke shell script
-      command: /home/ec2-user/scripts/dockerimage.sh
+  - name: Invoke shell script
+    command: /home/ec2-user/scripts/dockerimage.sh
 
 - name: get parksmap url
   hosts: all
@@ -14,11 +14,11 @@
   gather_facts: no
   
   tasks:
-    - name: tail file
-      command: tail -1 /home/ec2-user/parksmap
-      register: url
+  - name: tail file
+    command: tail -1 /home/ec2-user/parksmap
+    register: url
 
-    - name: show url
-      debug:
-        var: url.stdout
+  - name: show url
+    debug:
+      var: url.stdout
 ...
