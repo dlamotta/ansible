@@ -10,5 +10,6 @@
   - name: Start a service
     service:
       state: started
-      name: "{{ svc }}"
+      name: "{{ service }}"
+      enabled: yes
 ...
