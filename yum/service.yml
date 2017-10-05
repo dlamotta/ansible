@@ -1,0 +1,14 @@
+---
+- Name: Start services
+  hosts: all
+  user: ec2-user
+  become: true
+  vars:
+    service: svc
+    
+  tasks:
+  - name: Start a service
+    service:
+      state: started
+      name: "{{ svc }}"
+...
