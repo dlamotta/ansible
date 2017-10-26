@@ -1,5 +1,5 @@
 ---
-- name: Create a VM
+- name: Delete a VM
   hosts: localhost
   connection: local
   gather_facts: False
@@ -18,7 +18,7 @@
     sku: 7.3
 
   tasks:
-  - name: remove vm and all resources except public ips
+  - name: Remove VM and all resources
     azure_rm_virtualmachine:
       client_id: "{{ client }}"
       secret: "{{ secret }}"
