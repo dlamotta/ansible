@@ -1,0 +1,44 @@
+---
+- name: Create a VM
+  hosts: localhost
+  connection: local
+  gather_facts: False
+  vars:
+    resource_group: group
+    vm_name: name
+    vm_size: Standard_D4
+    storage_account_name: storage
+    admin_username: username
+    admin_password: password
+    virtual_network_name: network
+    client: clientid
+    secret: clientsecret
+    sub: subid
+    tenant: tenant
+    publisher: RedHat
+    offer: rhel_byol
+    version: Latest
+    sku: 7.3
+  
+  tasks:
+  - name: Provision instance
+    azure_rm_virtualmachine:
+      client_id: "{{ client }}"
+      secret: "{{ secret }}"
+      subscription_id: "{{ sub }}"
+      tenant: "{{ tenant }}"
+      resource_group: "{{ resource_group }}"
+      name: "{{ vm_name }}"
+      vm_size: "{{ vm_size }}"
+      storage_account_name: "{{ storage_account_name }}"
+      admin_username: "{{ admin_username }}"
+      admin_password: "{{ admin_password }}"
+      started: True
+      state: present
+      public_ip_allocation_method: Dynamic
+      virtual_network_name: "{{ virtual_network_name }}"
+      image:
+        publisher: "{{ publisher }}"
+        offer: "{{ offer }}"
+        version: "{{ version }}"
+        sku: "{{ sku }}"
