@@ -6,16 +6,11 @@
   vars:
     resource_group: group
     vm_name: name
-    storage_account_name: storage
-    virtual_network_name: network
     client: clientid
     secret: clientsecret
     sub: subid
     tenant: tenant
-    publisher: RedHat
-    offer: rhel_byol
-    version: Latest
-    sku: 7.3
+
 
   tasks:
   - name: Remove VM and all resources
