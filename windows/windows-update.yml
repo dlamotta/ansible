@@ -1,0 +1,11 @@
+---
+- name: Update Windows
+  hosts: all 
+  gather_facts: true
+  
+  tasks:
+  - name: Windows Update
+    win_updates:
+      category_names:
+        - SecurityUpdates
+        - CriticalUpdates
