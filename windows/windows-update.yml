@@ -6,6 +6,7 @@
   tasks:
   - name: Windows Update
     win_updates:
+      log_path: c:\ansible_updates.txt
       category_names:
         - SecurityUpdates
         - CriticalUpdates
