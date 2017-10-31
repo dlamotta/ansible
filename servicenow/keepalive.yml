@@ -9,10 +9,10 @@
     snow_pass: password
     
   tasks:
-    - name: Login to SNOW
-      uri:
-        url: "{{ snow_host }}"
-        method: POST
-        user: "{{ snow_user }}"
-        password: "{{ snow_pass }}"
+  - name: Login to SNOW
+    uri:
+      url: "{{ snow_host }}"
+      method: POST
+      user: "{{ snow_user }}"
+      password: "{{ snow_pass }}"
 ...
