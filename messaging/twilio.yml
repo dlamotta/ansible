@@ -1,0 +1,17 @@
+---
+- name: Send a text message
+  hosts: localhost
+  connection: local
+  vars:
+    message: Hello World!
+    recipient: +1555411900
+    sid: sid
+    token: token
+  
+  tasks:
+  - twilio: 
+      msg: All servers with webserver role are now configured.
+      account_sid: "{{ sid }}"
+      auth_token: "{{ token }}"
+      from_number: +15552014545
+      to_number: "{{ recipient }}"
