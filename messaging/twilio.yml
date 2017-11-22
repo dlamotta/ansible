@@ -4,7 +4,8 @@
   connection: local
   vars:
     message: Hello World!
-    recipient: +1555411900
+    recipient: to
+    sender: from
     sid: sid
     token: token
   
@@ -13,5 +14,5 @@
       msg: All servers with webserver role are now configured.
       account_sid: "{{ sid }}"
       auth_token: "{{ token }}"
-      from_number: +15552014545
+      from_number: "{{ sender }}"
       to_number: "{{ recipient }}"
