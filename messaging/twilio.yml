@@ -16,4 +16,3 @@
       auth_token: "{{ token }}"
       from_number: "{{ sender }}"
       to_number: "{{ recipient }}"
-    delegate_to: localhost
