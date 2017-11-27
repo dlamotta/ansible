@@ -26,8 +26,3 @@
       ipa_host: "{{ idm_server }}"
       ipa_user: admin
       ipa_pass: "{{ idm_pass }}"
-      
-  - name: Ping the newly added host
-    ping: "{{ idm_record }}"
-
-   
