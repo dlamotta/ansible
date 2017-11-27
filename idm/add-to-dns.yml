@@ -16,7 +16,7 @@
       state: present
       zone_name: "{{ idm_zone }}"
       record_name: "{{ idm_record }}"
-      record_type: 'A'
+      record_type: "A"
       record_value: "{{ idm_value }}"  
   
   - name: Add the host
