@@ -21,7 +21,7 @@
   
   - name: Add the host
     ipa_host:
-      name: "{{ idm_record }}"
+      name: "{{ idm_record }}.cloudsalab.com"
       state: present
       ipa_host: "{{ idm_server }}"
       ipa_user: admin
