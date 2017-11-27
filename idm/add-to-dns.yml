@@ -9,14 +9,6 @@
     idm_record: 24
     
   tasks:
-  - name: Add the host first
-    ipa_host:
-      fqdn: "{{ idm_record }}"
-      state: present
-      ipa_host: "{{ idm_host }}"
-      ipa_user: admin
-      ipa_pass: "{{ idm_pass }}"
-
   - name: Ensure a DNS record is present
     ipa_dnsrecord:
       ipa_host: "{{ idm_host }}"
@@ -25,4 +17,17 @@
       zone_name: "{{ idm_zone }}"
       record_name: "{{ idm_record }}"
       record_type: 'A'
-      record_value: "{{ idm_value }}"
+      record_value: "{{ idm_value }}"  
+  
+  - name: Add the host
+    ipa_host:
+      fqdn: "{{ idm_record }}"
+      state: present
+      ipa_host: "{{ idm_host }}"
+      ipa_user: admin
+      ipa_pass: "{{ idm_pass }}"
+      
+  - name: Ping the newly added host
+    ping: "{{ idm_record }}"
+
+   
