@@ -2,16 +2,18 @@
 - name: Add a host to IDM
   hosts: all
   vars:
-    idm_host: idm_host
+    idm_server: idm_host
     idm_passwd: idm_pass
     idm_zone: idm_zone
-    idm_value: dns_record
-    idm_record: 24
+    idm_record: fqdn
+    idm_value: ipaddress
+    idm_hostname: shorthostname
+
     
   tasks:
   - name: Ensure a DNS record is present
     ipa_dnsrecord:
-      ipa_host: "{{ idm_host }}"
+      ipa_host: "{{ idm_server }}"
       ipa_pass: "{{ idm_pass }}"
       state: present
       zone_name: "{{ idm_zone }}"
@@ -21,9 +23,10 @@
   
   - name: Add the host
     ipa_host:
-      fqdn: "{{ idm_record }}"
+      ocp.cloudsalab.com
+      name: "{{ idm_hostname }}"
       state: present
-      ipa_host: "{{ idm_host }}"
+      ipa_host: "{{ idm_server }}"
       ipa_user: admin
       ipa_pass: "{{ idm_pass }}"
       
