@@ -1,6 +1,6 @@
 ---
 - name: Add a host to IDM
-  hosts: 192.168.76.23
+  hosts: idm.cloudsalab.com
   vars:
     host: idm_host
     pass: idm_pass
