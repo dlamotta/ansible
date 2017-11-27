@@ -2,19 +2,19 @@
 - name: Add a host to IDM
   hosts: all
   vars:
-    host: idm_host
-    pass: idm_pass
-    zone: idm_zone
-    value: dns_record
-    record: 24
+    idm_host: idm_host
+    idm_passwd: idm_pass
+    idm_zone: idm_zone
+    idm_value: dns_record
+    idm_record: 24
     
   tasks:
   - name: Ensure a PTR record is present
     ipa_dnsrecord:
-      ipa_host: "{{ host }}"
-      ipa_pass: "{{ pass }}"
+      ipa_host: "{{ idm_host }}"
+      ipa_pass: "{{ idm_pass }}"
       state: present
-      zone_name: "{{ zone }}"
-      record_name: "{{ record }}"
+      zone_name: "{{ idm_zone }}"
+      record_name: "{{ idm_record }}"
       record_type: 'PTR'
-      record_value: "{{ value }}"
+      record_value: "{{ idm_value }}"
