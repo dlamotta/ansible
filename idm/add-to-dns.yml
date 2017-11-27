@@ -9,7 +9,7 @@
     idm_record: 24
     
   tasks:
-  - name: Ensure a PTR record is present
+  - name: Ensure a DNS record is present
     ipa_dnsrecord:
       ipa_host: "{{ idm_host }}"
       ipa_pass: "{{ idm_pass }}"
