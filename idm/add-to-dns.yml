@@ -10,11 +10,11 @@
     
   tasks:
   - name: Ensure a PTR record is present
-     ipa_dnsrecord:
-       ipa_host: "{{ host }}"
-       ipa_pass: "{{ pass }}"
-       state: present
-       zone_name: "{{ zone }}"
-       record_name: "{{ record }}"
-       record_type: 'PTR'
-       record_value: "{{ value }}"
+    ipa_dnsrecord:
+      ipa_host: "{{ host }}"
+      ipa_pass: "{{ pass }}"
+      state: present
+      zone_name: "{{ zone }}"
+      record_name: "{{ record }}"
+      record_type: 'PTR'
+      record_value: "{{ value }}"
