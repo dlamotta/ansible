@@ -8,7 +8,6 @@
     idm_record: fqdn
     idm_value: ipaddress
     idm_hostname: shorthostname
-
     
   tasks:
   - name: Ensure a DNS record is present
