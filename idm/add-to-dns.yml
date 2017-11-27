@@ -9,6 +9,14 @@
     idm_record: 24
     
   tasks:
+  - name: Add the host first
+    ipa_host:
+      fqdn: "{{ idm_record }}"
+      state: present
+      ipa_host: "{{ idm_host }}"
+      ipa_user: admin
+      ipa_pass: "{{ idm_pass }}"
+
   - name: Ensure a DNS record is present
     ipa_dnsrecord:
       ipa_host: "{{ idm_host }}"
