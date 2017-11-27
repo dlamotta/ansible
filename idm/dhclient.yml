@@ -1,0 +1,13 @@
+---
+- name: Copies dhclient.conf from Tower and restarts network service
+  hosts: all  
+  tasks:
+  - name: Copy dhclient.conf
+    copy:
+      src: /etc/dhclient.conf
+      dest: /etc/dhclient.conf
+      
+  - name:
+    service:
+      name: network
+      state: restarted
