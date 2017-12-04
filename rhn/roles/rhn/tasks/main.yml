@@ -1,5 +1,6 @@
 ---
 - include_vars: rhn.yml
+  no_log: True
 
 - name: wait for sshd  
   wait_for:
