@@ -29,12 +29,11 @@
   async: 1
   poll: 0
 
-- name: Wait for the server to come back
-  wait_for:
-    host: "{{ ansible_ssh_host }}"
-    port: 22 
+- name: Wait for the server to come back  
+  local_action: wait_for
+  args:
+    host: "{{ inventory_hostname }}"
+    port: 22
     state: started
-    delay: 30 
-    timeout: 120
-  connection: local
-  sudo: false
+    delay: 30
+    timeout: 300
