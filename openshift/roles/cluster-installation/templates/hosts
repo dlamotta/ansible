@@ -1,0 +1,50 @@
+# Create an OSEv3 group that contains the masters and nodes groups
+[OSEv3:children]
+masters
+nodes
+nfs
+
+# Set variables common for all OSEv3 hosts
+[OSEv3:vars]
+# SSH user, this user should allow ssh based auth without requiring a password
+ansible_ssh_user={{ ssh_user }}
+ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+
+# If ansible_ssh_user is not root, ansible_become must be set to true
+ansible_become=true
+openshift_clock_enabled=true
+openshift_deployment_type=openshift-enterprise
+
+# uncomment the following to enable htpasswd authentication; defaults to DenyAllPasswordIdentityProvider
+openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider', 'filename': '/etc/origin/master/htpasswd'}]
+
+# metrics vars
+openshift_metrics_deploy=true
+openshift_metrics_storage_kind=nfs
+openshift_metrics_storage_access_modes=['ReadWriteOnce']
+openshift_metrics_storage_nfs_options='*(rw,root_squash)'
+openshift_metrics_storage_nfs_directory={{ metrics_mountpoint }}
+openshift_metrics_storage_volume_name=metrics
+openshift_metrics_storage_volume_size=20Gi
+
+# logging vars
+openshift_logging_deploy=true
+openshift_logging_storage_kind=nfs
+openshift_logging_storage_access_modes=['ReadWriteOnce']
+openshift_logging_storage_nfs_directory={{ logging_mountpoint }}
+openshift_logging_storage_nfs_options='*(rw,root_squash)'
+openshift_logging_storage_volume_name=logging
+openshift_logging_storage_volume_size=20Gi
+openshift_logging_install_logging=true
+
+# host group for masters
+[masters]
+{{ hostvars[groups['master'][0]]['ansible_hostname'] }}
+
+# host group for nodes, includes region info
+[nodes]
+{{ hostvars[groups['master'][0]]['ansible_fqdn'] }} openshift_node_labels="{'region': 'infra', 'zone': 'default'}"
+{{ hostvars[groups['node'][0]]['ansible_fqdn'] }} openshift_node_labels="{'region': 'primary', 'zone': 'east'}"
+
+[nfs]
+{{ hostvars[groups['master'][0]]['ansible_fqdn'] }}

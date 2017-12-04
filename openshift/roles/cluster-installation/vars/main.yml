@@ -1,0 +1,10 @@
+---
+ssh_user: cloud-user
+ocpuser: admin
+ocppass: RedHat123!
+
+metrics_storage_device: /dev/vdc
+metrics_mountpoint: /exports/m
+
+logging_storage_device: /dev/vdd  
+logging_mountpoint: /exports/l
