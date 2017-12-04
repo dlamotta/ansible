@@ -1,2 +1,2 @@
 ---
-# vars file for host-preparation
+docker_storage_device: /dev/vdb
