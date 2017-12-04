@@ -1,27 +1,27 @@
 ---
 - name: Install necessary packages
-    yum:  
-      name: '{{ item }}'
-      state: present
-    with_items: 
-    - wget 
-    - git 
-    - net-tools 
-    - bind-utils 
-    - iptables-services 
-    - bridge-utils 
-    - bash-completion 
-    - kexec-tools 
-    - sos 
-    - psacct
-    - atomic-openshift-utils
-    - docker-1.12.6
-    - ipa-client
-    - httpd-tools
+  yum:  
+    name: '{{ item }}'
+    state: present
+  with_items: 
+  - wget 
+  - git 
+  - net-tools 
+  - bind-utils 
+  - iptables-services 
+  - bridge-utils 
+  - bash-completion 
+  - kexec-tools 
+  - sos 
+  - psacct
+  - atomic-openshift-utils
+  - docker-1.12.6
+  - ipa-client
+  - httpd-tools
 
 - name: Update the system
-    yum:  
-      name: '*'
+  yum:  
+    name: '*'
 
 - name: Reboot
   become: yes
