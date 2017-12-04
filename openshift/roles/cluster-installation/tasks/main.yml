@@ -5,17 +5,17 @@
     number: 1
     state: present
   with_items:
-    - {{ metrics_storage_device }}
-    - {{ logging_storage_device }}
+    - "{{ metrics_storage_device }}"
+    - "{{ logging_storage_device }}"
 
 - name: Create filesystem
   filesystem:
     fstype: xfs
-    dev: {{ item }}1
+    dev: "{{ item }}1"
   with_items:
-    - {{ metrics_storage_device }}
-    - {{ logging_storage_device }}    
-
+    - "{{ metrics_storage_device }}"
+    - "{{ logging_storage_device }}"
+    
 - name: Mount metrics filesystem
   mount:
     path: "{{ metrics_mountpoint }}"
