@@ -34,5 +34,4 @@
     host: "{{ inventory_hostname }}"
     port: 22 
     state: started
-  sudo: false
   delegate_to: localhost
