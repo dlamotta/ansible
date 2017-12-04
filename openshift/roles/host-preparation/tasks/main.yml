@@ -29,7 +29,10 @@
   async: 1
   poll: 0
 
-- name: Wait for the machine to be back
+- name: Wait for the server to come back
   wait_for:
-    port: 22
-    delay: 5        
+    host: "{{ inventory_hostname }}"
+    port: 22 
+    state: started
+  sudo: false
+  delegate_to: localhost
