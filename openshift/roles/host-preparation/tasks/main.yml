@@ -1,0 +1,35 @@
+---
+- name: Install necessary packages
+    yum:  
+      name: '{{ item }}'
+      state: present
+    with_items: 
+    - wget 
+    - git 
+    - net-tools 
+    - bind-utils 
+    - iptables-services 
+    - bridge-utils 
+    - bash-completion 
+    - kexec-tools 
+    - sos 
+    - psacct
+    - atomic-openshift-utils
+    - docker-1.12.6
+    - ipa-client
+    - httpd-tools
+
+- name: Update the system
+    yum:  
+      name: *
+
+- name: Reboot
+  become: yes
+  shell: sleep 2 && /sbin/shutdown -r now "System reboot"  
+  async: 1
+  poll: 0
+
+- name: Wait for the machine to be back
+  wait_for:
+    port: 22
+    delay: 5        
