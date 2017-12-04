@@ -21,7 +21,7 @@
 
 - name: Update the system
     yum:  
-      name: *
+      name: '*'
 
 - name: Reboot
   become: yes
