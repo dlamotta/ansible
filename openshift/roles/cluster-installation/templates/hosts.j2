@@ -39,12 +39,12 @@ openshift_logging_install_logging=true
 
 # host group for masters
 [masters]
-{{ hostvars[groups['master'][0]]['ansible_hostname'] }}
+ocp.cloudsalab.com
 
 # host group for nodes, includes region info
 [nodes]
-{{ hostvars[groups['master'][0]]['ansible_fqdn'] }} openshift_node_labels="{'region': 'infra', 'zone': 'default'}"
-{{ hostvars[groups['node'][0]]['ansible_fqdn'] }} openshift_node_labels="{'region': 'primary', 'zone': 'east'}"
+ocp.cloudsalab.com openshift_node_labels="{'region': 'infra', 'zone': 'default'}"
+ocp-n1.cloudsalab.com openshift_node_labels="{'region': 'primary', 'zone': 'east'}"
 
 [nfs]
-{{ hostvars[groups['master'][0]]['ansible_fqdn'] }}
+ocp.cloudsalab.com
