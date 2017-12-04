@@ -2,8 +2,6 @@
 - include_vars: rhn.yml
 
 - name: subscription registration
-  hosts: all
-  gather_facts: no
   tasks:
     - name: wait for sshd  
       wait_for:
