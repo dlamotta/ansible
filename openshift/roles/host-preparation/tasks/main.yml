@@ -31,7 +31,10 @@
 
 - name: Wait for the server to come back
   wait_for:
-    host: "{{ inventory_hostname }}"
+    host: "{{ ansible_ssh_host }}"
     port: 22 
     state: started
-  delegate_to: localhost
+    delay: 30 
+    timeout: 120
+  connection: local
+  sudo: false
