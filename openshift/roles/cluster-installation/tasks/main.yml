@@ -7,6 +7,7 @@
   with_items:
     - "{{ metrics_storage_device }}"
     - "{{ logging_storage_device }}"
+    - "{{ ansible_broker_storage_device }}"
 
 - name: Create filesystem
   filesystem:
@@ -15,6 +16,7 @@
   with_items:
     - "{{ metrics_storage_device }}"
     - "{{ logging_storage_device }}"
+    - "{{ ansible_broker_storage_device }}"
 
 - name: Mount metrics filesystem
   mount:
@@ -28,7 +30,14 @@
     path: "{{ logging_mountpoint }}"
     src: "{{ logging_storage_device }}1"
     fstype: xfs
-    state: mounted    
+    state: mounted
+
+- name: Mount ansible broker etc filesystem
+  mount:
+    path: "{{ ansible_broker_mountpoint }}"
+    src: "{{ ansible_broker_storage_device }}1"
+    fstype: xfs
+    state: mounted
 
 - name: Copy hoststemplate file
   template:

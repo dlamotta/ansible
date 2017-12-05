@@ -35,6 +35,18 @@ openshift_logging_storage_nfs_options='*(rw,root_squash)'
 openshift_logging_storage_volume_name=logging
 openshift_logging_storage_volume_size=20Gi
 
+# project for the template service broker
+openshift_template_service_broker_namespaces=['openshift','templateservicebroker']
+
+# etcd space for ansible broker
+openshift_hosted_etcd_storage_kind=nfs
+openshift_hosted_etcd_storage_nfs_options="*(rw,root_squash,sync,no_wdelay)"
+openshift_hosted_etcd_storage_nfs_directory={{ ansible_broker_mountpoint }}
+openshift_hosted_etcd_storage_volume_name=etcd-ansible-broker 
+openshift_hosted_etcd_storage_access_modes=["ReadWriteOnce"]
+openshift_hosted_etcd_storage_volume_size=4G
+openshift_hosted_etcd_storage_labels={'storage': 'etcd'}
+
 # host group for masters
 [masters]
 ocp.cloudsalab.com
