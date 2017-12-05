@@ -32,7 +32,7 @@
     fstype: xfs
     state: mounted
 
-- name: Mount ansible broker etc filesystem
+- name: Mount ansible broker etcd filesystem
   mount:
     path: "{{ ansible_broker_mountpoint }}"
     src: "{{ ansible_broker_storage_device }}1"
@@ -48,7 +48,7 @@
     mode: 0644
 
 - name: Install OpenShift unattended
-  command: ansible-playbook  -i /etc/ansible/hosts -e deprecation_warnings=False /usr/share/ansible/openshift-ansible/playbooks/byo/config.yml
+  shell: ansible-playbook -i /etc/ansible/hosts -e deprecation_warnings=False /usr/share/ansible/openshift-ansible/playbooks/byo/config.yml
 
 - name: Configure htpasswd for authentication 
   htpasswd:
