@@ -1,0 +1,25 @@
+---
+- name: create volumes
+  os_volume:
+    auth:
+      auth_url: "{{ openstack }}"
+      username: "{{ username }}"
+      password: "{{ password }}"
+      project_name: "{{ tenant }}"  
+    state: present
+    size: "{{ size }}"
+    display_name: "{{ instance }}-{{ item }}"  
+  with_items: "{{ volumes }}"
+
+- name: attach volumes  
+  os_server_volume:
+    auth:
+      auth_url: "{{ openstack }}"
+      username: "{{ username }}"
+      password: "{{ password }}"
+      project_name: "{{ tenant }}"
+    state: present    
+    server: "{{ instance }}"
+    volume: "{{ instance }}-{{ item }}"
+  with_items: "{{ volumes }}"
+

@@ -1,0 +1,9 @@
+---
+- name: launch a compute instance
+  hosts: localhost
+  vars:
+    instances:
+      - ocp-n1.cloudsalab.com
+      - ocp-n2.cloudsalab.com
+  roles:
+    - create-instances

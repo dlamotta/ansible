@@ -1,0 +1,8 @@
+---
+openstack: http://10.11.95.20:5000/v2.0/
+username: cloudforms
+password: redhat
+tenant: cloudforms
+instance:
+volumes:
+size: 15
