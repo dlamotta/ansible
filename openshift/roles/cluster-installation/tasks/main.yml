@@ -49,6 +49,7 @@
 
 - name: Install OpenShift unattended
   shell: ansible-playbook -i /etc/ansible/hosts -e deprecation_warnings=False /usr/share/ansible/openshift-ansible/playbooks/byo/config.yml
+  ignore_errors: True
 
 - name: Configure htpasswd for authentication 
   htpasswd:
