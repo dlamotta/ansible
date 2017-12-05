@@ -28,14 +28,12 @@ openshift_metrics_storage_volume_name=metrics
 openshift_metrics_storage_volume_size=20Gi
 
 # logging vars
-openshift_logging_deploy=true
 openshift_logging_storage_kind=nfs
 openshift_logging_storage_access_modes=['ReadWriteOnce']
 openshift_logging_storage_nfs_directory={{ logging_mountpoint }}
 openshift_logging_storage_nfs_options='*(rw,root_squash)'
 openshift_logging_storage_volume_name=logging
 openshift_logging_storage_volume_size=20Gi
-openshift_logging_install_logging=true
 
 # host group for masters
 [masters]
