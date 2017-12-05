@@ -48,7 +48,7 @@
     mode: 0644
 
 - name: Install OpenShift unattended
-  command: ansible-playbook  -i /etc/ansible/hosts /usr/share/ansible/openshift-ansible/playbooks/byo/config.yml
+  command: ansible-playbook  -i /etc/ansible/hosts -e deprecation_warnings=False /usr/share/ansible/openshift-ansible/playbooks/byo/config.yml
 
 - name: Configure htpasswd for authentication 
   htpasswd:
