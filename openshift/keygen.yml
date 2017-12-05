@@ -4,7 +4,9 @@
   tasks:
 
   - name: create ssh key on cloud-user account
-    shell: 'ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa -q -N ""'
+    shell: |
+      rm -rf ~/.ssh/id_rsa*
+      ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa -q -N ""      
     when: ansible_hostname == "ocp"
 
   - name: capture master public key
