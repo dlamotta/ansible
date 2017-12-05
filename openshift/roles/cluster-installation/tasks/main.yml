@@ -15,7 +15,7 @@
   with_items:
     - "{{ metrics_storage_device }}"
     - "{{ logging_storage_device }}"
-    
+
 - name: Mount metrics filesystem
   mount:
     path: "{{ metrics_mountpoint }}"
@@ -39,8 +39,7 @@
     mode: 0644
 
 - name: Install OpenShift unattended
-  command: ansible-playbook  -i /etc/ansible/hosts -e 'host_key_checking=False' /usr/share/ansible/openshift-ansible/playbooks/byo/config.yml
-  ignore_errors: True
+  command: ansible-playbook  -i /etc/ansible/hosts /usr/share/ansible/openshift-ansible/playbooks/byo/config.yml
 
 - name: Configure htpasswd for authentication 
   htpasswd:
