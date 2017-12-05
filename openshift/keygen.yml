@@ -16,10 +16,10 @@
 
   - debug:
       var:
-        pubkey
+        pubkey.stdout
 
   - name: add key to authorized keys
     authorized_key: 
       user: cloud-user
       state: present
-      key: "{{ pubkey }}"
+      key: "{{ pubkey.stdout }}"
