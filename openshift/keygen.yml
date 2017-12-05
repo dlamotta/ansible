@@ -12,8 +12,12 @@
     register: pubkey
     when: ansible_host == "ocp"
 
+  - debug:
+      var:
+        pubkey
+
   - name: add key to authorized keys
     authorized_key: 
       user: cloud-user
       state: present
-      key: "{{ pubkey.stdout }}"
+      key: "{{ pubkey }}"
