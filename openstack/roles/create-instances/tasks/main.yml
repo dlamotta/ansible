@@ -14,7 +14,7 @@
     flavor: cfme
     security_groups: "{{ securitygroup }}"
     network: private
-    auto_ip: True
+    auto_ip: "{{ floating_ip }}"
     wait: yes
     userdata: |
       #cloud-config
