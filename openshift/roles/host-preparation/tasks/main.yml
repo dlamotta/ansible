@@ -1,11 +1,13 @@
 ---
 - name: create ssh key on root account
   hosts: ocp
-  shell: 'ssh-keygen -b 2048 -t rsa -f {{ ansible_user_dir }}/.ssh/id_rsa -q -N ""'
+  become: False
+  shell: 'ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa -q -N ""'
 
 - name: capture master public key
   hosts: ocp
-  shell: "cat {{ ansible_user_dir }}/.ssh/id_rsa.pub"  
+  become: False
+  shell: "cat ~/.ssh/id_rsa.pub"  
   register: pubkey
 
 - name: add key to authorized keys
