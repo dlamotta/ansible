@@ -1,21 +1,4 @@
 ---
-- name: create ssh key on root account
-  hosts: ocp
-  become: False
-  shell: 'ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa -q -N ""'
-
-- name: capture master public key
-  hosts: ocp
-  become: False
-  shell: "cat ~/.ssh/id_rsa.pub"  
-  register: pubkey
-
-- name: add key to authorized keys
-  authorized_key: 
-    user: "{{ ssh_user }}"
-    state: present
-    key: "{{ pubkey.stdout }}"
-
 - name: Install necessary packages
   yum:  
     name: '{{ item }}'
