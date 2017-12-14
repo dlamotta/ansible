@@ -1,7 +1,7 @@
 ---
 flavor: cfme
 securitygroup: wide-open
-floating_ip: True
+floating_ip: False
 volumes:
   - name: docker
     size: 100
