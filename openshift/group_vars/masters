@@ -1,0 +1,17 @@
+---
+flavor: cfme
+securitygroup: wide-open
+floating_ip: True
+volumes:
+  - name: docker
+    size: 100
+    device: /dev/vdb
+  - name: metrics
+    size: 15
+    device: /dev/vdc
+  - name: logging
+    size: 15
+    device: /dev/vdd
+  - name: ansible-broker
+    size: 15
+    device: /dev/vde

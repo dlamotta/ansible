@@ -1,0 +1,11 @@
+---
+flavor: cfme
+securitygroup: wide-open
+floating_ip: True
+volumes:
+  - name: docker
+    size: 100
+    device: /dev/vdb
+  - name: storage
+    size: 50
+    device: /dev/vdc

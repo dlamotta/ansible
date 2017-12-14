@@ -1,0 +1,56 @@
+---
+- name: launch an instance
+  os_server:
+    state: present
+    auth:
+      auth_url: "{{ openstack }}"
+      username: "{{ username }}"
+      password: "{{ password }}"
+      project_name: "{{ tenant }}"
+    name: "{{ inventory_hostname }}"
+    image: 157e2f64-a397-498e-9a30-33a4ae11e4be
+    key_name: "{{ key }}"
+    timeout: 200
+    flavor: "{{ flavor }}"
+    security_groups: "{{ securitygroup }}"
+    network: private
+    auto_ip: "{{ hostvars[inventory_hostname]['floating_ip'] }}"
+    wait: yes
+    userdata: |
+      #cloud-config
+      ssh_authorized_keys:
+        - "{{ publickey }}"
+  register: instance
+  delegate_to: localhost
+
+- name: add the IP address as a fact
+  set_fact:
+    ansible_ssh_host: "{{ instance.openstack.public_v4 }}"
+
+- name: create volumes
+  os_volume:
+    auth:
+      auth_url: "{{ openstack }}"
+      username: "{{ username }}"
+      password: "{{ password }}"
+      project_name: "{{ tenant }}"  
+    state: present
+    size: "{{ item['size'] }}"
+    display_name: "{{ inventory_hostname }}-{{ item['name'] }}"  
+  with_items: "{{ hostvars[inventory_hostname]['volumes'] }}"
+  delegate_to: localhost
+
+- name: attach volumes  
+  os_server_volume:
+    auth:
+      auth_url: "{{ openstack }}"
+      username: "{{ username }}"
+      password: "{{ password }}"
+      project_name: "{{ tenant }}"
+    state: present    
+    server: "{{ inventory_hostname }}"
+    volume: "{{ inventory_hostname }}-{{ item['name'] }}"
+  with_items: "{{ hostvars[inventory_hostname]['volumes'] }}"
+  delegate_to: localhost
+  
+    

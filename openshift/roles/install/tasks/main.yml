@@ -1,0 +1,76 @@
+---
+- hosts: all
+  become: true
+  roles:
+    - {role: 'ocp-quick'}
+
+- name: Prepare metrics disk
+  parted:
+    device: "{{ item }}"
+    number: 1
+    state: present
+  with_items:
+    - "{{ metrics_storage_device }}"
+    - "{{ logging_storage_device }}"
+    - "{{ ansible_broker_storage_device }}"
+
+- name: Create filesystem
+  filesystem:
+    fstype: xfs
+    dev: "{{ item }}1"
+  with_items:
+    - "{{ metrics_storage_device }}"
+    - "{{ logging_storage_device }}"
+    - "{{ ansible_broker_storage_device }}"
+
+- name: Mount metrics filesystem
+  mount:
+    path: "{{ metrics_mountpoint }}"
+    src: "{{ metrics_storage_device }}1"
+    fstype: xfs
+    state: mounted
+
+- name: Mount logging filesystem
+  mount:
+    path: "{{ logging_mountpoint }}"
+    src: "{{ logging_storage_device }}1"
+    fstype: xfs
+    state: mounted
+
+- name: Mount ansible broker etcd filesystem
+  mount:
+    path: "{{ ansible_broker_mountpoint }}"
+    src: "{{ ansible_broker_storage_device }}1"
+    fstype: xfs
+    state: mounted
+
+- name: Copy hoststemplate file
+  template:
+    src: hosts.j2
+    dest: /etc/ansible/hosts
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Install OpenShift unattended
+  shell: ansible-playbook -i /etc/ansible/hosts -e deprecation_warnings=False /usr/share/ansible/openshift-ansible/playbooks/byo/config.yml
+  ignore_errors: True
+
+- name: Configure htpasswd for authentication 
+  htpasswd:
+    path: '/etc/origin/master/htpasswd'
+    name: "{{ ocpuser }}"
+    password: "{{ ocppass }}"
+
+- name: set htpasswd user up as a cluster-admin
+  shell: |
+    oadm policy add-cluster-role-to-user cluster-admin admin
+    oc project management-infra
+    oadm policy add-role-to-user -n management-infra admin -z management-admin
+    oadm policy add-role-to-user -n management-infra management-infra-admin -z management-admin
+    oadm policy add-cluster-role-to-user cluster-reader system:serviceaccount:management-infra:management-admin
+    oadm policy add-scc-to-user privileged system:serviceaccount:management-infra:management-admin
+    oc sa get-token -n management-infra management-admin > /root/token.txt
+    
+
+  

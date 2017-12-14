@@ -1,0 +1,6 @@
+[masters]
+ocp-m1    provider=openstack     region=infra      zone=default
+
+[nodes]
+ocp-n1    provider=openstack     region=primary    zone=east
+ocp-n2    provider=openstack     region=primary    zone=west

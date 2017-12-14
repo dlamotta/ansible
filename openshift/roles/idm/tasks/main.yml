@@ -1,0 +1,28 @@
+---
+- name: Ensure a DNS record is present
+  ipa_dnsrecord:
+    ipa_host: "{{ idm_server }}"
+    ipa_pass: "{{ idm_pass }}"
+    state: present
+    zone_name: "{{ idm_zone }}"
+    record_name: "{{ inventory_hostname }}"
+    record_type: "A"
+    record_value: "{{ ansible_ssh_host }}"
+
+- name: Add the host
+  ipa_host:
+    name: "{{ inventory_hostname }}.{{ idm_zone }}"
+    state: present
+    ipa_host: "{{ idm_server }}"
+    ipa_user: admin
+    ipa_pass: "{{ idm_pass }}"
+
+- name: Copy dhclient.conf
+  template:
+    src: dhclient.conf.j2
+    dest: /etc/dhclient.conf
+    
+- name:
+  service:
+    name: network
+    state: restarted      

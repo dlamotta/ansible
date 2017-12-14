@@ -1,0 +1,20 @@
+---
+- name: create ssh key
+  shell: echo -e  'y\n' | ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa -q -N ""
+
+- name: capture master public key
+  shell: "cat ~/.ssh/id_rsa.pub"  
+  register: pubkey
+
+- name: set the pubkey fact on the master
+  set_fact:
+    masterpubkey: "{{ pubkey.stdout }}"
+  when: inventory_hostname == groups['masters'][0]
+
+- name: add key to authorized keys
+  authorized_key: 
+    user: "{{ ansible_ssh_user }}"
+    state: present
+    key: "{{ hostvars[groups['masters'][0]]['masterpubkey'] }}"  
+  
+   
