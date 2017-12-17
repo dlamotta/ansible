@@ -20,11 +20,19 @@
   delegate_to: "{{ idm_server }}"
 
 - name: Copy dhclient.conf
+  become: True
   template:
     src: dhclient.conf.j2
     dest: /etc/dhclient.conf
-    
-- name:
+
+- name: Set resolv.conf
+  become: True
+  template:
+    src: resolv.conf.j2
+    dest: /etc/resolv.conf    
+
+- name: Restart network service
+  become: True
   service:
     name: network
     state: restarted      
