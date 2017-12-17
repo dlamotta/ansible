@@ -25,7 +25,12 @@
 
 - name: add the IP address as a fact
   set_fact:
-    ansible_ssh_host: "{{ instance.openstack.public_v4 }}"
+    ansible_default_ipv4:
+      address: "{{ instance.openstack.private_v4 }}"
+    cacheable: True
+
+- debug:
+    msg: IP address is "{{ ansible_default_ipv4.address }}"
 
 - name: create volumes
   os_volume:

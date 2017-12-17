@@ -1,10 +1,12 @@
 ---
 - name: create ssh key
   shell: echo -e  'y\n' | ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa -q -N ""
+  when: inventory_hostname == groups['masters'][0]
 
 - name: capture master public key
   shell: "cat ~/.ssh/id_rsa.pub"  
   register: pubkey
+  when: inventory_hostname == groups['masters'][0]
 
 - name: set the pubkey fact on the master
   set_fact:
