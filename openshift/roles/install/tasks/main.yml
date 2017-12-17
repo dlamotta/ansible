@@ -1,76 +1,60 @@
 ---
-- hosts: all
+- name: Prepare disk
   become: true
-  roles:
-    - {role: 'ocp-quick'}
-
-- name: Prepare metrics disk
   parted:
-    device: "{{ item }}"
+    device: "{{ item.device }}"
     number: 1
     state: present
-  with_items:
-    - "{{ metrics_storage_device }}"
-    - "{{ logging_storage_device }}"
-    - "{{ ansible_broker_storage_device }}"
+  with_items: "{{ hostvars[inventory_hostname]['volumes'] }}"
 
 - name: Create filesystem
+  become: true
   filesystem:
     fstype: xfs
-    dev: "{{ item }}1"
-  with_items:
-    - "{{ metrics_storage_device }}"
-    - "{{ logging_storage_device }}"
-    - "{{ ansible_broker_storage_device }}"
+    dev: "{{ item.device }}1"
+  with_items: "{{ hostvars[inventory_hostname]['volumes'] }}"
 
-- name: Mount metrics filesystem
+- name: Mount device
+  become: true
   mount:
-    path: "{{ metrics_mountpoint }}"
-    src: "{{ metrics_storage_device }}1"
+    path: "{{ item.mountpoint }}"
+    src: "{{ item.device }}1"
     fstype: xfs
     state: mounted
+  with_items: "{{ hostvars[inventory_hostname]['volumes'] }}"  
 
-- name: Mount logging filesystem
-  mount:
-    path: "{{ logging_mountpoint }}"
-    src: "{{ logging_storage_device }}1"
-    fstype: xfs
-    state: mounted
-
-- name: Mount ansible broker etcd filesystem
-  mount:
-    path: "{{ ansible_broker_mountpoint }}"
-    src: "{{ ansible_broker_storage_device }}1"
-    fstype: xfs
-    state: mounted
-
-- name: Copy hoststemplate file
+- name: Copy hosts template file
+  become: true
   template:
     src: hosts.j2
     dest: /etc/ansible/hosts
     owner: root
     group: root
     mode: 0644
+  run_once: true  
 
-- name: Install OpenShift unattended
-  shell: ansible-playbook -i /etc/ansible/hosts -e deprecation_warnings=False /usr/share/ansible/openshift-ansible/playbooks/byo/config.yml
-  ignore_errors: True
+# - name: Install OpenShift unattended
+#   shell: ansible-playbook -i /etc/ansible/hosts -e deprecation_warnings=False /usr/share/ansible/openshift-ansible/playbooks/byo/config.yml
+#   run_once: true
+#   ignore_errors: True
 
-- name: Configure htpasswd for authentication 
-  htpasswd:
-    path: '/etc/origin/master/htpasswd'
-    name: "{{ ocpuser }}"
-    password: "{{ ocppass }}"
+# - name: Configure htpasswd for authentication 
+#   become: true
+#   htpasswd:
+#     path: '/etc/origin/master/htpasswd'
+#     name: "{{ ocpuser }}"
+#     password: "{{ ocppass }}"  
 
-- name: set htpasswd user up as a cluster-admin
-  shell: |
-    oadm policy add-cluster-role-to-user cluster-admin admin
-    oc project management-infra
-    oadm policy add-role-to-user -n management-infra admin -z management-admin
-    oadm policy add-role-to-user -n management-infra management-infra-admin -z management-admin
-    oadm policy add-cluster-role-to-user cluster-reader system:serviceaccount:management-infra:management-admin
-    oadm policy add-scc-to-user privileged system:serviceaccount:management-infra:management-admin
-    oc sa get-token -n management-infra management-admin > /root/token.txt
+# - name: set htpasswd user up as a cluster-admin
+#   run_once: true
+#   shell: |
+#     oadm policy add-cluster-role-to-user cluster-admin admin
+#     oc project management-infra
+#     oadm policy add-role-to-user -n management-infra admin -z management-admin
+#     oadm policy add-role-to-user -n management-infra management-infra-admin -z management-admin
+#     oadm policy add-cluster-role-to-user cluster-reader system:serviceaccount:management-infra:management-admin
+#     oadm policy add-scc-to-user privileged system:serviceaccount:management-infra:management-admin
+#     oc sa get-token -n management-infra management-admin > /root/token.txt
     
 
   

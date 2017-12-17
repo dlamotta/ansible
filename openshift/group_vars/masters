@@ -6,12 +6,16 @@ volumes:
   - name: docker
     size: 100
     device: /dev/vdb
+    mountpoint:
   - name: metrics
     size: 15
     device: /dev/vdc
+    mountpoint: /exports/metrics
   - name: logging
     size: 15
     device: /dev/vdd
+    mountpoint: /exports/logging
   - name: ansible-broker
     size: 15
     device: /dev/vde
+    mountpoint: /exports/ansible-broker
