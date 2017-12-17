@@ -50,16 +50,16 @@ openshift_hosted_etcd_storage_labels={'storage': 'etcd'}
 # host group for masters
 [masters]
 {% for master in groups['masters'] %}
-  {{ master }}
+{{ master }}
 {% endfor %}
 
 # host group for nodes, includes region info
 [nodes]
 {% for node in groups['all'] %}
-  {{ node }} openshift_node_labels="{'region': '{{ hostvars[node]['region'] }}', 'zone': '{{ hostvars[node]['region'] }}'}"  
+{{ node }} openshift_node_labels="{'region': '{{ hostvars[node]['region'] }}', 'zone': '{{ hostvars[node]['zone'] }}'}"  
 {% endfor %}
 
 [nfs]
 {% for master in groups['masters'] %}
-  {{ master }}
+{{ master }}
 {% endfor %}

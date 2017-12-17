@@ -1,5 +1,5 @@
 ---
-- name: Ensure a DNS record is present
+- name: Create DNS record for nodes
   ipa_dnsrecord:
     ipa_host: "{{ idm_server }}"
     ipa_pass: "{{ idm_pass }}"
@@ -9,6 +9,19 @@
     record_type: "A"
     record_value: "{{ ansible_default_ipv4.address }}"
   delegate_to: "{{ idm_server }}"
+
+- name: Create DNS record for apps subdomain
+  ipa_dnsrecord:
+    ipa_host: "{{ idm_server }}"
+    ipa_pass: "{{ idm_pass }}"
+    state: present
+    zone_name: "{{ idm_zone }}"
+    record_name: "*.apps"
+    record_type: "A"
+    record_value: "{{ ansible_default_ipv4.address }}"
+  delegate_to: "{{ idm_server }}"
+  run_once: true
+  when: inventory_hostname == groups['masters'][0]
 
 - name: Add the host
   ipa_host:

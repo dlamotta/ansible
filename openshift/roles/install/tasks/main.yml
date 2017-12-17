@@ -6,6 +6,7 @@
     number: 1
     state: present
   with_items: "{{ hostvars[inventory_hostname]['volumes'] }}"
+  when: item.name != "docker"
 
 - name: Create filesystem
   become: true
@@ -13,6 +14,7 @@
     fstype: xfs
     dev: "{{ item.device }}1"
   with_items: "{{ hostvars[inventory_hostname]['volumes'] }}"
+  when: item.name != "docker"
 
 - name: Mount device
   become: true
@@ -22,6 +24,7 @@
     fstype: xfs
     state: mounted
   with_items: "{{ hostvars[inventory_hostname]['volumes'] }}"  
+  when: item.name != "docker"
 
 - name: Copy hosts template file
   become: true
@@ -31,7 +34,7 @@
     owner: root
     group: root
     mode: 0644
-  run_once: true  
+  when: inventory_hostname == groups['masters'][0]
 
 # - name: Install OpenShift unattended
 #   shell: ansible-playbook -i /etc/ansible/hosts -e deprecation_warnings=False /usr/share/ansible/openshift-ansible/playbooks/byo/config.yml

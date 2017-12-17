@@ -23,11 +23,19 @@
   register: instance
   delegate_to: localhost
 
-- name: add the IP address as a fact
+- name: add the public IP address as a fact for masters
+  set_fact:
+    ansible_default_ipv4:
+      address: "{{ instance.openstack.public_v4 }}"
+    cacheable: True
+  when: inventory_hostname in groups['masters']
+
+- name: add the private IP address as a fact for nodes
   set_fact:
     ansible_default_ipv4:
       address: "{{ instance.openstack.private_v4 }}"
     cacheable: True
+  when: inventory_hostname in groups['nodes']
 
 - debug:
     msg: IP address is "{{ ansible_default_ipv4.address }}"

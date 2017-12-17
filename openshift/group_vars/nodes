@@ -6,6 +6,8 @@ volumes:
   - name: docker
     size: 100
     device: /dev/vdb
+    mountpoint:
   - name: storage
     size: 50
     device: /dev/vdc
+    mountpoint: /exports/storage

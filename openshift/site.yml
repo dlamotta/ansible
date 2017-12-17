@@ -1,7 +1,7 @@
 ---
 - name: Prepare for cluster installation
-  remote_user: cloud-user
   hosts: all
+  remote_user: cloud-user
   gather_facts: False
   vars:
     ansible_ssh_private_key_file: /home/cloud-user/salab.pem
@@ -22,12 +22,5 @@
     # prepare all hosts for installation
     - { role: prepare } 
 
-- name: Install OpenShift cluster
-  remote_user: cloud-user
-  hosts: masters
-  gather_facts: False
-  vars:
-    ansible_ssh_private_key_file: /home/cloud-user/salab.pem
-  roles:
     # prepare all hosts for installation
     - { role: install } 
