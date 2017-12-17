@@ -20,4 +20,4 @@
     - { role: rhn, version: '3.7'}
 
     # prepare all hosts for installation
-    # - { role: prepare } 
+    - { role: prepare } 
