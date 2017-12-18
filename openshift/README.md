@@ -13,12 +13,12 @@ Role Variables
 
 See group_vars/masters and group_vars/nodes in order to specify variables for all hosts in their corresponding group. Each role has their own set of variables, broken down as follows:
 
-  - [OpenStack](openstack/README.md)
-  - [IPA](ipa/README.md)
-  - [Keys](keys/README.md)
-  - [RHN](rhn/README.md)
-  - [Prepare](prepare/README.md)
-  - [Install](install/README.md)
+  - [OpenStack](roles/openstack/README.md)
+  - [IPA](roles/ipa/README.md)
+  - [Keys](roles/keys/README.md)
+  - [RHN](roles/rhn/README.md)
+  - [Prepare](roles/prepare/README.md)
+  - [Install](roles/install/README.md)
 
 Dependencies
 ------------
