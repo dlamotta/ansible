@@ -1,7 +1,12 @@
 A set of roles for installing an OpenShift Container Platform cluster on Red Hat Enterprise Linux machines.
 The installation has been broken down into several roles to make consumption easier. Each role has a set of variables that may be overwritten at execution time.
 
-It is assumed that the RHEL machines do not exist; as such, they will be 
+It is assumed that the RHEL machines do not exist so the very first role will create the instances. You have full control where instances are created; currently,
+the only provider that exists is OpenStack but there is nothing that prevents others such as AWS, Azure, VMware, CloudForms, etc, from co-existing with each other.
+
+The IPA machine is NOT created as part of this installation. You may ommit or modify that role if your DNS is served elsewhere.
+
+Please contribute! We are happy for any pull request to make this installer better. Know that this was created exclusively for standing up OpenShift lab environments in an automated and repeatable fashion.
 
 Requirements
 ------------
@@ -54,6 +59,10 @@ Example Playbook
 
         # prepare all hosts for installation
         - { role: install }
+
+TODO
+-------
+This is currently a work in progress and should 
 
 License
 -------
