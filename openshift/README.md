@@ -64,7 +64,12 @@ The following example is exactly how the roles in this repository are being used
 
 TODO
 -------
-This is currently a work in progress and should 
+This is currently a work in progress and by no means perfect (yet). Still needed:
+
+  - An instance dedicated for NFS. Will need to create group_vars/nfs and modify group_vars/masters since currently the master is being used for all NFS volumes
+  - We should not be modifying /etc/resolv.conf [see IPA role](roles/ipa/tasks/main.yml) and instead modify /etc/sysconfig/network-scripts/ifcfg-eth0 for setting the domain
+  - Expanding the cluster
+  - Environment cleanup  
 
 License
 -------
