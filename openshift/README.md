@@ -11,7 +11,7 @@ Subscription manager credentials and pool ID are required as variables. See belo
 Role Variables
 --------------
 
-See group_vars/masters and group_vars/nodes in order to specify variables for all hosts in their corresponding group. Each role has their own set of variables, broken down as follows:
+See [group_vars/masters](group_vars/masters) and [group_vars/nodes](group_vars/nodes) in order to specify variables for all hosts in their corresponding group. Each role has their own set of variables, broken down as follows:
 
   - [OpenStack](roles/openstack/README.md)
   - [IPA](roles/ipa/README.md)
