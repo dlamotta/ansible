@@ -28,32 +28,32 @@ All the rolez!
 Example Playbook
 ----------------
 
----
-- name: Install OpenShift
-  hosts: all
-  gather_facts: False
-  vars:
-    ansible_ssh_common_args: -o StrictHostKeyChecking=no
-    domain: cloudsalab.com
-  roles:
-    # deploy in target platform. if other platforms are required, create a role for that
-    # platform and add another line. Destination provider is defined as a group variable.
-    - { role: openstack, when: "hostvars[inventory_hostname]['provider'] == 'openstack'" }
+    ---
+    - name: Install OpenShift
+      hosts: all
+      gather_facts: False
+      vars:
+        ansible_ssh_common_args: -o StrictHostKeyChecking=no
+        domain: cloudsalab.com
+      roles:
+        # deploy in target platform. if other platforms are required, create a role for that
+        # platform and add another line. Destination provider is defined as a group variable.
+        - { role: openstack, when: "hostvars[inventory_hostname]['provider'] == 'openstack'" }
 
-    # create and add DNS entries
-    - { role: ipa }
+        # create and add DNS entries
+        - { role: ipa }
 
-    # create and copy SSH keys
-    - { role: keys }    
+        # create and copy SSH keys
+        - { role: keys }    
 
-    # register with subscription manager
-    - { role: rhn, version: '3.7'}
+        # register with subscription manager
+        - { role: rhn, version: '3.7'}
 
-    # prepare all hosts for installation
-    - { role: prepare } 
+        # prepare all hosts for installation
+        - { role: prepare } 
 
-    # prepare all hosts for installation
-    - { role: install }
+        # prepare all hosts for installation
+        - { role: install }
 
 License
 -------
