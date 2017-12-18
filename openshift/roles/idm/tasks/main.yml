@@ -20,7 +20,6 @@
     record_type: "A"
     record_value: "{{ ansible_default_ipv4.address }}"
   delegate_to: "{{ idm_server }}"
-  run_once: true
   when: inventory_hostname == groups['masters'][0]
 
 - name: Add the host
