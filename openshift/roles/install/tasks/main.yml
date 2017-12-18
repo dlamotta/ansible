@@ -43,16 +43,14 @@
     name: "{{ ocpuser }}"
     password: "{{ ocppass }}"  
   when: inventory_hostname == groups['masters'][0]
-  run_once: true
       
 - name: Install OpenShift unattended
   shell: ansible-playbook -i /etc/ansible/hosts -e deprecation_warnings=False /usr/share/ansible/openshift-ansible/playbooks/byo/config.yml
   when: inventory_hostname == groups['masters'][0]
-  run_once: true
   ignore_errors: True
 
-- name: set htpasswd user up as a cluster-admin
-  run_once: true
+- name: Setup {{ ocpuser }} as a cluster-admin and generate the management token
+  when: inventory_hostname == groups['masters'][0]
   shell: |
     oadm policy add-cluster-role-to-user cluster-admin {{ ocpuser }}
     oc project management-infra

@@ -18,9 +18,11 @@
 
 - name: Disable all repos
   become: True
-  command: subscription-manager repos --disable "*"
+  shell: |
+    subscription-manager repos --disable="*"
+    yum-config-manager --disable \*
 
 - name: Enable necessary repos
   become: True
-  command: subscription-manager repos --enable="rhel-7-server-rpms"     --enable="rhel-7-server-extras-rpms"     --enable="rhel-7-server-ose-{{ version }}-rpms"     --enable="rhel-7-fast-datapath-rpms"
+  command: subscription-manager repos --enable="rhel-7-server-rpms" --enable="rhel-7-server-extras-rpms" --enable="rhel-7-server-ose-{{ version }}-rpms" --enable="rhel-7-fast-datapath-rpms"
   
