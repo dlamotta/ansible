@@ -33,6 +33,8 @@ All the rolez!
 Example Playbook
 ----------------
 
+The following example is exactly how the roles in this repository are being used in [site.yml](site.yml).
+
     ---
     - name: Install OpenShift
       hosts: all
