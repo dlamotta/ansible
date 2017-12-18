@@ -8,6 +8,11 @@ The IPA machine is NOT created as part of this installation. You may ommit or mo
 
 Please contribute! We are happy for any pull request to make this installer better. Know that this was created exclusively for standing up OpenShift lab environments in an automated and repeatable fashion.
 
+Start Here
+------------
+
+The first thing you'll want to check is the [inventory](inventory) file. This is where your soon-to-be-created instances are declared, along with some variables. Next up, take a look at the [site.yml](site.yml). The rest is defined in the various roles in this repo.
+
 Requirements
 ------------
 
