@@ -11,7 +11,7 @@ Please contribute! We are happy for any pull request to make this installer bett
 Start Here
 ------------
 
-The first thing you'll want to check is the [inventory](inventory) file. This is where your soon-to-be-created instances are declared, along with some variables. Next up, take a look at the [site.yml](site.yml). The rest is defined in the various roles in this repo.
+The first thing you'll want to check is the [inventory](inventory) file. This is where your soon-to-be-created instances are declared, along with some variables. Next up, see [group_vars/masters](group_vars/masters) and [group_vars/nodes](group_vars/nodes) in order to specify variables for all hosts specified in the inventory. Last but not least, take a look at the [site.yml](site.yml) and then look at each role to see what it's doing.
 
 Requirements
 ------------
@@ -21,7 +21,7 @@ Subscription manager credentials and pool ID are required as variables. See belo
 Role Variables
 --------------
 
-See [group_vars/masters](group_vars/masters) and [group_vars/nodes](group_vars/nodes) in order to specify variables for all hosts in their corresponding group. Each role has their own set of variables, broken down as follows:
+Each role has their own set of variables, broken down as follows:
 
   - [OpenStack](roles/openstack/README.md)
   - [IPA](roles/ipa/README.md)
