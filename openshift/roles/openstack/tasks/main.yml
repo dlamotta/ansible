@@ -38,7 +38,7 @@
   when: inventory_hostname in groups['nodes']
 
 - debug:
-    msg: IP address is "{{ ansible_default_ipv4.address }}"
+    msg: IP address is {{ ansible_default_ipv4.address }}
 
 - name: create volumes
   os_volume:
