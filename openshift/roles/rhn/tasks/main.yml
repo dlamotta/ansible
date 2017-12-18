@@ -7,7 +7,7 @@
 - name: register with red hat network
   become: True
   shell: |
-    subscription-manager register --username={{ rhn_username }} --password={{ rhn_password }} --force
+    subscription-manager register --username={{ rhn_user }} --password={{ rhn_pass }} --force
     subscription-manager refresh
     subscription-manager attach --pool={{ rhn_pool }}
   ignore_errors: yes

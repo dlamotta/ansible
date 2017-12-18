@@ -40,8 +40,8 @@
   become: true
   htpasswd:
     path: '/etc/origin/master/htpasswd'
-    name: "{{ ocpuser }}"
-    password: "{{ ocppass }}"  
+    name: "{{ ocp_user }}"
+    password: "{{ ocp_pass }}"  
   when: inventory_hostname == groups['masters'][0]
       
 - name: Install OpenShift unattended

@@ -15,7 +15,7 @@ ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 ansible_become=true
 openshift_clock_enabled=true
 openshift_deployment_type=openshift-enterprise
-openshift_master_default_subdomain=apps.{{ idm_zone }}
+openshift_master_default_subdomain=apps.{{ domain }}
 
 # uncomment the following to enable htpasswd authentication; defaults to DenyAllPasswordIdentityProvider
 openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider', 'filename': '/etc/origin/master/htpasswd'}]
@@ -52,21 +52,21 @@ openshift_hosted_etcd_storage_labels={'storage': 'etcd'}
 # host group for masters
 [masters]
 {% for master in groups['masters'] %}
-{{ master }}.{{ idm_zone }}
+{{ master }}.{{ domain }}
 {% endfor %}
 
 # host group for nodes, includes region info
 [nodes]
 {% for node in groups['all'] %}
-{{ node }}.{{ idm_zone }} openshift_node_labels="{'region': '{{ hostvars[node]['region'] }}', 'zone': '{{ hostvars[node]['zone'] }}'}"  
+{{ node }}.{{ domain }} openshift_node_labels="{'region': '{{ hostvars[node]['region'] }}', 'zone': '{{ hostvars[node]['zone'] }}'}"  
 {% endfor %}
 
 [nfs]
 {% for master in groups['masters'] %}
-{{ master }}.{{ idm_zone }}
+{{ master }}.{{ domain }}
 {% endfor %}
 
 [etcd]
 {% for master in groups['masters'] %}
-{{ master }}.{{ idm_zone }}
+{{ master }}.{{ domain }}
 {% endfor %}

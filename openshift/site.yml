@@ -1,11 +1,10 @@
 ---
-- name: Prepare for cluster installation
+- name: Install OpenShift
   hosts: all
-  remote_user: cloud-user
   gather_facts: False
   vars:
-    ansible_ssh_private_key_file: /home/cloud-user/salab.pem
     ansible_ssh_common_args: -o StrictHostKeyChecking=no
+    domain: cloudsalab.com
   roles:
     # deploy in target platform. if other platforms are required, create a role for that
     # platform and add another line. Destination provider is defined as a group variable.
@@ -24,4 +23,4 @@
     - { role: prepare } 
 
     # prepare all hosts for installation
-    - { role: install } 
+    - { role: install }

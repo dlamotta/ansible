@@ -1,35 +1,35 @@
 ---
 - name: Create DNS record for nodes
   ipa_dnsrecord:
-    ipa_host: "{{ idm_server }}"
-    ipa_pass: "{{ idm_pass }}"
+    ipa_host: "{{ ipa_server }}"
+    ipa_pass: "{{ ipa_pass }}"
     state: present
-    zone_name: "{{ idm_zone }}"
+    zone_name: "{{ domain }}"
     record_name: "{{ inventory_hostname }}"
     record_type: "A"
     record_value: "{{ ansible_default_ipv4.address }}"
-  delegate_to: "{{ idm_server }}"
+  delegate_to: "{{ ipa_server }}"
 
 - name: Create DNS record for apps subdomain
   ipa_dnsrecord:
-    ipa_host: "{{ idm_server }}"
-    ipa_pass: "{{ idm_pass }}"
+    ipa_host: "{{ ipa_server }}"
+    ipa_pass: "{{ ipa_pass }}"
     state: present
-    zone_name: "{{ idm_zone }}"
+    zone_name: "{{ domain }}"
     record_name: "*.apps"
     record_type: "A"
     record_value: "{{ ansible_default_ipv4.address }}"
-  delegate_to: "{{ idm_server }}"
+  delegate_to: "{{ ipa_server }}"
   when: inventory_hostname == groups['masters'][0]
 
 - name: Add the host
   ipa_host:
-    name: "{{ inventory_hostname }}.{{ idm_zone }}"
+    name: "{{ inventory_hostname }}.{{ domain }}"
     state: present
-    ipa_host: "{{ idm_server }}"
+    ipa_host: "{{ ipa_server }}"
     ipa_user: admin
-    ipa_pass: "{{ idm_pass }}"
-  delegate_to: "{{ idm_server }}"
+    ipa_pass: "{{ ipa_pass }}"
+  delegate_to: "{{ ipa_server }}"
 
 - name: Copy dhclient.conf
   become: True

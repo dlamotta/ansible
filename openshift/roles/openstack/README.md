@@ -1,38 +1,46 @@
 Role Name
 =========
 
-A brief description of the role goes here.
+Creates instances in an OpenStack environment.
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+Enough quota available to provision as many instances as specified in the inventory file. Also, enough storage quota to create all volumes specified for all entries in group_vars.
+This role also requires a previously-created SSH key that can be embedded via cloud-init (see variables below); this is required for Ansible in order to manage the instances created.
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+| Variable Name      | Description                                                           | Example                              |
+|--------------------|-----------------------------------------------------------------------|--------------------------------------|
+| osp_server 	       | OpenStack API endpoint                            										 | http://osp.exmaple.com:5000/v2.0/    | 
+| ocp_user           | OpenStack tenant administrator username    									         | tenant_admin              	          |
+| ocp_pass     	     | OpenStack tenant administrator password    									         | password                   	        |
+| osp_tenant 	       | OpenStack tenant with enough resources available   									 | redhatrulez                          | 
+| osp_key   	       | SSH key-pair name to allow Ansible to manage instances								 | mykey                                | 
+| osp_iamge          | Glance image ID that will be used to provision new instances  				 | 157e2f64-a397-498e-9a30-33a4ae11e4be | 
+| osp_public_key     | Public SSH key to allow passwordless connection from masters to nodes | ssh-rsa ABCDetcetcetc                | 
+| osp_security_group | OpenStack network security group (i.e., ingress/egress rules)         | wide-open                            | 
+| osp_floating_ip    | Whether to create a floating IP or not (master only, by default)      | True                                 | 
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+None.
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too.
+See the inventory file and define the provider there. Other providers can coexist but their corresponding roles will need to be created.
 
-    - hosts: servers
+    - hosts: all
       roles:
-         - { role: username.rolename, x: 42 }
+         - { role: openstack, when: "hostvars[inventory_hostname]['provider'] == 'openstack'" }
 
 License
 -------
 
 BSD
 
-Author Information
-------------------
-
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).

@@ -1,7 +1,10 @@
 ---
-flavor: cfme
-securitygroup: wide-open
-floating_ip: True
+# OpenStack-specific variables
+osp_flavor: cfme
+osp_security_group: wide-open
+osp_floating_ip: True
+
+# OpenShift volumes. Size is specified in Gi
 volumes:
   - name: docker
     size: 100

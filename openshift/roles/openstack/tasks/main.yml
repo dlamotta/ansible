@@ -3,23 +3,23 @@
   os_server:
     state: present
     auth:
-      auth_url: "{{ openstack }}"
-      username: "{{ username }}"
-      password: "{{ password }}"
-      project_name: "{{ tenant }}"
+      auth_url: "{{ osp_server }}"
+      username: "{{ osp_user }}"
+      password: "{{ osp_pass }}  "
+      project_name: "{{ osp_tenant }}"
     name: "{{ inventory_hostname }}"
-    image: 157e2f64-a397-498e-9a30-33a4ae11e4be
-    key_name: "{{ key }}"
+    image: "{{ osp_image }}"
+    key_name: "{{ osp_key }}"
     timeout: 200
-    flavor: "{{ flavor }}"
-    security_groups: "{{ securitygroup }}"
+    flavor: "{{ osp_flavor }}"
+    security_groups: "{{ osp_security_group }}"
     network: private
     auto_ip: "{{ hostvars[inventory_hostname]['floating_ip'] }}"
     wait: yes
     userdata: |
       #cloud-config
       ssh_authorized_keys:
-        - "{{ publickey }}"
+        - "{{ osp_public_key }}"
   register: instance
   delegate_to: localhost
 
@@ -43,10 +43,10 @@
 - name: create volumes
   os_volume:
     auth:
-      auth_url: "{{ openstack }}"
-      username: "{{ username }}"
-      password: "{{ password }}"
-      project_name: "{{ tenant }}"  
+      auth_url: "{{ osp_server }}"
+      osp_user: "{{ osp_user }}"
+      password: "{{ osp_pass }}"
+      project_name: "{{ osp_tenant }}"  
     state: present
     size: "{{ item['size'] }}"
     display_name: "{{ inventory_hostname }}-{{ item['name'] }}"  
@@ -56,10 +56,10 @@
 - name: attach volumes  
   os_server_volume:
     auth:
-      auth_url: "{{ openstack }}"
-      username: "{{ username }}"
-      password: "{{ password }}"
-      project_name: "{{ tenant }}"
+      auth_url: "{{ osp_server }}"
+      osp_user: "{{ osp_user }}"
+      password: "{{ osp_pass }}"
+      project_name: "{{ osp_tenant }}"
     state: present    
     server: "{{ inventory_hostname }}"
     volume: "{{ inventory_hostname }}-{{ item['name'] }}"
