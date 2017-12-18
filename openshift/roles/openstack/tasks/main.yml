@@ -5,7 +5,7 @@
     auth:
       auth_url: "{{ osp_server }}"
       username: "{{ osp_user }}"
-      password: "{{ osp_pass }}  "
+      password: "{{ osp_pass }}"
       project_name: "{{ osp_tenant }}"
     name: "{{ inventory_hostname }}"
     image: "{{ osp_image }}"
@@ -14,7 +14,7 @@
     flavor: "{{ osp_flavor }}"
     security_groups: "{{ osp_security_group }}"
     network: private
-    auto_ip: "{{ hostvars[inventory_hostname]['floating_ip'] }}"
+    auto_ip: "{{ hostvars[inventory_hostname]['osp_floating_ip'] }}"
     wait: yes
     userdata: |
       #cloud-config
@@ -44,7 +44,7 @@
   os_volume:
     auth:
       auth_url: "{{ osp_server }}"
-      osp_user: "{{ osp_user }}"
+      username: "{{ osp_user }}"
       password: "{{ osp_pass }}"
       project_name: "{{ osp_tenant }}"  
     state: present
@@ -57,7 +57,7 @@
   os_server_volume:
     auth:
       auth_url: "{{ osp_server }}"
-      osp_user: "{{ osp_user }}"
+      username: "{{ osp_user }}"
       password: "{{ osp_pass }}"
       project_name: "{{ osp_tenant }}"
     state: present    

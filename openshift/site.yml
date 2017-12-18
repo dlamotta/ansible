@@ -11,7 +11,7 @@
     - { role: openstack, when: "hostvars[inventory_hostname]['provider'] == 'openstack'" }
 
     # create and add DNS entries
-    - { role: idm }
+    - { role: ipa}
 
     # create and copy SSH keys
     - { role: keys }    
