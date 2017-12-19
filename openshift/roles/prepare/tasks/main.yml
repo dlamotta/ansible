@@ -1,4 +1,14 @@
 ---
+- name: Install yum-utils
+  become: true
+  yum:
+    name: yum-utils
+    state: present
+  
+- name: Cleanup any interrupted yum actions
+  become: true
+  command: yum-complete-transaction --cleanup-only
+
 - name: Install necessary packages
   become: true
   yum:  
