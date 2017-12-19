@@ -1,9 +1,4 @@
 ---
-- name: Set hostname
-  become: true
-  hostname:
-    name: "{{ inventory_hostname }}.{{ domain }}"   
-
 - name: Create DNS record 
   ipa_dnsrecord:
     ipa_host: "{{ ipa_server }}"
@@ -43,6 +38,11 @@
   template:
     src: dhclient.conf.j2
     dest: /etc/dhclient.conf
+
+- name: Set hostname
+  become: true
+  hostname:
+    name: "{{ inventory_hostname }}.{{ domain }}"
 
 - name: Set resolv.conf
   become: True

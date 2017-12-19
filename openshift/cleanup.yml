@@ -1,7 +1,6 @@
 ---
 - name: Deletes OpenShift machines and cleans up DNS
   hosts: all
-  gather_facts: false
   remote_user: cloud-user
   vars:
     ansible_ssh_common_args: -o StrictHostKeyChecking=no

@@ -19,6 +19,8 @@
       project_name: "{{ osp_tenant }}"  
     state: absent
     display_name: "{{ inventory_hostname }}-{{ item['name'] }}"  
-  with_items: "{{ hostvars[inventory_hostname]['volumes'] }}"
+  with_flattened: 
+    - "{{ hostvars[inventory_hostname]['docker-volumes'] }}"
+    - "{{ hostvars[inventory_hostname]['nfs-volumes'] }}"
   delegate_to: localhost  
     

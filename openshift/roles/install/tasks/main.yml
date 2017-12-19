@@ -5,16 +5,14 @@
     device: "{{ item.device }}"
     number: 1
     state: present
-  with_items: "{{ hostvars[inventory_hostname]['volumes'] }}"
-  when: item.name != "docker"
+  with_items: "{{ hostvars[inventory_hostname]['nfs-volumes'] }}"
 
 - name: Create filesystem
   become: true
   filesystem:
     fstype: xfs
     dev: "{{ item.device }}1"
-  with_items: "{{ hostvars[inventory_hostname]['volumes'] }}"
-  when: item.name != "docker"
+  with_items: "{{ hostvars[inventory_hostname]['nfs-volumes'] }}"
 
 - name: Mount device
   become: true
@@ -23,8 +21,7 @@
     src: "{{ item.device }}1"
     fstype: xfs
     state: mounted
-  with_items: "{{ hostvars[inventory_hostname]['volumes'] }}"  
-  when: item.name != "docker"
+  with_items: "{{ hostvars[inventory_hostname]['nfs-volumes'] }}"  
 
 - name: Copy hosts template file
   become: true
@@ -44,10 +41,10 @@
     password: "{{ ocp_pass }}"  
   when: inventory_hostname == groups['masters'][0]
       
-- name: Install OpenShift unattended
-  shell: ansible-playbook -i /etc/ansible/hosts -e deprecation_warnings=False /usr/share/ansible/openshift-ansible/playbooks/byo/config.yml
-  when: inventory_hostname == groups['masters'][0]
-  ignore_errors: True
+# - name: Install OpenShift unattended
+#  shell: ansible-playbook -i /etc/ansible/hosts -e deprecation_warnings=False /usr/share/ansible/openshift-ansible/playbooks/byo/config.yml
+#  when: inventory_hostname == groups['masters'][0]
+#  ignore_errors: True
 
 - name: Setup {{ ocp_user }} as a cluster-admin and generate the management token
   when: inventory_hostname == groups['masters'][0]

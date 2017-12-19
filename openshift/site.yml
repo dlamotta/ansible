@@ -7,6 +7,7 @@
     ansible_ssh_common_args: -o StrictHostKeyChecking=no
     ansible_ssh_private_key_file: /home/cloud-user/salab.pem
     domain: cloudsalab.com
+    version: 3.7
   roles:
     # deploy in target platform. if other platforms are required, create a role for that
     # platform and add another line. Destination provider is defined as a group variable.
@@ -19,7 +20,7 @@
     - { role: keys }    
 
     # register with subscription manager
-    - { role: rhn, version: '3.7'}
+    - { role: rhn }
 
     # prepare all hosts for installation
     - { role: prepare } 
