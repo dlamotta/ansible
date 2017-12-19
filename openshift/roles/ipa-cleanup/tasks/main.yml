@@ -1,0 +1,34 @@
+---
+- name: Delete DNS record 
+  ipa_dnsrecord:
+    ipa_host: "{{ ipa_server }}"
+    ipa_pass: "{{ ipa_pass }}"
+    state: absent
+    zone_name: "{{ domain }}"
+    record_name: "{{ inventory_hostname }}"
+    record_type: "A"
+    record_value: "{{ ansible_default_ipv4.address }}"
+    validate_certs: False
+  delegate_to: localhost
+
+- name: Create DNS record for apps subdomain
+  ipa_dnsrecord:
+    ipa_host: "{{ ipa_server }}"
+    ipa_pass: "{{ ipa_pass }}"
+    state: absent
+    zone_name: "{{ domain }}"
+    record_name: "*.apps"
+    record_type: "A"
+    record_value: "{{ ansible_default_ipv4.address }}"
+    validate_certs: False
+  delegate_to: localhost
+  when: inventory_hostname == groups['masters'][0]
+
+- name: Add the host
+  ipa_host:
+    name: "{{ inventory_hostname }}.{{ domain }}"
+    state: absent
+    ipa_host: "{{ ipa_server }}"
+    ipa_pass: "{{ ipa_pass }}"
+    validate_certs: False
+  delegate_to: localhost

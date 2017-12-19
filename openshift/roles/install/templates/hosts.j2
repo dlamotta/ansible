@@ -7,46 +7,88 @@ nfs
 
 # Set variables common for all OSEv3 hosts
 [OSEv3:vars]
+# If ansible_ssh_user is not root, ansible_become must be set to true
+ansible_become=true
+
 # SSH user, this user should allow ssh based auth without requiring a password
 ansible_ssh_user={{ ansible_user }}
 ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 
-# If ansible_ssh_user is not root, ansible_become must be set to true
-ansible_become=true
+
+# OpenShift vars
+openshift_release=v{{ version }}
 openshift_clock_enabled=true
 openshift_deployment_type=openshift-enterprise
 openshift_master_default_subdomain=apps.{{ domain }}
+openshift_docker_insecure_registries=172.30.0.0/16
+osm_use_cockpit=true
+osm_cockpit_plugins=['cockpit-kubernetes']
+osm_default_node_selector="region=[{{ groups['nodes'][0]['region'] }}]"
 
 # uncomment the following to enable htpasswd authentication; defaults to DenyAllPasswordIdentityProvider
 openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider', 'filename': '/etc/origin/master/htpasswd'}]
 
 # metrics vars
-openshift_metrics_deploy=true
 openshift_metrics_storage_kind=nfs
+openshift_metrics_deploy=true
 openshift_metrics_storage_access_modes=['ReadWriteOnce']
 openshift_metrics_storage_nfs_options='*(rw,root_squash)'
-openshift_metrics_storage_nfs_directory={{ hostvars[groups['masters'][0]]['volumes'][1]['mountpoint'] }}
+openshift_metrics_storage_nfs_directory={{ hostvars[groups['masters'][0]]['volumes']['metrics']['mountpoint'] }}
 openshift_metrics_storage_volume_name=
-openshift_metrics_storage_volume_size={{ hostvars[groups['masters'][0]]['volumes'][1]['size'] }}Gi
+openshift_metrics_storage_volume_size={{ hostvars[groups['masters'][0]]['volumes']['metrics']['size'] }}Gi
+openshift_metrics_storage_labels={'storage': 'metrics'}
 
 # logging vars
 openshift_logging_storage_kind=nfs
 openshift_logging_storage_access_modes=['ReadWriteOnce']
-openshift_logging_storage_nfs_directory={{ hostvars[groups['masters'][0]]['volumes'][2]['mountpoint'] }}
+openshift_logging_storage_nfs_directory={{ hostvars[groups['masters'][0]]['volumes']['logging']['mountpoint'] }}
 openshift_logging_storage_nfs_options='*(rw,root_squash)'
 openshift_logging_storage_volume_name=
-openshift_logging_storage_volume_size={{ hostvars[groups['masters'][0]]['volumes'][2]['size'] }}Gi
+openshift_logging_storage_volume_size={{ hostvars[groups['masters'][0]]['volumes']['logging']['size'] }}Gi
+openshift_logging_storage_labels={'storage': 'logging'}
+
+# prometheus
+openshift_prometheus_storage_kind=nfs
+openshift_prometheus_storage_access_modes=['ReadWriteOnce']
+openshift_prometheus_storage_nfs_directory={{ hostvars[groups['masters'][0]]['volumes']['prometheus']['mountpoint'] }}
+openshift_prometheus_storage_nfs_options='*(rw,root_squash)'
+openshift_prometheus_storage_volume_name=
+openshift_prometheus_storage_volume_size={{ hostvars[groups['masters'][0]]['volumes']['prometheus']['size'] }}Gi
+openshift_prometheus_storage_labels={'storage': 'prometheus'}
+openshift_prometheus_storage_type='pvc'
+
+# For prometheus-alertmanager
+#openshift_prometheus_alertmanager_storage_kind=nfs
+#openshift_prometheus_alertmanager_storage_access_modes=['ReadWriteOnce']
+#openshift_prometheus_alertmanager_storage_nfs_directory={{ hostvars[groups['masters'][0]]['volumes']['prometheus-alertmanager']['mountpoint'] }}
+#openshift_prometheus_alertmanager_storage_nfs_options='*(rw,root_squash)'
+#openshift_prometheus_alertmanager_storage_volume_name=
+#openshift_prometheus_alertmanager_storage_volume_size={{ hostvars[groups['masters'][0]]['volumes']['prometheus-alertmanager']['size'] }}Gi
+#openshift_prometheus_alertmanager_storage_labels={'storage': 'prometheus-alertmanager'}
+#openshift_prometheus_alertmanager_storage_type='pvc'
+
+# For prometheus-alertbuffer
+#openshift_prometheus_alertbuffer_storage_kind=nfs
+#openshift_prometheus_alertbuffer_storage_access_modes=['ReadWriteOnce']
+#openshift_prometheus_alertbuffer_storage_nfs_directory={{ hostvars[groups['masters'][0]]['volumes']['prometheus-alertbuffer']['mountpoint'] }}
+#openshift_prometheus_alertbuffer_storage_nfs_options='*(rw,root_squash)'
+#openshift_prometheus_alertbuffer_storage_volume_name=
+#openshift_prometheus_alertbuffer_storage_volume_size={{ hostvars[groups['masters'][0]]['volumes']['prometheus-alertbuffer']['size'] }}Gi
+#openshift_prometheus_alertbuffer_storage_labels={'storage': 'prometheus-alertbuffer'}
+#openshift_prometheus_alertbuffer_storage_type='pvc'
 
 # project for the template service broker
-openshift_template_service_broker_namespaces=['openshift','template-service-broker']
+openshift_enable_service_catalog=true
+template_service_broker_install=true
+openshift_template_service_broker_namespaces=['openshift']
 
 # etcd space for ansible broker
 openshift_hosted_etcd_storage_kind=nfs
 openshift_hosted_etcd_storage_nfs_options="*(rw,root_squash,sync,no_wdelay)"
-openshift_hosted_etcd_storage_nfs_directory={{ hostvars[groups['masters'][0]]['volumes'][3]['mountpoint'] }}
+openshift_hosted_etcd_storage_nfs_directory={{ hostvars[groups['masters'][0]]['volumes']['ansible-broker']['mountpoint'] }}
 openshift_hosted_etcd_storage_volume_name=
 openshift_hosted_etcd_storage_access_modes=["ReadWriteOnce"]
-openshift_hosted_etcd_storage_volume_size={{ hostvars[groups['masters'][0]]['volumes'][3]['size'] }}Gi
+openshift_hosted_etcd_storage_volume_size={{ hostvars[groups['masters'][0]]['volumes']['ansible-broker']['size'] }}Gi
 openshift_hosted_etcd_storage_labels={'storage': 'etcd'}
 
 # host group for masters

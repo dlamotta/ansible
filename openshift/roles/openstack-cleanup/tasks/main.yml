@@ -1,0 +1,24 @@
+---
+- name: delete an instance
+  os_server:
+    state: absent
+    auth:
+      auth_url: "{{ osp_server }}"
+      username: "{{ osp_user }}"
+      password: "{{ osp_pass }}"
+      project_name: "{{ osp_tenant }}"
+    name: "{{ inventory_hostname }}"
+  delegate_to: localhost
+
+- name: delete volumes
+  os_volume:
+    auth:
+      auth_url: "{{ osp_server }}"
+      username: "{{ osp_user }}"
+      password: "{{ osp_pass }}"
+      project_name: "{{ osp_tenant }}"  
+    state: absent
+    display_name: "{{ inventory_hostname }}-{{ item['name'] }}"  
+  with_items: "{{ hostvars[inventory_hostname]['volumes'] }}"
+  delegate_to: localhost  
+    

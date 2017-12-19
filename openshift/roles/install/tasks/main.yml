@@ -39,7 +39,7 @@
 - name: Configure htpasswd for authentication 
   become: true
   htpasswd:
-    path: '/etc/origin/master/htpasswd'
+    path: /etc/origin/master/htpasswd
     name: "{{ ocp_user }}"
     password: "{{ ocp_pass }}"  
   when: inventory_hostname == groups['masters'][0]
