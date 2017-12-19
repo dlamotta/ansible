@@ -16,7 +16,7 @@ The first thing you'll want to check is the [inventory](inventory) file. This is
 Requirements
 ------------
 
-Subscription manager credentials and pool ID are required as variables. See below.
+All variables mentioned below are required. You will need a Red Hat OpenShift Container Platform subscription and credentials. See below for each role's required variables.
 
 Role Variables
 --------------
