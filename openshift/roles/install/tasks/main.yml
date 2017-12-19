@@ -55,4 +55,4 @@
     oadm policy add-role-to-user -n management-infra management-infra-admin -z management-admin
     oadm policy add-cluster-role-to-user cluster-reader system:serviceaccount:management-infra:management-admin
     oadm policy add-scc-to-user privileged system:serviceaccount:management-infra:management-admin
-    oc sa get-token -n management-infra management-admin > /root/mgmt-token.txt
+    oc sa get-token -n management-infra management-admin > ~/mgmt-token.txt
