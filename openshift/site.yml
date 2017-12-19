@@ -25,5 +25,5 @@
     # prepare all hosts for installation
     - { role: prepare } 
 
-    # prepare all hosts for installation
+    # let it rip!
     - { role: install }
