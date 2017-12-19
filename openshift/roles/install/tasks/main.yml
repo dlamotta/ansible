@@ -49,12 +49,12 @@
   when: inventory_hostname == groups['masters'][0]
   ignore_errors: True
 
-- name: Setup {{ ocpuser }} as a cluster-admin and generate the management token
+- name: Setup {{ ocp_user }} as a cluster-admin and generate the management token
   when: inventory_hostname == groups['masters'][0]
   shell: |
-    oadm policy add-cluster-role-to-user cluster-admin {{ ocpuser }}
+    oadm policy add-cluster-role-to-user cluster-admin {{ ocp_user }}
     oc project management-infra
-    oadm policy add-role-to-user -n management-infra {{ ocpuser }} -z management-admin
+    oadm policy add-role-to-user -n management-infra {{ ocp_user }} -z management-admin
     oadm policy add-role-to-user -n management-infra management-infra-admin -z management-admin
     oadm policy add-cluster-role-to-user cluster-reader system:serviceaccount:management-infra:management-admin
     oadm policy add-scc-to-user privileged system:serviceaccount:management-infra:management-admin
