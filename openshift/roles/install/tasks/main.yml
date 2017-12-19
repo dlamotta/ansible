@@ -40,11 +40,11 @@
     name: "{{ ocp_user }}"
     password: "{{ ocp_pass }}"  
   when: inventory_hostname == groups['masters'][0]
-      
-# - name: Install OpenShift unattended
-#  shell: ansible-playbook -i /etc/ansible/hosts -e deprecation_warnings=False /usr/share/ansible/openshift-ansible/playbooks/byo/config.yml
-#  when: inventory_hostname == groups['masters'][0]
-#  ignore_errors: True
+     
+- name: Install OpenShift unattended
+  shell: ansible-playbook -i /etc/ansible/hosts -e deprecation_warnings=False /usr/share/ansible/openshift-ansible/playbooks/byo/config.yml
+  when: inventory_hostname == groups['masters'][0]
+  ignore_errors: True
 
 - name: Setup {{ ocp_user }} as a cluster-admin and generate the management token
   when: inventory_hostname == groups['masters'][0]
