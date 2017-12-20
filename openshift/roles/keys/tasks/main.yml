@@ -6,7 +6,8 @@
 - name: capture master public key during cluster install
   shell: "cat ~/.ssh/id_rsa.pub"  
   register: pubkey
-  when: inventory_hostname == groups['masters'][0]
+  when: inventory_hostname in groups['masters'] or inventory_hostname in groups['nodes']
+  delegate_to: groups['masters'][0]
 
 - name: capture master public key during cluster expansion
   shell: "cat ~/.ssh/id_rsa.pub"  
@@ -14,21 +15,14 @@
   when: inventory_hostname in groups['new_nodes']
   delegate_to: "{{ hostvars[inventory_hostname]['ocp-master'] }}" 
 
-- name: capture the master key
-  set_stats:
-    data:
-      masterpubkey: "{{ pubkey }}"
-    per_host: no
-
-# - name: set the pubkey fact on the host
-#   set_fact:
-#     masterpubkey: "{{ pubkey.stdout }}"
-#   when: "{{ hostvars[inventory_hostname]['ocp-master'] }}"   
+- name: set the pubkey fact on the host
+  set_fact:
+    masterpubkey: "{{ pubkey.stdout }}"
 
 - name: add key to authorized keys
   authorized_key: 
     user: "{{ ansible_user }}"
     state: present
-    key: "{{ masterpubkey }}"  
+    key: "{{ hostvars[inventory_hostname]['masterpubkey'] }}"
   
    
