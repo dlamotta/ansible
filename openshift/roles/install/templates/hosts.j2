@@ -52,12 +52,6 @@ openshift_{{ vol.name }}_storage_type='{{ vol.type }}'
 {{ master }}.{{ domain }}
 {% endfor %}
 
-# host group for nodes, includes region info
-[nodes]
-{% for node in groups['all'] %}
-{{ node }}.{{ domain }} openshift_node_labels="{'region': '{{ hostvars[node]['region'] }}', 'zone': '{{ hostvars[node]['zone'] }}'}"  
-{% endfor %}
-
 [nfs]
 {% for master in groups['masters'] %}
 {{ master }}.{{ domain }}
@@ -66,4 +60,10 @@ openshift_{{ vol.name }}_storage_type='{{ vol.type }}'
 [etcd]
 {% for master in groups['masters'] %}
 {{ master }}.{{ domain }}
+{% endfor %}
+
+# host group for nodes, includes region info
+[nodes]
+{% for node in groups['all'] %}
+{{ node }}.{{ domain }} openshift_node_labels="{'region': '{{ hostvars[node]['region'] }}', 'zone': '{{ hostvars[node]['zone'] }}'}"  
 {% endfor %}

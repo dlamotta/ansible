@@ -53,3 +53,9 @@
 #   delegate_to: "{{ hostvars[inventory_hostname]['ocp-master'] }}" 
 #   run_once: true
 #   ignore_errors: True
+
+- name: remove new nodes from hosts file
+  lineinfile:
+    dest: /etc/ansible/hosts
+    state: absent
+    regexp: '\[?new_nodes\]?'
