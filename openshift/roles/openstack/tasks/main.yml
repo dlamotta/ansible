@@ -21,7 +21,7 @@
       ssh_authorized_keys:
         - "{{ osp_public_key }}"
   register: instance
-  delegate_to: localhost
+  delegate_to: "{{ control_machine }}"
 
 - name: add the public IP address as a fact for masters
   set_fact:
@@ -53,7 +53,7 @@
   with_flattened: 
     - "{{ hostvars[inventory_hostname]['docker-volumes'] }}"
     - "{{ hostvars[inventory_hostname]['nfs-volumes'] }}"
-  delegate_to: localhost
+  delegate_to: "{{ control_machine }}"
 
 - name: attach volumes  
   os_server_volume:
@@ -68,6 +68,6 @@
   with_flattened:
     - "{{ hostvars[inventory_hostname]['docker-volumes'] }}"
     - "{{ hostvars[inventory_hostname]['nfs-volumes'] }}"
-  delegate_to: localhost
+  delegate_to: "{{ control_machine }}"
   
     
