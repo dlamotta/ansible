@@ -15,6 +15,10 @@ The first thing you'll want to check is the [inventory](inventory) file. This is
 
 If you'd like to blow away your OpenShift cluster--in other words, delete all instances and clean up IPA--, then you can use the [cluster-delete.yml](cluster-delete.yml) playbook.
 
+When you are ready to expand your cluster, take a look at [cluster-expand.yml](cluster-expand.yml). Roles invocation remains almost identical as with cluster installation, except that instead of calling the OpenShift Ansible install playbook we call the OpenShift Ansible scaleup playbook.
+
+Again, everything is driven from the [inventory](inventory) file; if you want to get creative and perform installation or expansion interactively, all you need is a process where the file is updated after the user provides input, and then the appropriate playbook (install or expand) is invoked.
+
 Requirements
 ------------
 
