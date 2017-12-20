@@ -9,6 +9,7 @@
   retries: 3
   delay: 5
   register: result
+  no_log: true
   until: result.rc == 0
 
 - name: Disable all repos
