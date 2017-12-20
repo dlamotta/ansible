@@ -7,7 +7,7 @@
   shell: "cat ~/.ssh/id_rsa.pub"  
   register: pubkey
   when: inventory_hostname in groups['masters'] or inventory_hostname in groups['nodes']
-  delegate_to: groups['masters'][0]
+  delegate_to: "{{ hostvars[groups['masters'][0]] }}"
 
 - name: capture master public key during cluster expansion
   shell: "cat ~/.ssh/id_rsa.pub"  
