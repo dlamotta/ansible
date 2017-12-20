@@ -35,7 +35,7 @@
     ansible_default_ipv4:
       address: "{{ instance.openstack.private_v4 }}"
     cacheable: True
-  when: inventory_hostname in groups['nodes']
+  when: inventory_hostname not in groups['masters']
 
 - debug:
     msg: IP address is {{ ansible_default_ipv4.address }}

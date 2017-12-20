@@ -1,0 +1,55 @@
+---
+- name: Prepare disk
+  become: true
+  parted:
+    device: "{{ item.device }}"
+    number: 1
+    state: present
+  with_items: "{{ hostvars[inventory_hostname]['nfs-volumes'] }}"
+
+- name: Create filesystem
+  become: true
+  filesystem:
+    fstype: xfs
+    dev: "{{ item.device }}1"
+  with_items: "{{ hostvars[inventory_hostname]['nfs-volumes'] }}"
+
+- name: Mount device
+  become: true
+  mount:
+    path: "{{ item.mountpoint }}"
+    src: "{{ item.device }}1"
+    fstype: xfs
+    state: mounted
+  with_items: "{{ hostvars[inventory_hostname]['nfs-volumes'] }}"  
+
+- name: add new_nodes line
+  lineinfile:
+    dest: /etc/ansible/hosts
+    state: present
+    insertafter: '^nodes'
+    line: 'new_nodes'
+  delegate_to: "{{ hostvars[inventory_hostname]['ocp-master'] }}"
+  run_once: true
+
+- name: add new_nodes group
+  lineinfile:
+    dest: /etc/ansible/hosts
+    state: present
+    insertafter: EOF
+    line: "[new_nodes]"
+  delegate_to: "{{ hostvars[inventory_hostname]['ocp-master'] }}"
+  run_once: true
+
+- name: add new nodes
+  lineinfile:
+    dest: /etc/ansible/hosts
+    state: present
+    insertafter: EOF
+    line: "{{ inventory_hostname }}.{{ domain }} openshift_node_labels=\"{'region': '{{ hostvars[node]['region'] }}', 'zone': '{{ hostvars[node]['zone'] }}'}\""
+
+# - name: Expand OpenShift cluster
+#   shall: ansible-playbook -i /etc/ansible/hosts -e deprecation_warnings=False /usr/share/ansible/openshift-ansible/playbooks/byo/openshift-node/scaleup.yml
+#   delegate_to: "{{ hostvars[inventory_hostname]['ocp-master'] }}" 
+#   run_once: true
+#   ignore_errors: True
