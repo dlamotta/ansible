@@ -33,18 +33,18 @@
     mode: 0644
   when: inventory_hostname == groups['masters'][0]
 
-- name: Configure htpasswd for authentication 
-  become: true
-  htpasswd:
-    path: /etc/origin/master/htpasswd
-    name: "{{ ocp_user }}"
-    password: "{{ ocp_pass }}"  
-  when: inventory_hostname == groups['masters'][0]
-     
 - name: Install OpenShift unattended
   shell: ansible-playbook -i /etc/ansible/hosts -e deprecation_warnings=False /usr/share/ansible/openshift-ansible/playbooks/byo/config.yml
   when: inventory_hostname == groups['masters'][0]
   ignore_errors: True
+
+- name: Configure htpasswd for authentication
+  become: true
+  htpasswd:
+    path: /etc/origin/master/htpasswd
+    name: "{{ ocp_user }}"
+    password: "{{ ocp_pass }}"
+  when: inventory_hostname == groups['masters'][0]
 
 - name: Setup {{ ocp_user }} as a cluster-admin and generate the management token
   when: inventory_hostname == groups['masters'][0]
