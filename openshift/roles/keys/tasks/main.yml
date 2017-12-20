@@ -12,7 +12,7 @@
 - name: capture master public key during cluster expansion
   shell: "cat ~/.ssh/id_rsa.pub"  
   register: pubkey
-  when: inventory_hostname in groups['newnodes']
+  when: not (inventory_hostname in groups['masters'] or inventory_hostname in groups['nodes'])
   delegate_to: "{{ hostvars[inventory_hostname]['ocp-master'] }}" 
 
 - name: set the pubkey fact on the host
