@@ -20,7 +20,7 @@ All variables mentioned below are required--see below for each role's required v
 
   - Current and valid Red Hat OpenShift subscription
   - An IPA server - used for DNS. 
-  - A control_machine - this can very well be an Ansible Tower machine. Or, you can also elect to run this from the CLI in which case control_machine can simply be 'localhost'
+  - A control_machine - this can very well be an Ansible Tower machine. Or, you can also elect to run this from the CLI in which case control_machine can simply be 'localhost'. See the vars: section in [site.yml](site.yml)
   - OpenStack, or AWS, or Azure, or RHV - basically an environment for your OpenShift machines to reside on
 
 Role Variables
