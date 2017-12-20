@@ -7,7 +7,6 @@
     zone_name: "{{ domain }}"
     record_name: "{{ inventory_hostname }}"
     validate_certs: False
-  delegate_to: localhost
 
 - name: Delete DNS record for apps subdomain
   ipa_dnsrecord:
@@ -17,7 +16,6 @@
     zone_name: "{{ domain }}"
     record_name: "*.apps"
     validate_certs: False
-  delegate_to: localhost
   when: inventory_hostname == groups['masters'][0]
 
 - name: Delete the host
@@ -27,4 +25,3 @@
     ipa_host: "{{ ipa_server }}"
     ipa_pass: "{{ ipa_pass }}"
     validate_certs: False
-  delegate_to: localhost
