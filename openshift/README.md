@@ -11,7 +11,9 @@ Please contribute! We are happy for any pull request to make this installer bett
 Start Here
 ------------
 
-The first thing you'll want to check is the [inventory](inventory) file. This is where your soon-to-be-created instances are declared, along with some variables. Next up, see [group_vars/masters](group_vars/masters) and [group_vars/nodes](group_vars/nodes) in order to specify variables for all hosts specified in the inventory. Last but not least, take a look at the [site.yml](site.yml) and then look at each role to see what it's doing.
+The first thing you'll want to check is the [inventory](inventory) file. This is where your soon-to-be-created instances are declared, along with some variables. Next up, see [group_vars/masters](group_vars/masters) and [group_vars/nodes](group_vars/nodes) in order to specify variables for all hosts specified in the inventory. Last but not least, take a look at the [cluster-create.yml](cluster-create.yml) and then look at each role to see what it's doing.
+
+If you'd like to blow away your OpenShift cluster--in other words, delete all instances and clean up IPA--, then you can use the [cluster-delete.yml](cluster-delete.yml) playbook.
 
 Requirements
 ------------
@@ -20,7 +22,7 @@ All variables mentioned below are required--see below for each role's required v
 
   - Current and valid Red Hat OpenShift subscription
   - An IPA server - used for DNS. 
-  - A control_machine - this can very well be an Ansible Tower machine. Or, you can also elect to run this from the CLI in which case control_machine can simply be 'localhost'. See the vars: section in [site.yml](site.yml)
+  - A control_machine - this can very well be an Ansible Tower machine. Or, you can also elect to run this from the CLI in which case control_machine can simply be 'localhost'. See the vars: section in [cluster-create.yml](cluster-create.yml)
   - OpenStack, or AWS, or Azure, or RHV - basically an environment for your OpenShift machines to reside on
 
 Role Variables
@@ -43,7 +45,7 @@ All the rolez!
 Example Playbook
 ----------------
 
-The following example is exactly how the roles in this repository are being used in [site.yml](site.yml).
+The following example is exactly how the roles in this repository are being used in [cluster-create.yml](cluster-create.yml).
 
     ---
     - name: Install OpenShift
