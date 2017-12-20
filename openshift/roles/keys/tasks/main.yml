@@ -18,12 +18,11 @@
 - name: set the pubkey fact on the master
   set_fact:
     masterpubkey: "{{ pubkey.stdout }}"
-  when: inventory_hostname == groups['masters'][0]
 
 - name: add key to authorized keys
   authorized_key: 
     user: "{{ ansible_user }}"
     state: present
-    key: "{{ hostvars[groups['masters'][0]]['masterpubkey'] }}"  
+    key: "{{ hostvars[inventory_hostname]['masterpubkey'] }}"  
   
    
