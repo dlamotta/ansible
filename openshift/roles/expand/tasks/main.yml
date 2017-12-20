@@ -45,8 +45,8 @@
   lineinfile:
     dest: /etc/ansible/hosts
     state: present
-    insertafter: EOF
-    line: "{{ inventory_hostname }}.{{ domain }} openshift_node_labels=\"{'region': '{{ hostvars[inventory_hostname]['region'] }}', 'zone': '{{ hostvars[inventory_hostname]['zone'] }}'}\""
+    insertafter: "[new_nodes]"
+    line: "{{ inventory_hostname }}.{{ domain }}"
 
 # - name: Expand OpenShift cluster
 #   shall: ansible-playbook -i /etc/ansible/hosts -e deprecation_warnings=False /usr/share/ansible/openshift-ansible/playbooks/byo/openshift-node/scaleup.yml
@@ -54,8 +54,8 @@
 #   run_once: true
 #   ignore_errors: True
 
-- name: remove new nodes from hosts file
-  lineinfile:
-    dest: /etc/ansible/hosts
-    state: absent
-    regexp: '\[?new_nodes\]?'
+#- name: remove new nodes from hosts file
+#  lineinfile:
+#    dest: /etc/ansible/hosts
+#    state: absent
+#    regexp: '\[?new_nodes\]?'
