@@ -44,6 +44,8 @@
     path: /etc/origin/master/htpasswd
     name: "{{ ocp_user }}"
     password: "{{ ocp_pass }}"
+    state: present
+    create: yes
   when: inventory_hostname == groups['masters'][0]
 
 - name: Setup {{ ocp_user }} as a cluster-admin and generate the management token
