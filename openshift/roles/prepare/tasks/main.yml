@@ -50,7 +50,6 @@
   when: reboot_hint.stdout.find("reboot") != -1
 
 - name: Wait for host to boot
-  become: false
   local_action: wait_for
   args:
     host: "{{ inventory_hostname }}"
