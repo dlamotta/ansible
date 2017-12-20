@@ -8,6 +8,7 @@
       password: "{{ osp_pass }}"
       project_name: "{{ osp_tenant }}"
     name: "{{ inventory_hostname }}"
+  delegate_to: tower  
 
 - name: delete volumes
   os_volume:
@@ -21,4 +22,5 @@
   with_flattened: 
     - "{{ hostvars[inventory_hostname]['docker-volumes'] }}"
     - "{{ hostvars[inventory_hostname]['nfs-volumes'] }}"
+  delegate_to: tower  
     
