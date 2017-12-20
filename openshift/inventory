@@ -4,4 +4,3 @@ ocp-m1    provider=openstack     region=infra      zone=default
 [nodes]
 ocp-n1    provider=openstack     region=primary    zone=east      ocp-master=ocp-m1
 
-[new_nodes]
