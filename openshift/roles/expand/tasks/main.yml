@@ -46,7 +46,8 @@
     dest: /etc/ansible/hosts
     state: present
     insertafter: "[new_nodes]"
-    line: "{{ inventory_hostname }}.{{ domain }}"
+    line: "{{ inventory_hostname }}.{{ domain }} openshift_node_labels=\"{'region': '{{ hostvars[inventory_hostname]['region'] }}', 'zone': '{{ hostvars[inventory_hostname]['zone'] }}'}\""  
+  delegate_to: "{{ hostvars[inventory_hostname]['ocp-master'] }"
 
 # - name: Expand OpenShift cluster
 #   shall: ansible-playbook -i /etc/ansible/hosts -e deprecation_warnings=False /usr/share/ansible/openshift-ansible/playbooks/byo/openshift-node/scaleup.yml
