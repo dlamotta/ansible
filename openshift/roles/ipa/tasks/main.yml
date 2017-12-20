@@ -9,7 +9,7 @@
     record_type: "A"
     record_value: "{{ ansible_default_ipv4.address }}"
     validate_certs: False
-  delegate_to: localhost
+  delegate_to: "{{ control_machine }}"
 
 - name: Create DNS record for apps subdomain
   ipa_dnsrecord:
@@ -21,7 +21,7 @@
     record_type: "A"
     record_value: "{{ ansible_default_ipv4.address }}"
     validate_certs: False
-  delegate_to: localhost
+  delegate_to: "{{ control_machine }}"
   when: inventory_hostname == groups['masters'][0]
 
 - name: Add the host
@@ -31,7 +31,7 @@
     ipa_host: "{{ ipa_server }}"
     ipa_pass: "{{ ipa_pass }}"
     validate_certs: False
-  delegate_to: localhost
+  delegate_to: "{{ control_machine }}"
 
 - name: Copy dhclient.conf
   become: True
