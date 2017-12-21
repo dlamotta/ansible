@@ -10,16 +10,16 @@
   delegate_to: "{{ groups['masters'][0] }}"
 
 - debug:
-    msg: SSH key - {{ pubkey.stdout }}
+    msg: "{{ pubkey }}"
 
 - name: capture master public key during cluster expansion
   shell: "cat ~/.ssh/id_rsa.pub"  
   register: pubkey
-  when: not (inventory_hostname in groups['masters'] or inventory_hostname in groups['nodes'])
+  when: "{{ hostvars[inventory_hostname]['ocp-master'] }}" is defined
   delegate_to: "{{ hostvars[inventory_hostname]['ocp-master'] }}" 
 
 - debug:
-    msg: SSH key - {{ pubkey.stdout }}
+    msg: "{{ pubkey }}"
 
 - name: set the pubkey fact on the host
   set_fact:
