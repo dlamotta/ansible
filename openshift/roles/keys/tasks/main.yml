@@ -8,9 +8,6 @@
   register: pubkey
   delegate_to: "{{ groups['masters'][0] }}"
 
-- debug:
-    msg: "{{ pubkey }}"
-
 - name: add key to authorized keys
   authorized_key: 
     user: "{{ ansible_user }}"

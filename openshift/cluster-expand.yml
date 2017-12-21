@@ -1,6 +1,6 @@
 ---
 - name: Install OpenShift
-  hosts: new_nodes
+  hosts: newnodes
   gather_facts: False
   remote_user: cloud-user
   vars:
