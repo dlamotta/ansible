@@ -9,6 +9,9 @@
   when: inventory_hostname in groups['masters'] or inventory_hostname in groups['nodes']
   delegate_to: "{{ groups['masters'][0] }}"
 
+- debug:
+    msg: SSH key - {{ pubkey.stdout }}
+
 - name: capture master public key during cluster expansion
   shell: "cat ~/.ssh/id_rsa.pub"  
   register: pubkey
