@@ -82,7 +82,6 @@ TODO
 -------
 This is currently a work in progress and by no means perfect (yet). Still needed:
 
-  - We should not be modifying /etc/resolv.conf [see IPA role](roles/ipa/tasks/main.yml) and instead modify /etc/sysconfig/network-scripts/ifcfg-eth0 for setting the domain
   - Expanding the cluster
 
 License
