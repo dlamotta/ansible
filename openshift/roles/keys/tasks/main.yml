@@ -15,6 +15,9 @@
   when: not (inventory_hostname in groups['masters'] or inventory_hostname in groups['nodes'])
   delegate_to: "{{ hostvars[inventory_hostname]['ocp-master'] }}" 
 
+- debug:
+    msg: SSH key - {{ pubkey.stdout }}
+
 - name: set the pubkey fact on the host
   set_fact:
     masterpubkey: "{{ pubkey.stdout }}"
