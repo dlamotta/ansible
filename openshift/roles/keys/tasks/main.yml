@@ -12,6 +12,13 @@
 - debug:
     msg: "{{ pubkey }}"
 
+- name: add key to authorized keys
+  authorized_key: 
+    user: "{{ ansible_user }}"
+    state: present
+    key: "{{ pubkey.stdout }}"
+
+# Only newnodes defined during cluster expansion should have an ocp-master variable defined
 - name: capture master public key during cluster expansion
   shell: "cat ~/.ssh/id_rsa.pub"  
   register: pubkey
@@ -21,14 +28,11 @@
 - debug:
     msg: "{{ pubkey }}"
 
-- name: set the pubkey fact on the host
-  set_fact:
-    masterpubkey: "{{ pubkey.stdout }}"
-
 - name: add key to authorized keys
   authorized_key: 
     user: "{{ ansible_user }}"
     state: present
-    key: "{{ hostvars[inventory_hostname]['masterpubkey'] }}"
+    key: "{{ pubkey.stdout }}"
+  when: pubkey is defined
   
    
