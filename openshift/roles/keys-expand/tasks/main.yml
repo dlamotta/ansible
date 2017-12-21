@@ -2,10 +2,7 @@
 - name: capture master public key during cluster expansion
   shell: "cat ~/.ssh/id_rsa.pub"  
   register: pubkey
-  delegate_to: "{{ hostvars[inventory_hostname]['ocp-master'] }}" 
-
-- debug:
-    msg: "{{ pubkey }}"
+  delegate_to: "{{ hostvars[inventory_hostname]['ocp-master'] }}"
 
 - name: add key to authorized keys
   authorized_key: 

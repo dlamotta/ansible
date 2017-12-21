@@ -11,21 +11,25 @@ An SSH key must have previously been created in one of the OCP masters.
 Role Variables
 --------------
 
-ocp-master
+Check the [inventory](invnetory) and also [group_vars/newnodes](group_vars/newnodes) for places to initialize variables.
+
+| Variable Name | Description                                                           | Example           |
+|---------------|-----------------------------------------------------------------------|-------------------|
+| ocp_master 	  | OpenShift master where the OpenShift Ansible installer was run    		| ocp-m1        	  | 
 
 Dependencies
 ------------
 
-None.
+Albeit obvious but we'll need an OpenShift cluster previously installed and running. A valid Op
 
 Example Playbook
 ----------------
 
 Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
 
-    - hosts: all
+    - hosts: newnodes
       roles:
-         - { role: keys }
+         - { role: keys-expand }
 
 License
 -------
