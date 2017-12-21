@@ -15,7 +15,7 @@
 - name: capture master public key during cluster expansion
   shell: "cat ~/.ssh/id_rsa.pub"  
   register: pubkey
-  when: "{{ hostvars[inventory_hostname]['ocp-master'] }}" is defined
+  when: hostvars[inventory_hostname]['ocp-master'] is defined
   delegate_to: "{{ hostvars[inventory_hostname]['ocp-master'] }}" 
 
 - debug:
