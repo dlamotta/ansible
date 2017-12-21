@@ -52,16 +52,16 @@
     line: "{{ inventory_hostname }}.{{ domain }} openshift_node_labels=\"{'region': '{{ hostvars[inventory_hostname]['region'] }}', 'zone': '{{ hostvars[inventory_hostname]['zone'] }}'}\""  
   delegate_to: "{{ hostvars[inventory_hostname]['ocp-master'] }}"
 
-# - name: Expand OpenShift cluster
-#   shall: ansible-playbook -i /etc/ansible/hosts -e deprecation_warnings=False /usr/share/ansible/openshift-ansible/playbooks/byo/openshift-node/scaleup.yml
-#   delegate_to: "{{ hostvars[inventory_hostname]['ocp-master'] }}" 
-#   run_once: true
-#   ignore_errors: True
+- name: Expand OpenShift cluster
+  shall: ansible-playbook -i /etc/ansible/hosts -e deprecation_warnings=False /usr/share/ansible/openshift-ansible/playbooks/byo/openshift-node/scaleup.yml
+  delegate_to: "{{ hostvars[inventory_hostname]['ocp-master'] }}" 
+  run_once: true
+  ignore_errors: True
 
-# - name: remove new nodes from hosts file
-#   become: True
-#   lineinfile:
-#     dest: /etc/ansible/hosts
-#     state: absent
-#     regexp: '\[?new_nodes\]?'
-#   delegate_to: "{{ hostvars[inventory_hostname]['ocp-master'] }}"   
+- name: remove new nodes from hosts file
+  become: True
+  lineinfile:
+    dest: /etc/ansible/hosts
+    state: absent
+    regexp: '\[?new_nodes\]?'
+  delegate_to: "{{ hostvars[inventory_hostname]['ocp-master'] }}"   
