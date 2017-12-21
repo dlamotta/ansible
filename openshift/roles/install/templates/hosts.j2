@@ -66,5 +66,5 @@ openshift_{{ vol.name }}_storage_type='{{ vol.type }}'
 # host group for nodes, includes region info
 [nodes]
 {% for node in groups['all'] %}
-{{ node }}.{{ domain }} openshift_node_labels="{'region': '{{ hostvars[node]['region'] }}', 'zone': '{{ hostvars[node]['zone'] }}'}"  
+{{ node }}.{{ domain }} openshift_node_labels="{'region': '{{ hostvars[node]['region'] }}', 'zone': '{{ hostvars[node]['zone'] }}'}" openshift_schedulable=true
 {% endfor %}
