@@ -80,9 +80,7 @@ The following example is exactly how the roles in this repository are being used
 
 TODO
 -------
-This is currently a work in progress and by no means perfect (yet). Still needed:
-
-  - Expanding the cluster
+This is currently a work in progress and by no means perfect (yet).
 
 License
 -------
