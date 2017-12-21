@@ -1,5 +1,5 @@
 ---
-- name: Install OpenShift
+- name: Add nodes to OpenShift cluster
   hosts: newnodes
   gather_facts: False
   remote_user: cloud-user
