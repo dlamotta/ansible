@@ -17,7 +17,7 @@
     - { role: ipa}
 
     # create and copy SSH keys
-    - { role: keys }    
+    - { role: keys-expand }    
 
     # register with subscription manager
     - { role: rhn }

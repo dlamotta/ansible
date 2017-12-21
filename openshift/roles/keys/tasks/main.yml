@@ -6,7 +6,6 @@
 - name: capture master public key during cluster install
   shell: "cat ~/.ssh/id_rsa.pub"  
   register: pubkey
-  when: inventory_hostname in groups['masters'] or inventory_hostname in groups['nodes']
   delegate_to: "{{ groups['masters'][0] }}"
 
 - debug:
@@ -17,22 +16,5 @@
     user: "{{ ansible_user }}"
     state: present
     key: "{{ pubkey.stdout }}"
-
-# Only newnodes defined during cluster expansion should have an ocp-master variable defined
-- name: capture master public key during cluster expansion
-  shell: "cat ~/.ssh/id_rsa.pub"  
-  register: pubkey
-  when: hostvars[inventory_hostname]['ocp-master'] is defined
-  delegate_to: "{{ hostvars[inventory_hostname]['ocp-master'] }}" 
-
-- debug:
-    msg: "{{ pubkey }}"
-
-- name: add key to authorized keys
-  authorized_key: 
-    user: "{{ ansible_user }}"
-    state: present
-    key: "{{ pubkey.stdout }}"
-  when: pubkey is defined
   
    
