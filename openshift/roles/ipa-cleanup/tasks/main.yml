@@ -6,7 +6,7 @@
     state: absent
     zone_name: "{{ domain }}"
     record_name: "{{ inventory_hostname }}"
-    record_value: "{{ lookup('dig', inventory_hostname)}}"
+    record_value: "{{ lookup('dig', inventory_hostname.domain.)}}"
     validate_certs: False
   delegate_to: tower
 
@@ -17,7 +17,7 @@
     state: absent
     zone_name: "{{ domain }}"
     record_name: "*.apps"
-    record_value: "{{ lookup('dig', inventory_hostname)}}"
+    record_value: "{{ lookup('dig', inventory_hostname.domain.)}}"
     validate_certs: False
   when: inventory_hostname == groups['masters'][0]
   delegate_to: tower
