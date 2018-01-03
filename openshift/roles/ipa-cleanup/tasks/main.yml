@@ -1,4 +1,4 @@
----
+---  
 - name: Delete DNS record 
   ipa_dnsrecord:
     ipa_host: "{{ ipa_server }}"
@@ -6,7 +6,7 @@
     state: absent
     zone_name: "{{ domain }}"
     record_name: "{{ inventory_hostname }}"
-    record_value: "{{ ansible_default_ipv4.address }}"
+    record_value: "{{ lookup('dig', inventory_hostname)}}"
     validate_certs: False
   delegate_to: tower
 
@@ -17,7 +17,7 @@
     state: absent
     zone_name: "{{ domain }}"
     record_name: "*.apps"
-    record_value: "{{ ansible_default_ipv4.address }}"
+    record_value: "{{ lookup('dig', inventory_hostname)}}"
     validate_certs: False
   when: inventory_hostname == groups['masters'][0]
   delegate_to: tower
