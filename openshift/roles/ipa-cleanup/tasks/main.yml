@@ -6,7 +6,7 @@
     state: absent
     zone_name: "{{ domain }}"
     record_name: "{{ inventory_hostname }}"
-    record_value: "{{ lookup('dig', inventory_hostname.domain.)}}"
+    record_value: "{{ lookup('dig', fqdn)}}"
     validate_certs: False
   delegate_to: tower
 
@@ -17,14 +17,14 @@
     state: absent
     zone_name: "{{ domain }}"
     record_name: "*.apps"
-    record_value: "{{ lookup('dig', inventory_hostname.domain.)}}"
+    record_value: "{{ lookup('dig', fqdn)}}"
     validate_certs: False
   when: inventory_hostname == groups['masters'][0]
   delegate_to: tower
 
 - name: Delete the host
   ipa_host:
-    name: "{{ inventory_hostname }}.{{ domain }}"
+    name: "{{ fqdn }}"
     state: absent
     ipa_host: "{{ ipa_server }}"
     ipa_pass: "{{ ipa_pass }}"
