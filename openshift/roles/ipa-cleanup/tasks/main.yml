@@ -1,4 +1,9 @@
 ---  
+- name: Save the IP address as returned from DNS because we don't want them from facts
+  set_fact:
+    ansible_default_ipv4:
+      address: "{{ lookup('dig', fqdn)}}"
+
 - name: Delete DNS record 
   ipa_dnsrecord:
     ipa_host: "{{ ipa_server }}"
@@ -6,13 +11,9 @@
     state: absent
     zone_name: "{{ domain }}"
     record_name: "{{ inventory_hostname }}"
-    record_value: "{{ lookup('dig', fqdn)}}"
+    record_value: "{{ ansible_default_ipv4.address }}"
     validate_certs: False
   delegate_to: tower
-  register: dnsrecord
-
-- debug:
-    var: dnsrecord
 
 - name: Delete DNS record for apps subdomain
   ipa_dnsrecord:
@@ -21,7 +22,7 @@
     state: absent
     zone_name: "{{ domain }}"
     record_name: "*.apps"
-    record_value: "{{ dnsrecord.ip }}"
+    record_value: "{{ ansible_default_ipv4.address }}"
     validate_certs: False
   when: inventory_hostname == groups['masters'][0]
   delegate_to: tower
