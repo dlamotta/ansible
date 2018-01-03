@@ -9,6 +9,10 @@
     record_value: "{{ lookup('dig', fqdn)}}"
     validate_certs: False
   delegate_to: tower
+  register: dnsrecord
+
+- debug:
+    var: dnsrecord
 
 - name: Delete DNS record for apps subdomain
   ipa_dnsrecord:
@@ -17,7 +21,7 @@
     state: absent
     zone_name: "{{ domain }}"
     record_name: "*.apps"
-    record_value: "{{ lookup('dig', fqdn)}}"
+    record_value: "{{ dnsrecord.ip }}"
     validate_certs: False
   when: inventory_hostname == groups['masters'][0]
   delegate_to: tower
