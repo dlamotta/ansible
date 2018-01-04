@@ -1,12 +1,12 @@
 Role Name
 =========
 
-Creates DNS entries and records for all hosts provided. Additionally, this role will create an apps subdomain
+Deletes DNS entries and records for all hosts provided. Additionally, this role will delete the apps subdomain.
 
 Requirements
 ------------
 
-This role requires an existing IPA server. Additionally, machines in the inventory must have a valid IP address associated with them.
+This role requires an existing (and functioning) IPA server.
 
 Role Variables
 --------------
@@ -22,9 +22,7 @@ Role Variables
 Dependencies
 ------------
 
-Prior to running this role, the following roles must have been previously executed:
-
-  - provider (one or more; i.e., openstack)
+None.
 
 Example Playbook
 ----------------
