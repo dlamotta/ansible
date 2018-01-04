@@ -31,7 +31,7 @@ See the inventory file and define the provider there. Other providers can coexis
 
     - hosts: all
       roles:
-         - { role: openstack, when: "hostvars[inventory_hostname]['provider'] == 'openstack'" }
+         - { role: openstack-cleanup, when: "hostvars[inventory_hostname]['provider'] == 'openstack'" }
 
 License
 -------
