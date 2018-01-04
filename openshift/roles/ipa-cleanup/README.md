@@ -17,7 +17,7 @@ Role Variables
 | ipa_user	    | User account used to join nodes to IPA/IdM								           	| admin		          | 
 | ipa_pass     	| Password used to join nodes to IPA/IdM  										          | password 	        |
 | domain       	| Domain name for instance FQDN and for OpenShift apps subdomain        | example.com       |
-| fqdn          | No need to set. Defaults to {{ inventory_hostname }}.{{ domain }}     | foo.example.com   |
+| fqdn          | Value should be set to {{ inventory_hostname }}.{{ domain }}          |                   |
 
 Dependencies
 ------------
