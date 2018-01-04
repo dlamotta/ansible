@@ -1,5 +1,5 @@
 ---  
-- name: Save the IP address as returned from DNS because we don't want them from facts
+- name: Save the IP address as returned from DNS because we don't want it from ansible facts
   set_fact:
     ansible_default_ipv4:
       address: "{{ lookup('dig', fqdn)}}"
