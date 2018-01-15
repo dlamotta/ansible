@@ -1,0 +1,33 @@
+---
+- name: Enforces a given number of application instances in OpenStack to exist
+  hosts: localhost
+  gather_facts: false
+  vars_files:
+    - openstack.yaml
+    - sla.yaml
+  
+  tasks:
+  - name: Get instances that start with '{{ prefix }}'
+    os_server_facts:
+      auth:
+        auth_url: "{{ osp_server }}"
+        username: "{{ osp_user }}"
+        password: "{{ osp_pass }}"
+        project_name: "{{ osp_tenant }}"
+      server: "{{ prefix }}*"
+
+  - name: Determine number of required instances to create
+    vars:
+      powered_on_instances: "[?power_state==`{{ osp_state}}`]"
+      instances: "{{ openstack_servers|json_query(powered_on_instances) }}"
+      required_instances: "{{ sla - instances|length }}"
+    set_fact:
+      instances: "{{ required_instances }}"
+    when: required_instances > 0
+          
+  - debug:
+      msg: Required number of instances to create is {{ hostvars[inventory_hostname]['instances'] }}
+
+  
+    
+  
