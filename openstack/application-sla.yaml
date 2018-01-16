@@ -5,6 +5,7 @@
   vars_files:
     - openstack.yaml
     - sla.yaml
+    - gmail.yaml
   
   tasks:
   - name: Get instances that start with '{{ prefix }}'
@@ -16,6 +17,9 @@
         project_name: "{{ osp_tenant }}"
       server: "{{ prefix }}*"
 
+  - debug:
+      var: openstack_servers      
+
   - name: Determine number of required instances to create
     vars:
       powered_on_instances: "[?power_state==`{{ osp_state}}`]"
@@ -23,10 +27,32 @@
       required_instances: "{{ sla - instances|length }}"
     set_fact:
       instances: "{{ required_instances }}"
+    notify:
+    - send email
+    - create instances
+    - configure instances
     when: required_instances > 0
-          
-  - debug:
-      msg: Required number of instances to create is {{ hostvars[inventory_hostname]['instances'] }}
+
+  handlers:
+  - name: send email
+    mail:
+      host: smtp.gmail.com
+      port: 587
+      username: "{{ gmail_user }}"
+      password: "{{ gmail_pass }}"
+      to: "{{ email_recipients }}"
+      subject: Application SLA Alert
+      body: "The number of instances that will be created to meet the application SLA is: {{ hostvars[inventory_hostname]['instances'] }}"
+
+  - name: create instances
+    debug:
+      msg: Creating instances...  
+
+  - name: configure instances
+    debug:
+      msg: Configuring instances...
+  
+
 
   
     
