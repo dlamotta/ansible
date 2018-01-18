@@ -2,5 +2,6 @@
 - hosts: all
   gather_facts: no
   become: yes
+  remote_user: cloud-user
   roles:
-    - { role: "elk-stack" }
+    - { role: elk-stack }
