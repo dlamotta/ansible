@@ -24,7 +24,7 @@
     vars:
       powered_on_instances: "[?power_state==`{{ osp_state}}`]"
       instances: "{{ openstack_servers|json_query(powered_on_instances) }}"
-      required_instances: "{{ sla - instances|length }}"
+      required_instances: "4"
     set_fact:
       count: "{{ required_instances }}"
     register: instances
