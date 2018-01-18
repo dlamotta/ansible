@@ -3,7 +3,7 @@
   hosts: localhost
   gather_facts: false
   vars_files:
-    - mbu-openstack.yaml
+    - openstack.yaml
     - sla.yaml
     - gmail.yaml
   
@@ -26,12 +26,13 @@
       instances: "{{ openstack_servers|json_query(powered_on_instances) }}"
       required_instances: "{{ sla - instances|length }}"
     set_fact:
-      instances: "{{ required_instances }}"
+      count: "{{ required_instances }}"
+    register: instances
     notify:
-    - send email
-    - create instances
-    - configure instances
-    when: required_instances > 0
+      - send email
+      - create instances
+      - configure instances
+    changed_when: instances.ansible_facts.count|int > 0
 
   handlers:
   - name: send email
@@ -42,18 +43,12 @@
       password: "{{ gmail_pass }}"
       to: "{{ email_recipients }}"
       subject: Application SLA Alert
-      body: "The number of instances that will be created to meet the application SLA is: {{ hostvars[inventory_hostname]['instances'] }}"
+      body: "The number of instances that will be created to meet the application SLA is: {{ instances.ansible_facts.count }}"
 
   - name: create instances
     debug:
-      msg: Creating instances...  
+      msg: Configuring instances...    
 
   - name: configure instances
     debug:
       msg: Configuring instances...
-  
-
-
-  
-    
-  
