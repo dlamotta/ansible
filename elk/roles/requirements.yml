@@ -1,3 +1,6 @@
 ---
 - src: bingoarunprasath.elk
-  name: elkstack
+  name: elk
+  
+- src: geerlingguy.filebeat
+  name: filebeat
