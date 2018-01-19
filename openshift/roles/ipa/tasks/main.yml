@@ -1,0 +1,57 @@
+---
+- name: Create DNS record 
+  ipa_dnsrecord:
+    ipa_host: "{{ ipa_server }}"
+    ipa_pass: "{{ ipa_pass }}"
+    state: present
+    zone_name: "{{ domain }}"
+    record_name: "{{ inventory_hostname }}"
+    record_type: "A"
+    record_value: "{{ ansible_default_ipv4.address }}"
+    validate_certs: False
+  delegate_to: "{{ control_machine }}"
+
+- name: Create DNS record for apps subdomain
+  ipa_dnsrecord:
+    ipa_host: "{{ ipa_server }}"
+    ipa_pass: "{{ ipa_pass }}"
+    state: present
+    zone_name: "{{ domain }}"
+    record_name: "*.apps"
+    record_type: "A"
+    record_value: "{{ ansible_default_ipv4.address }}"
+    validate_certs: False
+  delegate_to: "{{ control_machine }}"
+  when: inventory_hostname == groups['masters'][0]
+
+- name: Add the host
+  ipa_host:
+    name: "{{ inventory_hostname }}.{{ domain }}"
+    state: present
+    ipa_host: "{{ ipa_server }}"
+    ipa_pass: "{{ ipa_pass }}"
+    validate_certs: False
+  delegate_to: "{{ control_machine }}"
+
+- name: Copy dhclient.conf
+  become: True
+  template:
+    src: dhclient.conf.j2
+    dest: /etc/dhclient.conf
+
+- name: Set hostname
+  become: true
+  hostname:
+    name: "{{ inventory_hostname }}.{{ domain }}"
+
+- name: Set resolv.conf
+  become: True
+  template:
+    src: resolv.conf.j2
+    dest: /etc/resolv.conf    
+
+- name: Restart network service
+  become: True
+  service:
+    name: network
+    state: restarted      

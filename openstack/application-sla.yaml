@@ -1,0 +1,54 @@
+---
+- name: Enforces a given number of application instances in OpenStack to exist
+  hosts: localhost
+  gather_facts: false
+  vars_files:
+    - openstack.yaml
+    - sla.yaml
+    - gmail.yaml
+  
+  tasks:
+  - name: Get instances that start with '{{ prefix }}'
+    os_server_facts:
+      auth:
+        auth_url: "{{ osp_server }}"
+        username: "{{ osp_user }}"
+        password: "{{ osp_pass }}"
+        project_name: "{{ osp_tenant }}"
+      server: "{{ prefix }}*"
+
+  - debug:
+      var: openstack_servers      
+
+  - name: Determine number of required instances to create
+    vars:
+      powered_on_instances: "[?power_state==`{{ osp_state}}`]"
+      instances: "{{ openstack_servers|json_query(powered_on_instances) }}"
+      required_instances: "4"
+    set_fact:
+      count: "{{ required_instances }}"
+    register: instances
+    notify:
+      - send email
+      - create instances
+      - configure instances
+    changed_when: instances.ansible_facts.count|int > 0
+
+  handlers:
+  - name: send email
+    mail:
+      host: smtp.gmail.com
+      port: 587
+      username: "{{ gmail_user }}"
+      password: "{{ gmail_pass }}"
+      to: "{{ email_recipients }}"
+      subject: Application SLA Alert
+      body: "The number of instances that will be created to meet the application SLA is: {{ instances.ansible_facts.count }}"
+
+  - name: create instances
+    debug:
+      msg: Configuring instances...    
+
+  - name: configure instances
+    debug:
+      msg: Configuring instances...

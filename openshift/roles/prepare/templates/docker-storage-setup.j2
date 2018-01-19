@@ -1,0 +1,3 @@
+STORAGE_DRIVER=devicemapper
+VG=docker-vg
+DEVS={{ hostvars[inventory_hostname]['docker-volumes'][0]['device'] }}

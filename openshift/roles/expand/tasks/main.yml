@@ -1,0 +1,67 @@
+---
+- name: Prepare disk
+  become: true
+  parted:
+    device: "{{ item.device }}"
+    number: 1
+    state: present
+  with_items: "{{ hostvars[inventory_hostname]['nfs-volumes'] }}"
+
+- name: Create filesystem
+  become: true
+  filesystem:
+    fstype: xfs
+    dev: "{{ item.device }}1"
+  with_items: "{{ hostvars[inventory_hostname]['nfs-volumes'] }}"
+
+- name: Mount device
+  become: true
+  mount:
+    path: "{{ item.mountpoint }}"
+    src: "{{ item.device }}1"
+    fstype: xfs
+    state: mounted
+  with_items: "{{ hostvars[inventory_hostname]['nfs-volumes'] }}"  
+
+- name: add new_nodes line
+  become: True
+  lineinfile:
+    dest: /etc/ansible/hosts
+    state: present
+    insertafter: '^nodes'
+    line: 'new_nodes'
+  delegate_to: "{{ hostvars[inventory_hostname]['ocp-master'] }}"
+  run_once: true
+
+- name: add new_nodes group
+  become: True
+  lineinfile:
+    dest: /etc/ansible/hosts
+    state: present
+    insertafter: EOF
+    line: "[new_nodes]"
+  delegate_to: "{{ hostvars[inventory_hostname]['ocp-master'] }}"
+  run_once: true
+
+- name: add new nodes
+  become: True
+  lineinfile:
+    dest: /etc/ansible/hosts
+    state: present
+    insertafter: "[new_nodes]"
+    line: "{{ inventory_hostname }}.{{ domain }} openshift_node_labels=\"{'region': '{{ hostvars[inventory_hostname]['region'] }}', 'zone': '{{ hostvars[inventory_hostname]['zone'] }}'}\" openshift_schedulable=true"
+  delegate_to: "{{ hostvars[inventory_hostname]['ocp-master'] }}"
+
+- name: expand cluster
+  shell: ansible-playbook -i /etc/ansible/hosts -e deprecation_warnings=False /usr/share/ansible/openshift-ansible/playbooks/byo/openshift-node/scaleup.yml
+  delegate_to: "{{ hostvars[inventory_hostname]['ocp-master'] }}" 
+  run_once: true
+  ignore_errors: True
+
+- name: remove new nodes from hosts file
+  become: True
+  lineinfile:
+    dest: /etc/ansible/hosts
+    state: absent
+    regexp: '\[?new_nodes\]?'
+  delegate_to: "{{ hostvars[inventory_hostname]['ocp-master'] }}"   

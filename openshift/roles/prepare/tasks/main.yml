@@ -1,0 +1,80 @@
+---
+- name: Install yum-utils
+  become: true
+  yum:
+    name: yum-utils
+    state: present
+  
+- name: Cleanup any interrupted yum actions
+  become: true
+  command: yum-complete-transaction --cleanup-only
+
+- name: Install necessary packages
+  become: true
+  yum:  
+    name: '{{ item }}'
+    state: present
+  with_items: 
+  - wget 
+  - git 
+  - net-tools 
+  - bind-utils 
+  - iptables-services 
+  - bridge-utils 
+  - bash-completion 
+  - kexec-tools 
+  - sos 
+  - psacct
+  - atomic-openshift-utils
+  - docker-1.12.6
+  - ipa-client
+  - httpd-tools
+
+- name: Update the system
+  become: true
+  yum:  
+    name: '*'
+
+- name: Check for reboot hint
+  become: true
+  shell: LAST_KERNEL=$(rpm -q --last kernel | perl -pe 's/^kernel-(\S+).*/$1/' | head -1);CURRENT_KERNEL=$(uname -r); if [ $LAST_KERNEL != $CURRENT_KERNEL ]; then echo 'reboot'; else echo 'no'; fi
+  ignore_errors: true
+  register: reboot_hint
+
+- name: Rebooting...
+  become: true
+  shell: sleep 2 && /usr/sbin/reboot
+  async: 1
+  poll: 0
+  ignore_errors: true
+  when: reboot_hint.stdout.find("reboot") != -1
+
+- name: Wait for host to boot
+  local_action: wait_for
+  args:
+    host: "{{ inventory_hostname }}"
+    port: 22
+    state: started
+    delay: 30
+    timeout: 180
+  when: reboot_hint.stdout.find("reboot") != -1
+
+- name: Configure docker storage
+  become: true
+  template:
+    src: docker-storage-setup.j2
+    dest: /etc/sysconfig/docker-storage-setup
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Run docker storage setup
+  become: true  
+  command: docker-storage-setup
+
+- name: Start and enable Docker
+  become: true
+  service:
+    name: docker
+    state: started
+    enabled: true  

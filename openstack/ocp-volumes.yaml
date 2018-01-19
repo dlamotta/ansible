@@ -1,0 +1,11 @@
+---
+- name: launch a compute instance
+  hosts: localhost
+  vars:
+    instance: ocp
+    size: 100
+    volumes:
+      - docker
+
+  roles:
+    - create-and-attach-volumes

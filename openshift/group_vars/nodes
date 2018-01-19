@@ -1,0 +1,19 @@
+---
+# OpenStack-specific variables
+osp_flavor: cfme
+osp_security_group: wide-open
+osp_floating_ip: False
+
+# OpenShift volumes. Size is specified in Gi
+docker-volumes:
+  - name: docker
+    size: 100
+    device: /dev/vdb
+    mountpoint:
+
+nfs-volumes:
+  - name: storage
+    size: 50
+    device: /dev/vdc
+    mountpoint: /exports/storage
+

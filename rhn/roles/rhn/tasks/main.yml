@@ -1,0 +1,22 @@
+---
+- include_vars: rhn.yml
+  no_log: True
+
+- name: wait for sshd  
+  wait_for:
+    port: 22
+    delay: 5
+    
+- name: register with red hat network
+  shell: 
+    subscription-manager register --username={{ username }} --password={{ password }} --force &&
+    subscription-manager attach --pool={{ pool }}
+  ignore_errors: yes
+  retries: 3
+  delay: 5
+  register: result
+  until: result.rc == 0
+  
+- name: let subscription manager settle
+  pause:
+    seconds: 30

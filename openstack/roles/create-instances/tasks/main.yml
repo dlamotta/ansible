@@ -1,0 +1,34 @@
+---
+- name: launch an instance
+  os_server:
+    state: present
+    auth:
+      auth_url: "{{ openstack }}"
+      username: "{{ username }}"
+      password: "{{ password }}"
+      project_name: "{{ tenant }}"
+    name: "{{ item }}"
+    image: 157e2f64-a397-498e-9a30-33a4ae11e4be
+    key_name: "{{ key }}"
+    timeout: 200
+    flavor: cfme
+    security_groups: "{{ securitygroup }}"
+    network: private
+    auto_ip: "{{ floating_ip }}"
+    wait: yes
+    userdata: |
+      #cloud-config
+      ssh_authorized_keys:
+        - "{{ publickey }}"
+  with_items: "{{ instances }}"
+  async: 180
+  poll: 0
+  register: provisioning
+
+- name: check on provisioning
+  async_status:
+    jid: "{{ item.ansible_job_id }}"
+  register: job
+  until: job.finished
+  retries: 30
+  with_items: "{{ provisioning.results }}"

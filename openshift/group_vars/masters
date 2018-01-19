@@ -1,0 +1,64 @@
+---
+# OpenStack-specific variables
+osp_flavor: cfme
+osp_security_group: wide-open
+osp_floating_ip: True
+
+# Docker storage is kept separate for easy consumption
+docker-volumes:
+  - name: docker
+    size: 70
+    device: /dev/vdb
+    mountpoint:
+
+# OpenShift volumes that will be NFS-mounted. Size is specified in Gi
+# A volume can have other attributes (see hosts.j2 in the install role)
+# my-volumes:
+#   - name: foo
+#     size: 1
+#     device: /dev/vda
+#     mountpoint: /exports/bar
+#     dir: zar
+#     label: myvol
+#     type: pvc
+#
+nfs-volumes:
+  - name: metrics
+    size: 15
+    device: /dev/vdc
+    mountpoint: /exports/metrics
+    label: metrics
+    dir: data
+  - name: logging
+    size: 15
+    device: /dev/vdd
+    mountpoint: /exports/logging
+    label: logging
+    dir: data
+  - name: hosted_etcd
+    size: 10
+    device: /dev/vde
+    mountpoint: /exports/hosted_etcd
+    label: etcd
+    dir: data
+  - name: prometheus
+    size: 10
+    device: /dev/vdf
+    mountpoint: /exports/prometheus
+    label: prometheus
+    dir: data
+    type: pvc
+  - name: prometheus_alertmanager
+    size: 10
+    device: /dev/vdg
+    mountpoint: /exports/prometheus_alertmanager
+    label: prometheus_alertmanager
+    dir: data
+    type: pvc
+  - name: prometheus_alertbuffer
+    size: 10
+    device: /dev/vdh
+    mountpoint: /exports/prometheus_alertbuffer
+    label: prometheus_alertbuffer
+    dir: data
+    type: pvc

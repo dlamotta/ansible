@@ -1,0 +1,60 @@
+---
+- name: Prepare disk
+  become: true
+  parted:
+    device: "{{ item.device }}"
+    number: 1
+    state: present
+  with_items: "{{ hostvars[inventory_hostname]['nfs-volumes'] }}"
+
+- name: Create filesystem
+  become: true
+  filesystem:
+    fstype: xfs
+    dev: "{{ item.device }}1"
+  with_items: "{{ hostvars[inventory_hostname]['nfs-volumes'] }}"
+
+- name: Mount device
+  become: true
+  mount:
+    path: "{{ item.mountpoint }}"
+    src: "{{ item.device }}1"
+    fstype: xfs
+    state: mounted
+  with_items: "{{ hostvars[inventory_hostname]['nfs-volumes'] }}"  
+
+- name: Copy hosts template file
+  become: true
+  template:
+    src: hosts.j2
+    dest: /etc/ansible/hosts
+    owner: root
+    group: root
+    mode: 0644
+  when: inventory_hostname == groups['masters'][0]
+
+- name: Install OpenShift unattended
+  shell: ansible-playbook -i /etc/ansible/hosts -e deprecation_warnings=False /usr/share/ansible/openshift-ansible/playbooks/byo/config.yml
+  when: inventory_hostname == groups['masters'][0]
+  ignore_errors: True
+
+- name: Configure htpasswd for authentication
+  become: true
+  htpasswd:
+    path: /etc/origin/master/htpasswd
+    name: "{{ ocp_user }}"
+    password: "{{ ocp_pass }}"
+    state: present
+    create: yes
+  when: inventory_hostname == groups['masters'][0]
+
+- name: Setup {{ ocp_user }} as a cluster-admin and generate the management token
+  when: inventory_hostname == groups['masters'][0]
+  shell: |
+    oadm policy add-cluster-role-to-user cluster-admin {{ ocp_user }}
+    oc project management-infra
+    oadm policy add-role-to-user -n management-infra {{ ocp_user }} -z management-admin
+    oadm policy add-role-to-user -n management-infra management-infra-admin -z management-admin
+    oadm policy add-cluster-role-to-user cluster-reader system:serviceaccount:management-infra:management-admin
+    oadm policy add-scc-to-user privileged system:serviceaccount:management-infra:management-admin
+    oc sa get-token -n management-infra management-admin > ~/mgmt-token.txt

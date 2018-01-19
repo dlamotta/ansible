@@ -1,0 +1,15 @@
+---
+- name: Deletes OpenShift machines and cleans up DNS
+  hosts: all
+  gather_facts: false
+  remote_user: cloud-user
+  vars:
+    ansible_ssh_common_args: -o StrictHostKeyChecking=no
+    domain: cloudsalab.com
+  roles:
+    # clean target platform. if other platforms are required, create a role for that
+    # platform and add another line. Destination provider is defined as a group variable.
+    - { role: openstack-cleanup, when: "hostvars[inventory_hostname]['provider'] == 'openstack'" }
+
+    # create and add DNS entries
+    - { role: ipa-cleanup}

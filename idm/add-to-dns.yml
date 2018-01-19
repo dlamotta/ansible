@@ -1,0 +1,30 @@
+---
+- name: Add a host to IDM
+  hosts: all
+  vars:
+    idm_server: idm_server
+    idm_passwd: idm_pass
+    idm_zone: idm_zone
+    idm_record: hostname
+    idm_value: ipaddress
+    
+  tasks:  
+  - name: Ensure a DNS record is present
+    ipa_dnsrecord:
+      ipa_host: "{{ idm_server }}"
+      ipa_pass: "{{ idm_pass }}"
+      state: present
+      zone_name: "{{ idm_zone }}"
+      record_name: "{{ idm_record }}"
+      record_type: "A"
+      record_value: "{{ idm_value }}"  
+      validate_certs: False
+  
+  - name: Add the host
+    ipa_host:
+      name: "{{ idm_record }}.cloudsalab.com"
+      state: present
+      ipa_host: "{{ idm_server }}"
+      ipa_user: admin
+      ipa_pass: "{{ idm_pass }}"
+      validate_certs: False
