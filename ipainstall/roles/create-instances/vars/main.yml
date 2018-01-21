@@ -1,0 +1,11 @@
+---
+openstack: http://10.11.95.20:5000/v2.0/
+username: cloudforms
+password: redhat
+tenant: cloudforms
+key: salab
+publickey: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDKmTjOa+nJQPp8DKpZPxlPyESQRzu+GE2feurA0jVft8Ba+qyoD8FTebpR5o9YK9+uo6GzmhB7ll07k1aUcP4GMj8Ur9umGjiEo3WOv6sIq8TTleNABVdaT50cM+g1p4TzzNFAPmx+f+QDGt3hHHhQlJaLwbCNbggRLeIqb2IIme4+f221NpnPi8m8fXlxY5jCjUjcdnqWowFqQ2IbJFdwm8dzZ9Djtmw982g5rR9bbLz33AgVtNqd+PN7dx0n86iq13b54xB4v/Z/4C40g0CEQm2Ss77K9taTRCrajpKV//uTPVQ3/3GbQzFTptpikFIjQjPbCmxaJ6tpHo6m/ej3 cloud-user@ocp-master.novalocal
+securitygroup: wide-open
+floating_ip: False
+instances:
+  - instance1

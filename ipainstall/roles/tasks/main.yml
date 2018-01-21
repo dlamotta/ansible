@@ -1,0 +1,73 @@
+---
+- name: launch an instance
+  os_server:
+    state: present
+    auth:
+      auth_url: "{{ osp_server }}"
+      username: "{{ osp_user }}"
+      password: "{{ osp_pass }}"
+      project_name: "{{ osp_tenant }}"
+    name: "{{ inventory_hostname }}"
+    image: "{{ osp_image }}"
+    key_name: "{{ osp_key }}"
+    timeout: 200
+    flavor: "{{ osp_flavor }}"
+    security_groups: "{{ osp_security_group }}"
+    network: private
+    auto_ip: "{{ hostvars[inventory_hostname]['osp_floating_ip'] }}"
+    wait: yes
+    userdata: |
+      #cloud-config
+      ssh_authorized_keys:
+        - "{{ osp_public_key }}"
+  register: instance
+  delegate_to: "{{ control_machine }}"
+
+- name: add the public IP address as a fact for masters
+  set_fact:
+    ansible_default_ipv4:
+      address: "{{ instance.openstack.public_v4 }}"
+    cacheable: True
+  when: inventory_hostname in groups['masters']
+
+- name: add the private IP address as a fact for nodes
+  set_fact:
+    ansible_default_ipv4:
+      address: "{{ instance.openstack.private_v4 }}"
+    cacheable: True
+  when: inventory_hostname not in groups['masters']
+
+- debug:
+    msg: IP address is {{ ansible_default_ipv4.address }}
+
+- name: create volumes
+  os_volume:
+    auth:
+      auth_url: "{{ osp_server }}"
+      username: "{{ osp_user }}"
+      password: "{{ osp_pass }}"
+      project_name: "{{ osp_tenant }}"
+    state: present
+    size: "{{ item['size'] }}"
+    display_name: "{{ inventory_hostname }}-{{ item['name'] }}"
+  with_flattened: 
+    - "{{ hostvars[inventory_hostname]['docker-volumes'] }}"
+    - "{{ hostvars[inventory_hostname]['nfs-volumes'] }}"
+  delegate_to: "{{ control_machine }}"
+
+- name: attach volumes  
+  os_server_volume:
+    auth:
+      auth_url: "{{ osp_server }}"
+      username: "{{ osp_user }}"
+      password: "{{ osp_pass }}"
+      project_name: "{{ osp_tenant }}"
+    state: present    
+    server: "{{ inventory_hostname }}"
+    volume: "{{ inventory_hostname }}-{{ item['name'] }}"
+  with_flattened:
+    - "{{ hostvars[inventory_hostname]['docker-volumes'] }}"
+    - "{{ hostvars[inventory_hostname]['nfs-volumes'] }}"
+  delegate_to: "{{ control_machine }}"
+  
+    

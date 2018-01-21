@@ -1,0 +1,8 @@
+---
+- name: launch an ipa instance
+  hosts: localhost
+  vars:
+    instances:
+      - ocp.cloudsalab.com
+  roles:
+    - create-instances
