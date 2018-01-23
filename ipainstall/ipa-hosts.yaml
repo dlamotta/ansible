@@ -3,6 +3,8 @@
   hosts: localhost
   vars:
     instances:
-      - ipa2.cloudsalab.com
+      - ipa2
+    flavor:
+      - small
   roles:
     - create-instances
