@@ -1,0 +1,57 @@
+---
+- name: launch a compute instance
+  hosts: localhost
+  vars:
+    openstack: http://10.9.60.133:5000/v2.0/
+    username: admin
+    password: password
+    tenant: tenant
+    key: key
+    securitygroup: securitygroup
+    instances: 5
+  tasks:
+    - name: launch an instance
+      os_server:
+        state: present
+        auth:
+          auth_url: "{{ openstack }}"
+          username: "{{ username }}"
+          password: "{{ password }}"
+          project_name: "{{ tenant }}"
+        name: "{{ tenant }}{{ item }}"
+        image: ce231692-f8cf-4887-be76-bf854b0c353a
+        key_name: "{{ key }}"
+        timeout: 200
+        flavor: small
+        security_groups: "{{ securitygroup }}"
+        network: cloud
+        auto_ip: False
+        wait: yes
+      with_sequence: count={{ instances }}
+      async: 180
+      poll: 0
+      register: provisioning
+
+    - name: check on provisioning
+      async_status:
+        jid: "{{ item.ansible_job_id }}"
+      register: job
+      until: job.finished
+      retries: 30
+      with_items: "{{ provisioning.results }}"
+
+    - name: update cloudforms provider
+      uri:
+        url: https://10.9.61.208/api/providers/20000000000015
+        validate_certs: False
+        method: POST
+        user: admin
+        password: smartvm
+        force_basic_auth: yes
+        body_format: json
+        body: { "action": "refresh" }
+
+    - name: wait for connection
+      wait_for_connection:
+        delay: 5
+        timeout: 60 

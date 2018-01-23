@@ -1,8 +1,8 @@
 ---
-- name: launch an ipa instance
+- name: launch a compute instance
   hosts: localhost
   vars:
     instances:
-      - ocp.cloudsalab.com
+      - ipa2.cloudsalab.com
   roles:
     - create-instances
