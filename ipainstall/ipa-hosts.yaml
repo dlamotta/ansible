@@ -1,6 +1,6 @@
 ---
 - name: launch a compute instance
-  hosts: localhost
+  hosts: all
   vars:
     instances:
       - ipa2
