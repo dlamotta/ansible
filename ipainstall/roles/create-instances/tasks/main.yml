@@ -25,7 +25,7 @@
   poll: 0
   register: provisioning
   delegate_to: "{{ control_machine }}"
-- name: check on provisioning
+#- name: check on provisioning
 #  async_status:
 #    jid: "{{ item.ansible_job_id }}"
 #  register: job
