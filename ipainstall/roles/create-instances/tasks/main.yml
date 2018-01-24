@@ -11,7 +11,7 @@
     image: 157e2f64-a397-498e-9a30-33a4ae11e4be
     key_name: "{{ key }}"
     timeout: 200
-    flavor: cfme
+    flavor: small
     security_groups: "{{ securitygroup }}"
     network: private
     auto_ip: "{{ floating_ip }}"
@@ -26,10 +26,10 @@
   register: provisioning
   delegate_to: "{{ control_machine }}"
 - name: check on provisioning
-  async_status:
-    jid: "{{ item.ansible_job_id }}"
-  register: job
-  until: job.finished
-  retries: 30
-  with_items: "{{ provisioning.results }}"
+#  async_status:
+#    jid: "{{ item.ansible_job_id }}"
+#  register: job
+#  until: job.finished
+#  retries: 30
+#  with_items: "{{ provisioning.results }}"
 

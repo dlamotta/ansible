@@ -5,7 +5,7 @@
     instances:
       - ipa2
     flavor:
-      - small
+      - cfme
     control_machine: tower
   roles:
     - create-instances
