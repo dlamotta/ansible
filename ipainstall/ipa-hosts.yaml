@@ -6,6 +6,6 @@
       - ipa2
     flavor:
       - small
-    control_machine: localhost
+    control_machine: tower
   roles:
     - create-instances
