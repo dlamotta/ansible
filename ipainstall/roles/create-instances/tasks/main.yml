@@ -11,7 +11,7 @@
     image: 157e2f64-a397-498e-9a30-33a4ae11e4be
     key_name: "{{ key }}"
     timeout: 200
-    flavor: small
+    flavor: "{{ osp_flavor }}"
     security_groups: "{{ securitygroup }}"
     network: private
     auto_ip: "{{ floating_ip }}"
@@ -21,8 +21,8 @@
       ssh_authorized_keys:
         - "{{ publickey }}"
   with_items: "{{ instances }}"
-  async: 180
-  poll: 0
+#  async: 180
+#  poll: 0
   register: provisioning
   delegate_to: "{{ control_machine }}"
 #- name: check on provisioning

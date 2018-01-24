@@ -8,4 +8,4 @@ publickey: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDKmTjOa+nJQPp8DKpZPxlPyESQRzu+G
 securitygroup: wide-open
 floating_ip: False
 instances:
-  - ipa2
+  - ipa3331
