@@ -1,0 +1,7 @@
+---
+- tasks:
+  redhat_subscription
+    username: "{{ rhn_username }}"
+    password: "{{ rhn_password }}"
+    pool_ids: "{{ pool_id }}"
+    state: present
