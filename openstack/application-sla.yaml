@@ -2,9 +2,11 @@
 - name: Enforces a given number of application instances in OpenStack to exist
   hosts: localhost
   gather_facts: false
+  vars:
+    prefix: application-sla-test
+    sla: 1
   vars_files:
-    - openstack.yaml
-    - sla.yaml
+    - phx-openstack.yaml
     - gmail.yaml
   
   tasks:
@@ -24,7 +26,7 @@
     vars:
       powered_on_instances: "[?power_state==`{{ osp_state}}`]"
       instances: "{{ openstack_servers|json_query(powered_on_instances) }}"
-      required_instances: "4"
+      required_instances: "{{ sla - instances|length }}"
     set_fact:
       count: "{{ required_instances }}"
     register: instances
