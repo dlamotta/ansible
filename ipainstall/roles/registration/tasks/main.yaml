@@ -1,6 +1,6 @@
 ---
-- tasks:
-  redhat_subscription
+- name: subscribe the host to rhn
+  redhat_subscription:
     username: "{{ rhn_username }}"
     password: "{{ rhn_password }}"
     pool_ids: "{{ pool_id }}"
