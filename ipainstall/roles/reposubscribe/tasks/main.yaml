@@ -1,8 +1,7 @@
 ---
-- name: set the proper repositories
-  yum_repository:
-    - name: " {{ item }} "
-      state: absent
+- name: remove the improper repositories
+  shell:
+    subscription-manager repos --disable={{item}}
   with_items:
     - rhel-7-rc-rpms
     - rhel-7-server-aus-rpms
@@ -10,3 +9,16 @@
     - rhel-7-server-nfv-rpms
     - rhel-7-server-rt-rpms
     - rhel-7-server-tus-rpms
+- name: enable the proper repositores
+  shell:
+    subscription-manager repos --enable={{item}}
+  with_items:
+    - rhel-7-server-extras-rpms
+- name: Install the ipa packages
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - ipa-server 
+    - bind-dyndb-ldap 
+    - ipa-server-dns
