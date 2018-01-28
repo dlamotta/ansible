@@ -1,0 +1,8 @@
+---
+- name: register the host to rhn
+  hosts: 192.168.76.17
+  remote_user: cloud-user
+  become: True
+  vars:
+  roles:
+  - reposubscribe   

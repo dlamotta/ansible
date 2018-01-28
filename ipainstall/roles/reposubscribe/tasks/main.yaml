@@ -1,0 +1,12 @@
+---
+- name: set the proper repositories
+  yum_repository:
+    - name: " {{ item }} "
+      state: absent
+  with_items:
+    - rhel-7-rc-rpms
+    - rhel-7-server-aus-rpms
+    - rhel-7-server-htb-rpms
+    - rhel-7-server-nfv-rpms
+    - rhel-7-server-rt-rpms
+    - rhel-7-server-tus-rpms
