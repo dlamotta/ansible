@@ -5,10 +5,7 @@
   vars:
     prefix: application-sla-test
     sla: 1
-    control_machine: localhost
-  vars_files:
-    - phx-openstack.yml
-    - gmail.yml
+    control_machine: tower
   
   tasks:
   - name: Get instances that start with '{{ prefix }}'
