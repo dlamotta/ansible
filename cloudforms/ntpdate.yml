@@ -1,5 +1,6 @@
 ---
 - name: Update clocks via ntpdate
+  become: true
   hosts: all
   vars:
     time_server: rhel.0.pool.ntp.org
