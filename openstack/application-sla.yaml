@@ -1,10 +1,11 @@
 ---
 - name: Enforces a given number of application instances in OpenStack to exist
   hosts: localhost
-  gather_facts: false
+  gather_facts: false  
   vars:
     prefix: application-sla-test
     sla: 1
+    control_machine: localhost
   vars_files:
     - phx-openstack.yaml
     - gmail.yaml
@@ -18,6 +19,7 @@
         password: "{{ osp_pass }}"
         project_name: "{{ osp_tenant }}"
       server: "{{ prefix }}*"
+    delegate_to: "{{ control_machine }}"  
 
   - debug:
       var: openstack_servers      
@@ -46,6 +48,7 @@
       to: "{{ email_recipients }}"
       subject: Application SLA Alert
       body: "The number of instances that will be created to meet the application SLA is: {{ instances.ansible_facts.count }}"
+    delegate_to: "{{ control_machine }}"  
 
   - name: create instances
     debug:
