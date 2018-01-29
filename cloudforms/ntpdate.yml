@@ -9,4 +9,4 @@
       name: ntpdate
       state: latest
   - name: sync clock
-    shell: ntpdate {{ time server }}
+    shell: "ntpdate {{ time server }}"
