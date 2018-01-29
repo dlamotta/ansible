@@ -7,8 +7,8 @@
     sla: 1
     control_machine: localhost
   vars_files:
-    - phx-openstack.yaml
-    - gmail.yaml
+    - phx-openstack.yml
+    - gmail.yml
   
   tasks:
   - name: Get instances that start with '{{ prefix }}'
