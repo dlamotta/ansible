@@ -3,7 +3,7 @@
   become: true
   hosts: all
   vars:
-    time_server: rhel.0.pool.ntp.org
+    time_server: 0.pool.ntp.org
   tasks:
   - name: make sure ntpdate is installed
     yum:
