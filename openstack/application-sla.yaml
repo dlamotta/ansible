@@ -6,7 +6,7 @@
     prefix: application-sla-test
     sla: 1
     control_machine: tower
-    msg: 'Hello World'
+    msg: "The number of instances that will be created to meet the application SLA is"
   
   tasks:
   - name: Get instances that start with '{{ prefix }}'
@@ -45,7 +45,7 @@
       password: "{{ gmail_pass }}"
       to: "{{ email_recipients }}"
       subject: Application SLA Alert
-      body: "{{ msg }} The number of instances that will be created to meet the application SLA is: {{ instances.ansible_facts.count }}"
+      body: "{{ msg }}: {{ instances.ansible_facts.count }}"
     delegate_to: "{{ control_machine }}"  
 
   - name: create instances
