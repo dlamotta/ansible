@@ -1,0 +1,11 @@
+---
+- name: Reboot CF worker appliances
+  become: true
+  hosts: all
+  tasks:
+  - name: reboot the machine
+    shell: nohup bash -c "sleep 2s && systemctl reboot" &
+
+  - name: wait for machine to come back
+    wait_for_connection:
+      timeout: 120
