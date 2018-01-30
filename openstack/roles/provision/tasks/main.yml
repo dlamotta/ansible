@@ -1,0 +1,74 @@
+---
+- name: launch an instance
+  os_server:
+    state: present
+    auth:
+      auth_url: "{{ osp_server }}"
+      username: "{{ osp_user }}"
+      password: "{{ osp_pass }}"
+      project_name: "{{ osp_tenant }}"
+    name: "{{ osp_instance_name }}"
+    image: "{{ osp_image }}"
+    key_name: "{{ osp_key }}"
+    timeout: 200
+    flavor: "{{ osp_flavor }}"
+    security_groups: "{{ osp_security_group }}"
+    network: private
+    auto_ip: "{{ osp_floating_ip }}"
+    wait: yes
+    userdata: |
+      #cloud-config
+      ssh_authorized_keys:
+        - "{{ osp_public_key }}"
+  register: instance
+  delegate_to: "{{ control_machine }}"
+
+- name: add the public IP address as a fact
+  set_fact:
+    ansible_default_ipv4:
+      address: "{{ instance.openstack.public_v4 }}"
+    cacheable: True
+
+- debug:
+    msg: IP address is {{ ansible_default_ipv4.address }}
+
+- name: create volumes
+  os_volume:
+    auth:
+      auth_url: "{{ osp_server }}"
+      username: "{{ osp_user }}"
+      password: "{{ osp_pass }}"
+      project_name: "{{ osp_tenant }}"
+    state: present
+    size: "{{ osp_volume_size }}"
+    display_name: "{{ inventory_hostname }}-{{ osp_volume_name }}"
+  delegate_to: "{{ control_machine }}"
+
+- name: attach volumes  
+  os_server_volume:
+    auth:
+      auth_url: "{{ osp_server }}"
+      username: "{{ osp_user }}"
+      password: "{{ osp_pass }}"
+      project_name: "{{ osp_tenant }}"
+    state: present    
+    server: "{{ osp_instance_name }}"
+    volume: "{{ osp_instance_name }}-{{ osp_volume_name }}"
+  delegate_to: "{{ control_machine }}"
+  
+- name: Set the Provider URL
+  set_fact:
+    cf_provider_url: "{{ cf_server }}/api/providers/{{ cf_provider_id }}"
+
+- name: update cloudforms provider
+  uri:
+    url: "{{ cf_provider_url }}"
+    validate_certs: False
+    method: POST
+    user: "{{ cf_user }}"
+    password: "{{ cf_pass }}"
+    force_basic_auth: yes
+    body_format: json
+    body: { "action": "refresh" }        
+    status_code: 200
+  register: refresh_task

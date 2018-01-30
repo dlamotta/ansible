@@ -1,0 +1,18 @@
+---
+cf_server: https://10.11.95.142/
+cf_provider_id: 1000000000030
+cf_user: david
+cf_pass: RedHat123!
+
+osp_server: http://10.11.95.20:5000/v2.0/
+osp_user: cloudforms
+osp_pass: redhat
+osp_tenant: cloudforms
+osp_key: salab
+osp_instance_name: "instance-{{ 99999 | random | to_uuid }}"
+osp_image: 157e2f64-a397-498e-9a30-33a4ae11e4be
+osp_public_key: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDKmTjOa+nJQPp8DKpZPxlPyESQRzu+GE2feurA0jVft8Ba+qyoD8FTebpR5o9YK9+uo6GzmhB7ll07k1aUcP4GMj8Ur9umGjiEo3WOv6sIq8TTleNABVdaT50cM+g1p4TzzNFAPmx+f+QDGt3hHHhQlJaLwbCNbggRLeIqb2IIme4+f221NpnPi8m8fXlxY5jCjUjcdnqWowFqQ2IbJFdwm8dzZ9Djtmw982g5rR9bbLz33AgVtNqd+PN7dx0n86iq13b54xB4v/Z/4C40g0CEQm2Ss77K9taTRCrajpKV//uTPVQ3/3GbQzFTptpikFIjQjPbCmxaJ6tpHo6m/ej3 cloud-user@ocp-master.novalocal
+osp_security_group: wide-open
+osp_floating_ip: True
+osp_volume_size: 5
+osp_volume_name: vol-{{ 99 | random | to_uuid }}
