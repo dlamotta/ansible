@@ -1,6 +1,6 @@
 ---
 - name: Create an OpenStack instance
-  hosts: localhost
+  hosts: all
   gather_facts: False
   remote_user: cloud-user
   vars:

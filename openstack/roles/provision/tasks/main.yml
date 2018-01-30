@@ -41,7 +41,7 @@
       project_name: "{{ osp_tenant }}"
     state: present
     size: "{{ osp_volume_size }}"
-    display_name: "{{ inventory_hostname }}-{{ osp_volume_name }}"
+    display_name: "{{ osp_instance_name }}-{{ osp_volume_name }}"
   delegate_to: "{{ control_machine }}"
 
 - name: attach volumes  
