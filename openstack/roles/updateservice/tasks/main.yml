@@ -91,9 +91,10 @@
     status_code: 200
   register: result    
 
-- name: Initialize an empty list for vms
-  set_fact:
-    vms: []
+- name: debug resources
+  debug:
+    var: item
+  with_items: "{{ result.json.resources }}"
 
 - name: Append resource href to vms list
   set_fact:
