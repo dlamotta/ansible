@@ -6,6 +6,10 @@
   vars:
     control_machine: cfme-w4
     ansible_ssh_common_args: -o StrictHostKeyChecking=no
+    package: "httpd"
+    service: "httpd"
+  tasks:
   roles:
     - { role: provision }
     - { role: updateservice }
+    - { role: installpackage }

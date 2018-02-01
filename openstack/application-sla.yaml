@@ -31,27 +31,23 @@
       count: "{{ required_instances }}"
     register: instances
     notify:
-      - send email
-      - create instances
-      - configure instances
+      - provision instances
+      - update service
+      - configure instance
     changed_when: instances.ansible_facts.count|int > 0
 
   handlers:
-  - name: send email
-    mail:
-      host: smtp.gmail.com
-      port: 587
-      username: "{{ gmail_user }}"
-      password: "{{ gmail_pass }}"
-      to: "{{ email_recipients }}"
-      subject: Application SLA Alert
-      body: "{{ msg }}: {{ instances.ansible_facts.count }}"
-    delegate_to: "{{ control_machine }}"  
+  - name: provision instances
+    vars:
+      osp_instance_name: "{{ prefix }}-{{ 999 | random | to_uuid }}"
+    include_role:
+      name: provision
 
-  - name: create instances
-    debug:
-      msg: Configuring instances...    
+  - name: update service
+    include_role:
+      name: updateservice
 
-  - name: configure instances
-    debug:
-      msg: Configuring instances...
+  - name: configure instance
+    include_role:
+      name: installpackage
+      

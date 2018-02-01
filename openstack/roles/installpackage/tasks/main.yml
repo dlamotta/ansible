@@ -1,0 +1,12 @@
+---
+- name: Install one or more packages
+  become: true
+  yum:
+    name: "{{ package }}"
+
+- name: Start a service
+  become: true
+  service:
+    state: started
+    name: "{{ service }}"
+    enabled: yes      
