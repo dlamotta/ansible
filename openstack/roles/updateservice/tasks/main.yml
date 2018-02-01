@@ -69,10 +69,10 @@
     body_format: json
     body: { "action": "refresh" }
     status_code: 200
-  register: instance_href
+  register: result
 
 - debug:
-    var: instance_href
+    var: result
 
 - name: Set the Service URL
   set_fact:
@@ -85,7 +85,7 @@
 - name: Append resource href to vms list
   set_fact:
     vms: "{{ vms }} + [ { 'href': svc_url, 'resource': { 'href': '/api/vms/{{ item.json.resources[0].id }}' } } ]"
-  with_items: "{{ instance_href.results }}"
+  with_items: "{{ result.instance_href }}"
 
 - debug: 
     var: vms
@@ -93,15 +93,15 @@
 - name: Register vms with the service
   uri:
     url: "{{ manageiq.api_url }}/api/services"
+    validate_certs: False
+    headers:
+      X-Auth-Token: "{{ manageiq.api_token }}"
+      Content-Type: "application/json"
     method: POST
     body_format: json
     body:
       action: add_resource
       resources: "{{ vms }}"
-    validate_certs: False
-    headers:
-      X-Auth-Token: "{{ manageiq.api_token }}"
-      Content-Type: "application/json"
     status_code: 200
   register: registration
 
