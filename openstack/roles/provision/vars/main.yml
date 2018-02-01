@@ -2,6 +2,7 @@
 osp_server: http://10.3.71.47:5000/v2.0/
 osp_tenant: satellite
 osp_key: root
+osp_network: internal
 osp_flavor: m1.small
 osp_image: 0606b23e-06f8-4fb6-9da0-707cdf24c493
 osp_public_key: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDKmTjOa+nJQPp8DKpZPxlPyESQRzu+GE2feurA0jVft8Ba+qyoD8FTebpR5o9YK9+uo6GzmhB7ll07k1aUcP4GMj8Ur9umGjiEo3WOv6sIq8TTleNABVdaT50cM+g1p4TzzNFAPmx+f+QDGt3hHHhQlJaLwbCNbggRLeIqb2IIme4+f221NpnPi8m8fXlxY5jCjUjcdnqWowFqQ2IbJFdwm8dzZ9Djtmw982g5rR9bbLz33AgVtNqd+PN7dx0n86iq13b54xB4v/Z/4C40g0CEQm2Ss77K9taTRCrajpKV//uTPVQ3/3GbQzFTptpikFIjQjPbCmxaJ6tpHo6m/ej3 cloud-user@ocp-master.novalocal
@@ -11,9 +12,8 @@ osp_volume_size: 1
 osp_volume_name: vol
 
 # osp_server: http://10.11.95.20:5000/v2.0/
-# osp_user: cloudforms
-# osp_pass: redhat
 # osp_tenant: cloudforms
+# osp_network: private
 # osp_key: salab
 # osp_instance_name: embedded-ansible-instance
 # osp_flavor: m1.small

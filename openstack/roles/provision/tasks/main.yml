@@ -13,7 +13,7 @@
     timeout: 200
     flavor: "{{ osp_flavor }}"
     security_groups: "{{ osp_security_group }}"
-    network: private
+    network: "{{ osp_network }}"
     auto_ip: "{{ osp_floating_ip }}"
     wait: yes
     userdata: |
