@@ -1,4 +1,4 @@
----
+f---
 # ok: [tower] => {
 #     "changed": false, 
 #     "manageiq": {
@@ -18,7 +18,7 @@
 
 - name: Set the Provider URL
   set_fact:
-    cf_provider_url: "{{ cf_server }}/api/providers/{{ cf_provider_id }}"
+    cf_provider_url: "{{ manageiq.api_url }}/api/providers/{{ cf_provider_id }}"
 
 - name: update cloudforms provider
   uri:
@@ -60,7 +60,7 @@
 
 - name: Lookup instance href
   uri:
-    url: "{{ cf_server }}/api/vms?filter[]=name={{ osp_instance_name }}&expand=resources"
+    url: "{{ manageiq.api_url }}/api/vms?filter[]=name={{ osp_instance_name }}&expand=resources"
     validate_certs: False
     method: GET
     headers:
