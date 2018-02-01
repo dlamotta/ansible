@@ -18,14 +18,14 @@
 
 - name: Set the Provider URL
   set_fact:
-    cf_provider_url: "{{ manageiq.api_url }}/api/providers/{{ cf_provider_id }}"
+    cf_provider_url: "{{ cf_server }}/api/providers/{{ cf_provider_id }}"
 
 - name: update cloudforms provider
   uri:
     url: "{{ cf_provider_url }}"
-    headers:
-      X-Auth-Token: "{{ manageiq.api_token }}"
-      Content-Type: "application/json"     
+    user: "{{ cf_user }}"   
+    password: "{{ cf_pass }}"
+    force_basic_auth: true
     validate_certs: False
     method: POST
     body_format: json
@@ -47,9 +47,9 @@
     url: "{{ task_url }}"
     method: GET
     validate_certs: False
-    headers:
-      X-Auth-Token: "{{ manageiq.api_token }}"
-      Content-Type: "application/json"     
+    user: "{{ cf_user }}"   
+    password: "{{ cf_pass }}"
+    force_basic_auth: true    
     body_format: json
     status_code: 200
   register: task_result
@@ -60,12 +60,12 @@
 
 - name: Lookup instance href
   uri:
-    url: "{{ manageiq.api_url }}/api/vms?filter[]=name={{ osp_instance_name }}&expand=resources"
+    url: "{{ cf_server }}/api/vms?filter[]=name={{ osp_instance_name }}&expand=resources"
     validate_certs: False
     method: GET
-    headers:
-      X-Auth-Token: "{{ manageiq.api_token }}"
-      Content-Type: "application/json"   
+    user: "{{ cf_user }}"   
+    password: "{{ cf_pass }}"
+    force_basic_auth: true  
     body_format: json
     body: { "action": "refresh" }
     status_code: 200
@@ -80,12 +80,12 @@
 
 - name: Lookup instance href
   uri:
-    url: "{{ manageiq.api_url }}/api/vms?filter[]=name={{ osp_instance_name }}&expand=resources"
+    url: "{{ cf_server }}/api/vms?filter[]=name={{ osp_instance_name }}&expand=resources"
     validate_certs: False
     method: GET
-    headers:
-      X-Auth-Token: "{{ manageiq.api_token }}"
-      Content-Type: "application/json"   
+    user: "{{ cf_user }}"   
+    password: "{{ cf_pass }}"
+    force_basic_auth: true 
     body_format: json
     body: { "action": "refresh" }
     status_code: 200
@@ -105,11 +105,11 @@
 
 - name: Register vms with the service
   uri:
-    url: "{{ manageiq.api_url }}/api/services"
+    url: "{{ cf_server }}/api/services"
     validate_certs: False
-    headers:
-      X-Auth-Token: "{{ manageiq.api_token }}"
-      Content-Type: "application/json"
+    user: "{{ cf_user }}"   
+    password: "{{ cf_pass }}"
+    force_basic_auth: true
     method: POST
     body_format: json
     body:
