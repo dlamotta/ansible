@@ -80,7 +80,7 @@
 
 - name: Lookup instance href
   uri:
-    url: "{{ cf_server }}/api/vms?filter[]=name={{ osp_instance_name }}&expand=resources"
+    url: "{{ cf_server }}/api/vms?filter[]=name={{ osp_instance_name }}"
     validate_certs: False
     method: GET
     user: "{{ cf_user }}"   
@@ -97,8 +97,8 @@
 
 - name: Append resource href to vms list
   set_fact:
-    vms: "{{ vms }} + [ { 'href': svc_url, 'resource': { 'href': '/api/vms/{{ item.json.resources[0].id }}' } } ]"
-  with_items: "{{ result.instance_href }}"
+    vms: "{{ vms }} + [ { 'href': svc_url, 'resource': { 'href': '/api/vms/{{ item.id }}' } } ]"
+  with_items: "{{ result.json.resources }}"
 
 - debug: 
     var: vms
