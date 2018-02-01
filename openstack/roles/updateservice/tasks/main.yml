@@ -96,6 +96,10 @@
     var: item
   with_items: "{{ result.json.resources }}"
 
+- name: Initialize an empty list for vms
+  set_fact:
+    vms: []  
+
 - name: Append resource href to vms list
   set_fact:
     vms: "{{ vms }} + [ { 'href': svc_url, 'resource': { 'href': '/api/vms/{{ item.id }}' } } ]"
