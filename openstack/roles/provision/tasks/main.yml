@@ -1,4 +1,9 @@
 ---
+- name: 
+  debug:
+    var: manageiq
+  when: manageiq is defined
+
 - name: launch an instance
   os_server:
     state: present
