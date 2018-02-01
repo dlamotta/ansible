@@ -69,6 +69,81 @@
     password: "{{ cf_pass }}"
     force_basic_auth: yes
     body_format: json
-    body: { "action": "refresh" }        
+    body: { "action": "refresh" }
     status_code: 200
   register: refresh_task
+
+- name: Set the task href
+  set_fact:
+    task_url: "{{ refresh_task.json.task_href }}"
+
+- name:
+  debug:
+    var: task_url
+
+- name: Wait for the provider refresh to end
+  uri:
+    url: "{{ task_url }}"
+    method: GET
+    validate_certs: False
+    user: "{{ cf_user }}"
+    password: "{{ cf_pass }}"
+    force_basic_auth: yes    
+    body_format: json
+    status_code: 200
+  register: task_result
+  until: task_result.json.state == 'Finished' or task_result.json.status == 'Error'
+  failed_when: task_result.json.status == 'Error'
+  retries: "{{ cf_max_retries }}"
+  delay: "{{ cf_retry_interval }}"
+
+- name: Lookup instance href
+  uri:
+    url: "{{ cf_server }}/api/vms?filter[]=name={{ osp_instance_name }}&expand=resources"
+    validate_certs: False
+    method: GET
+    user: "{{ cf_user }}"
+    password: "{{ cf_pass }}"
+    force_basic_auth: yes
+    body_format: json
+    body: { "action": "refresh" }
+    status_code: 200
+  register: instance_href
+
+- name: Set the Service URL
+  set_fact:
+    svc_url: "/api/{{ manageiq.service }}"
+
+- name: Initialize an empty list for vms
+  set_fact:
+    vms: []
+
+- name: Append resource href to vms list
+  set_fact:
+    vms: "{{ vms }} + [ { 'href': svc_url, 'resource': { 'href': '/api/vms/{{ item.json.resources[0].id }}' } } ]"
+  with_items: "{{ instance_href.results }}"
+
+- debug: var=vms
+
+- name: Register vms with the service
+  uri:
+    url: "{{ cf_server }}/api/services"
+    validate_certs: False
+    user: "{{ cf_user }}"
+    password: "{{ cf_pass }}"
+    force_basic_auth: yes
+    body_format: json
+    status_code: 200
+    body:
+      action: add_resource
+      resources: "{{ vms }}"
+    validate_certs: False
+    status_code: 200
+  register: output
+
+- debug: var=output.json.results[0].success
+
+- name: Check if the VM was successfully attached to service
+  fail: msg="{{ output.json.results[0].message }}"
+  when: output.json.results[0].success == false
+
