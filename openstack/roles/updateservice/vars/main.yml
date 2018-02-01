@@ -1,7 +1,5 @@
 ---
 cf_server: https://10.11.95.142/
 cf_provider_id: 1000000000030
-cf_user: david
-cf_pass: RedHat123!
 cf_max_retries: 9 
 cf_retry_interval: 20

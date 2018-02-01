@@ -78,6 +78,19 @@
   set_fact:
     svc_url: "/api/{{ manageiq.service }}"
 
+- name: Lookup instance href
+  uri:
+    url: "{{ manageiq.api_url }}/api/vms?filter[]=name={{ osp_instance_name }}&expand=resources"
+    validate_certs: False
+    method: GET
+    headers:
+      X-Auth-Token: "{{ manageiq.api_token }}"
+      Content-Type: "application/json"   
+    body_format: json
+    body: { "action": "refresh" }
+    status_code: 200
+  register: result    
+
 - name: Initialize an empty list for vms
   set_fact:
     vms: []
