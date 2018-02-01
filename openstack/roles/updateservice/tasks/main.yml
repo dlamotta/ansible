@@ -80,7 +80,7 @@
 
 - name: Lookup instance href
   uri:
-    url: "{{ cf_server }}/api/vms?filter[]=name={{ osp_instance_name }}"
+    url: "{{ cf_server }}/api/vms?filter[]=name={{ osp_instance_name }}&expand=resources"
     validate_certs: False
     method: GET
     user: "{{ cf_user }}"   
