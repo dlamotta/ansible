@@ -68,11 +68,11 @@
 - name: update cloudforms provider
   uri:
     url: "{{ cf_provider_url }}"
+    headers:
+      X-Auth-Token: "{{ manageiq.api_token }}"
+      Content-Type: "application/json"     
     validate_certs: False
     method: POST
-    user: "{{ cf_user }}"
-    password: "{{ cf_pass }}"
-    force_basic_auth: yes
     body_format: json
     body: { "action": "refresh" }
     status_code: 200
@@ -91,9 +91,9 @@
     url: "{{ task_url }}"
     method: GET
     validate_certs: False
-    user: "{{ cf_user }}"
-    password: "{{ cf_pass }}"
-    force_basic_auth: yes    
+    headers:
+      X-Auth-Token: "{{ manageiq.api_token }}"
+      Content-Type: "application/json"     
     body_format: json
     status_code: 200
   register: task_result
@@ -107,13 +107,16 @@
     url: "{{ cf_server }}/api/vms?filter[]=name={{ osp_instance_name }}&expand=resources"
     validate_certs: False
     method: GET
-    user: "{{ cf_user }}"
-    password: "{{ cf_pass }}"
-    force_basic_auth: yes
+    headers:
+      X-Auth-Token: "{{ manageiq.api_token }}"
+      Content-Type: "application/json"   
     body_format: json
     body: { "action": "refresh" }
     status_code: 200
   register: instance_href
+
+- debug:
+    var: instance_href
 
 - name: Set the Service URL
   set_fact:
@@ -128,27 +131,28 @@
     vms: "{{ vms }} + [ { 'href': svc_url, 'resource': { 'href': '/api/vms/{{ item.json.resources[0].id }}' } } ]"
   with_items: "{{ instance_href.results }}"
 
-- debug: var=vms
+- debug: 
+    var: vms
 
 - name: Register vms with the service
   uri:
-    url: "{{ cf_server }}/api/services"
-    validate_certs: False
-    user: "{{ cf_user }}"
-    password: "{{ cf_pass }}"
-    force_basic_auth: yes
+    url: "{{ manageiq.api_url }}/api/services"
+    method: POST
     body_format: json
-    status_code: 200
     body:
       action: add_resource
       resources: "{{ vms }}"
     validate_certs: False
+    headers:
+      X-Auth-Token: "{{ manageiq.api_token }}"
+      Content-Type: "application/json"
     status_code: 200
-  register: output
+  register: registration
 
-- debug: var=output.json.results[0].success
+- debug: 
+    var: registration.json.results[0].success
 
 - name: Check if the VM was successfully attached to service
-  fail: msg="{{ output.json.results[0].message }}"
-  when: output.json.results[0].success == false
+  fail: msg="{{ registration.json.results[0].message }}"
+  when: registration.json.results[0].success == false
 
