@@ -127,6 +127,7 @@
     status_code: 200
   register: registration
   delegate_to: "{{ control_machine }}"
+  when: result.json.resources.count|int > 0
 
 - debug: 
     var: registration.json.results[0].success
