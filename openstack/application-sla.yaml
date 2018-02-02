@@ -36,18 +36,20 @@
       - configure instance
     changed_when: instances.ansible_facts.count|int > 0
 
-  handlers:
   - name: provision instances
     vars:
       osp_instance_name: "{{ prefix }}-{{ 999 | random | to_uuid }}"
     include_role:
       name: provision
+    when: instances.ansible_facts.count|int > 0  
 
   - name: update service
     include_role:
       name: updateservice
+    when: instances.ansible_facts.count|int > 0  
 
   - name: configure instance
     include_role:
       name: installpackage
+    when: instances.ansible_facts.count|int > 0  
       
