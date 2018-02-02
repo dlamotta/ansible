@@ -12,4 +12,3 @@
   roles:
     - { role: provision }
     - { role: updateservice }
-    - { role: installpackage }
