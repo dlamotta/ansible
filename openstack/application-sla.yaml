@@ -39,10 +39,10 @@
       name: provision
     when: instances.ansible_facts.count|int > 0  
 
-  - name: update service
+  - name: update cloudforms service
     include_role:
       name: updateservice
-    when: instances.ansible_facts.count|int > 0  
+    when: (manageiq is defined) and (instances.ansible_facts.count|int > 0)
 
 # Second play
 - name: Configure instance

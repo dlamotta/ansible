@@ -32,29 +32,29 @@
 - debug:
     msg: IP address is {{ ansible_default_ipv4.address }}
 
-- name: create volumes
-  os_volume:
-    auth:
-      auth_url: "{{ osp_server }}"
-      username: "{{ osp_user }}"
-      password: "{{ osp_pass }}"
-      project_name: "{{ osp_tenant }}"
-    state: present
-    size: "{{ osp_volume_size }}"
-    display_name: "{{ osp_instance_name }}-{{ osp_volume_name }}"
-  delegate_to: "{{ control_machine }}"
+# - name: create volumes
+#   os_volume:
+#     auth:
+#       auth_url: "{{ osp_server }}"
+#       username: "{{ osp_user }}"
+#       password: "{{ osp_pass }}"
+#       project_name: "{{ osp_tenant }}"
+#     state: present
+#     size: "{{ osp_volume_size }}"
+#     display_name: "{{ osp_instance_name }}-{{ osp_volume_name }}"
+#   delegate_to: "{{ control_machine }}"
 
-- name: attach volumes  
-  os_server_volume:
-    auth:
-      auth_url: "{{ osp_server }}"
-      username: "{{ osp_user }}"
-      password: "{{ osp_pass }}"
-      project_name: "{{ osp_tenant }}"
-    state: present    
-    server: "{{ osp_instance_name }}"
-    volume: "{{ osp_instance_name }}-{{ osp_volume_name }}"
-  delegate_to: "{{ control_machine }}"
+# - name: attach volumes  
+#   os_server_volume:
+#     auth:
+#       auth_url: "{{ osp_server }}"
+#       username: "{{ osp_user }}"
+#       password: "{{ osp_pass }}"
+#       project_name: "{{ osp_tenant }}"
+#     state: present    
+#     server: "{{ osp_instance_name }}"
+#     volume: "{{ osp_instance_name }}-{{ osp_volume_name }}"
+#   delegate_to: "{{ control_machine }}"
 
 - name: Add instance to a group
   add_host:
