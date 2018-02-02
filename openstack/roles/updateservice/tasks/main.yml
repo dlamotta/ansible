@@ -131,7 +131,3 @@
 
 - debug: 
     var: registration.json.results[0].success
-
-- name: Check if the VM was successfully attached to service
-  fail: msg="{{ registration.json.results[0].message }}"
-  when: registration.json.results[0].success == false
