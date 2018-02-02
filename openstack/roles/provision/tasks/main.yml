@@ -55,3 +55,8 @@
     server: "{{ osp_instance_name }}"
     volume: "{{ osp_instance_name }}-{{ osp_volume_name }}"
   delegate_to: "{{ control_machine }}"
+
+- name: Add instance to a group
+  add_host:
+    name: "{{ osp_instance_name }}"
+    groups: provisioned_instance

@@ -44,8 +44,13 @@
       name: updateservice
     when: instances.ansible_facts.count|int > 0  
 
+# Second play
+- name: Configure instance
+  hosts: provisioned_instance
+  become: true
+
+  tasks:
   - name: configure instance
     include_role:
-      name: installpackage
-    when: instances.ansible_facts.count|int > 0  
+      name: installpackage 
       
