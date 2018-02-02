@@ -39,6 +39,12 @@
       name: provision
     when: instances.ansible_facts.count|int > 0  
 
+  - name: Add instance to a group
+    add_host:
+      name: "{{ osp_instance_name }}"
+      groups: provisioned_instance
+    when: instances.ansible_facts.count|int > 0        
+
   - name: update cloudforms service
     include_role:
       name: updateservice
@@ -48,7 +54,7 @@
 - name: Configure instance
   hosts: provisioned_instance
   become: true
-
+  
   tasks:
   - name: configure instance
     include_role:
