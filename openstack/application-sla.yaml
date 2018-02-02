@@ -32,14 +32,22 @@
     register: instances
     changed_when: instances.ansible_facts.count|int > 0
 
+  - name: cache instance name
+    set_fact:
+      instance_name: "{{ prefix }}-{{ 999 | random | to_uuid }}"
+    register: osp
+    changed_when: true
+
   - name: provision instances
     vars:
-      osp_instance_name: "{{ prefix }}-{{ 999 | random | to_uuid }}"
+      osp_instance_name: "{{ osp.ansible_facts.instance_name }}"
     include_role:
       name: provision
     when: instances.ansible_facts.count|int > 0    
 
   - name: update cloudforms service
+    vars:
+        osp_instance_name: "{{ osp.ansible_facts.instance_name }}"
     include_role:
       name: updateservice
     when: (manageiq is defined) and (instances.ansible_facts.count|int > 0)
