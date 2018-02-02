@@ -33,6 +33,7 @@
       action: refresh
     status_code: 200
   register: refresh_task
+  delegate_to: "{{ control_machine }}"
 
 - name: Set the task href
   set_fact:
@@ -57,6 +58,7 @@
   failed_when: task_result.json.status == 'Error'
   retries: "{{ cf_max_retries }}"
   delay: "{{ cf_retry_interval }}"
+  delegate_to: "{{ control_machine }}"
 
 - name: Lookup instance href
   uri:
@@ -70,6 +72,7 @@
     body: { "action": "refresh" }
     status_code: 200
   register: result
+  delegate_to: "{{ control_machine }}"
 
 - debug:
     var: result
@@ -90,6 +93,7 @@
     body: { "action": "refresh" }
     status_code: 200
   register: result    
+  delegate_to: "{{ control_machine }}"
 
 - name: debug resources
   debug:
@@ -122,6 +126,7 @@
       resources: "{{ vms }}"
     status_code: 200
   register: registration
+  delegate_to: "{{ control_machine }}"
 
 - debug: 
     var: registration.json.results[0].success

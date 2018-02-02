@@ -3,6 +3,7 @@
   become: true
   yum:
     name: "{{ package }}"
+  delegate_to: "{{ osp_instance_name }}"
 
 - name: Start a service
   become: true
@@ -10,3 +11,4 @@
     state: started
     name: "{{ service }}"
     enabled: yes      
+  delegate_to: "{{ osp_instance_name }}"  

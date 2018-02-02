@@ -1,6 +1,6 @@
 ---
 - name: Enforces a given number of application instances in OpenStack to exist
-  hosts: localhost
+  hosts: all
   gather_facts: false  
   vars:
     prefix: application-sla-test
