@@ -32,23 +32,12 @@
     register: instances
     changed_when: instances.ansible_facts.count|int > 0
 
-  - name: cache instance name
-    set_fact:
-      name: "{{ prefix }}-{{ 999 | random | to_uuid }}"
-    register: instance
-
   - name: provision instances
     vars:
-      osp_instance_name: "{{ instance.ansible_facts.name }}"
+      osp_instance_name: "{{ prefix }}-{{ 999 | random | to_uuid }}"
     include_role:
       name: provision
-    when: instances.ansible_facts.count|int > 0  
-
-  - name: Add instance to a group
-    add_host:
-      name: "{{ instance.ansible_facts.name }}"
-      groups: provisioned_instance
-    when: instances.ansible_facts.count|int > 0        
+    when: instances.ansible_facts.count|int > 0    
 
   - name: update cloudforms service
     include_role:
