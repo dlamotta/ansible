@@ -32,16 +32,21 @@
     register: instances
     changed_when: instances.ansible_facts.count|int > 0
 
+  - name: cache instance name
+    set_fact:
+      name: "{{ prefix }}-{{ 999 | random | to_uuid }}"
+    register: instance
+
   - name: provision instances
     vars:
-      osp_instance_name: "{{ prefix }}-{{ 999 | random | to_uuid }}"
+      osp_instance_name: "{{ instance.ansible_facts.name }}"
     include_role:
       name: provision
     when: instances.ansible_facts.count|int > 0  
 
   - name: Add instance to a group
     add_host:
-      name: "{{ osp_instance_name }}"
+      name: "{{ instance.ansible_facts.name }}"
       groups: provisioned_instance
     when: instances.ansible_facts.count|int > 0        
 
@@ -54,7 +59,7 @@
 - name: Configure instance
   hosts: provisioned_instance
   become: true
-  
+
   tasks:
   - name: configure instance
     include_role:
