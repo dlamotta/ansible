@@ -18,8 +18,8 @@
     flavor: "{{ osp_flavor }}"
     security_groups: "{{ osp_security_group }}"
     network: "{{ osp_network }}"
-    floating_ip:
-      -  "10.11.95.171"
+    floating_ips:
+      -  10.11.95.171
     wait: true
     userdata: |
       #cloud-config
