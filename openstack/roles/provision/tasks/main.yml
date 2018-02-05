@@ -1,7 +1,7 @@
 ---
 - name: infoblox next available ip
   debug:
-    var: "{{ infoblox_response.json.ipv4addrs[0].ipv4addr }}"
+    msg: "IP address from infoblox is: {{ infoblox_response.json.ipv4addrs[0].ipv4addr }}"
 
 - name: launch an instance
   os_server:
