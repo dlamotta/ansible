@@ -12,9 +12,12 @@
   register: infoblox_response
   delegate_to: "{{ control_machine }}"
 
+- debug:
+    msg: "Network reference id: {{ infoblox_response.json[0]._ref | regex_replace('network/') }}"
+
 # - name:
 #   uri:
-#     url: "{{ infoblox_endpoint }}record:host/{{ infoblox_response[0]._ref }}:{{ osp_instance_name}}.{{ infoblox_domain }}/%20"
+#     url: "{{ infoblox_endpoint }}record:host/{{ infoblox_response.json[0]._ref | regex_replace('network/') }}:{{ osp_instance_name}}.{{ infoblox_domain }}/%20"
 #     user: "{{ infoblox_user }}"   
 #     password: "{{ infoblox_pass }}"
 #     force_basic_auth: true
