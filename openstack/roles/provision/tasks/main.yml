@@ -1,7 +1,7 @@
 ---
 - name: infoblox next available ip
   debug:
-    var: "{{ infoblox_ip }}"
+    var: "{{ ansible_stats.data.infoblox_ip }}"
 
 - name: launch an instance
   os_server:
@@ -36,13 +36,13 @@
       project_name: "{{ osp_tenant }}"
     state: present
     server: "{{ osp_instance_name }}"
-    floating_ip_address: "{{ infoblox_ip }}"
+    floating_ip_address: "{{ ansible_stats.data.infoblox_ip }}"
     wait: true
 
 - name: add the public IP address as a fact
   set_fact:
     ansible_default_ipv4:
-      address: "{{ infoblox_ip }}"
+      address: "{{ ansible_stats.data.infoblox_ip }}"
     cacheable: True
 
 - debug:
