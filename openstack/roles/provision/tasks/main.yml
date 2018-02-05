@@ -19,7 +19,7 @@
     security_groups: "{{ osp_security_group }}"
     network: "{{ osp_network }}"
     floating_ips:
-      -  "{{ infoblox_response.json.ipv4addrs[0].ipv4addr }}"
+      - {{ infoblox_response.json.ipv4addrs[0].ipv4addr }}
     wait: true
     userdata: |
       #cloud-config
