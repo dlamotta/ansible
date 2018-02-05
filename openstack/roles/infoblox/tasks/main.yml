@@ -60,8 +60,9 @@
     msg: "Next available IP address: {{ infoblox_response.json.ipv4addrs[0].ipv4addr }}"
 
 - name: store ip in memory for future use
-  set_stat:
-    infoblox_ip: "{{ infoblox_response.json.ipv4addrs[0].ipv4addr }}"
+  set_stats:
+    data:
+      infoblox_ip: "{{ infoblox_response.json.ipv4addrs[0].ipv4addr }}"
 
 
 
