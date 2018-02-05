@@ -54,15 +54,7 @@
     body_format: json
     status_code: 200
   register: infoblox_response
-  delegate_to: "{{ control_machine }}"  
-
-- debug:
-    msg: "Next available IP address: {{ infoblox_response.json.ipv4addrs[0].ipv4addr }}"
-
-- name: store ip in memory for future use
-  set_stats:
-    data:
-      infoblox_ip: "{{ infoblox_response.json.ipv4addrs[0].ipv4addr }}"
+  delegate_to: "{{ control_machine }}"
 
 
 
