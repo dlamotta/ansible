@@ -15,15 +15,27 @@
 - debug:
     msg: "Network reference id: {{ infoblox_response.json[0]._ref | regex_replace('network/') }}"
 
-# - name:
-#   uri:
-#     url: "{{ infoblox_endpoint }}record:host/{{ infoblox_response.json[0]._ref | regex_replace('network/') }}:{{ osp_instance_name}}.{{ infoblox_domain }}/%20"
-#     user: "{{ infoblox_user }}"   
-#     password: "{{ infoblox_pass }}"
-#     force_basic_auth: true
-#     validate_certs: False
-#     method: GET
-#     body_format: json
-#     status_code: 200
-#     body: { "action": "refresh" }
+- name:
+  uri:
+    url: "{{ infoblox_endpoint }}record:host/{{ infoblox_response.json[0]._ref | regex_replace('network/') }}:{{ osp_instance_name}}.{{ infoblox_domain }}/%20"
+    user: "{{ infoblox_user }}"   
+    password: "{{ infoblox_pass }}"
+    force_basic_auth: true
+    validate_certs: False
+    method: GET
+    body_format: json
+    body:
+      comment: "IP requested by Ansible for {{ osp_instance_name }}.{{ infoblox_domain }}"
+      name: "{{ osp_instance_name }}.{{ infoblox_domain }}"
+      configure_for_dns: false,
+      ipv4addrs:
+        - ipv4addr: "func:nextavailableip:{{ infoblox_cidr }},default"
+          configure_for_dhcp: false
+    status_code: 200
+  register: infoblox_response
+  delegate_to: "{{ control_machine }}"
+
+- debug:
+    msg: "Infoblox record host: {{ infoblox_response }}"  
+
 
