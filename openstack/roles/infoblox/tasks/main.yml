@@ -25,12 +25,17 @@
     method: GET
     body_format: json
     body:
-      comment: "IP requested by Ansible for {{ osp_instance_name }}.{{ infoblox_domain }}"
-      name: "{{ osp_instance_name }}.{{ infoblox_domain }}"
-      configure_for_dns: false
-      ipv4addrs:
-        - ipv4addr: "func:nextavailableip:{{ infoblox_cidr }},default"
-          configure_for_dhcp: false
+      {
+        "comment": "IP requested by Ansible for {{ osp_instance_name }}.{{ infoblox_domain }}",
+        "name": "{{ osp_instance_name }}.{{ infoblox_domain }}",
+        "configure_for_dns": false,
+        "ipv4addrs": [
+          {
+            "ipv4addr": "func:nextavailableip:{{ infoblox_cidr }},default",
+            "configure_for_dhcp": false
+          }
+        ]
+      }
     status_code: 200
   register: infoblox_response
   delegate_to: "{{ control_machine }}"
