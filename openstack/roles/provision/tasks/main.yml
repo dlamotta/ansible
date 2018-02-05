@@ -1,4 +1,8 @@
 ---
+- name: infoblox next available ip
+  debug:
+    var: "{{ artifacts.infoblox_ip }}"
+
 - name: launch an instance
   os_server:
     state: present
@@ -15,7 +19,7 @@
     security_groups: "{{ osp_security_group }}"
     network: "{{ osp_network }}"
     auto_ip: "{{ osp_floating_ip }}"
-    wait: yes
+    wait: true
     userdata: |
       #cloud-config
       ssh_authorized_keys:
@@ -23,10 +27,22 @@
   register: instance
   delegate_to: "{{ control_machine }}"
 
+- name: attach the IP to the instance
+  os_floating_ip:    
+    auth:
+      auth_url: "{{ osp_server }}"
+      username: "{{ osp_user }}"
+      password: "{{ osp_pass }}"
+      project_name: "{{ osp_tenant }}"
+    state: present
+    server: "{{ osp_instance_name }}"
+    floating_ip_address: "{{ artifacts.infoblox_ip }}"
+    wait: true
+
 - name: add the public IP address as a fact
   set_fact:
     ansible_default_ipv4:
-      address: "{{ instance.openstack.public_v4 }}"
+      address: "{{ artifacts.infoblox_ip }}"
     cacheable: True
 
 - debug:

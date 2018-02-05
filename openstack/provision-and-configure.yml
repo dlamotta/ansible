@@ -8,6 +8,6 @@
     ansible_ssh_common_args: -o StrictHostKeyChecking=no
   tasks:
   roles:
-    - { role: provision }
     - { role: infoblox }
+    - { role: provision }    
     - { role: updateservice }    
