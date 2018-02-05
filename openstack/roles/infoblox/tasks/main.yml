@@ -22,7 +22,7 @@
     password: "{{ infoblox_pass }}"
     force_basic_auth: true
     validate_certs: False
-    method: GET
+    method: POST
     body_format: json
     body:
       {
