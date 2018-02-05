@@ -36,6 +36,7 @@
           }
         ]
       }
+    status_code: 201
   register: infoblox_response
   delegate_to: "{{ control_machine }}"
 
