@@ -9,4 +9,4 @@
   roles:
     - { role: infoblox }
     - { role: provision }    
-    - { role: updateservice }    
+    - { role: updateservice, when: manageiq is defined }    
