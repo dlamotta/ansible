@@ -19,7 +19,7 @@
     security_groups: "{{ osp_security_group }}"
     network: "{{ osp_network }}"
     floating_ips:
-      -  10.11.95.171
+      -  "{{ infoblox_response.json.ipv4addrs[0].ipv4addr }}"
     wait: true
     userdata: |
       #cloud-config
@@ -28,29 +28,11 @@
   register: instance
   delegate_to: "{{ control_machine }}"
 
-# - name: attach the IP to the instance
-#   os_floating_ip:
-#     auth:
-#       auth_url: "{{ osp_server }}"
-#       username: "{{ osp_user }}"
-#       password: "{{ osp_pass }}"
-#       project_name: "{{ osp_tenant }}"
-#     state: present
-#     server: "{{ osp_instance_name }}"
-#     network: public
-#     floating_ip_address: "10.11.95.171"
-#     wait: true
-#   register: floating_ip
-#   delegate_to: "{{ control_machine }}"
-
 - name: add the public IP address as a fact
   set_fact:
     ansible_default_ipv4:
       address: "{{ infoblox_response.json.ipv4addrs[0].ipv4addr }}"
     cacheable: True
-
-- debug:
-    msg: IP address is {{ ansible_default_ipv4.address }}
 
 # - name: create volumes
 #   os_volume:
