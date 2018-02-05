@@ -1,0 +1,26 @@
+---
+- name: get network reference from infoblox
+  uri:
+    url: "{{ infoblox_endpoint }}network?network_view=default&network={{ infoblox_cidr }}&_return_fields=network_view,network,netmask,ipv4addr,extattrs,comment,options"
+    user: "{{ infoblox_user }}"   
+    password: "{{ infoblox_pass }}"
+    force_basic_auth: true
+    validate_certs: False
+    method: GET
+    body_format: json
+    status_code: 200
+  register: infoblox_response
+  delegate_to: "{{ control_machine }}"
+
+# - name:
+#   uri:
+#     url: "{{ infoblox_endpoint }}record:host/{{ infoblox_response[0]._ref }}:{{ osp_instance_name}}.{{ infoblox_domain }}/%20"
+#     user: "{{ infoblox_user }}"   
+#     password: "{{ infoblox_pass }}"
+#     force_basic_auth: true
+#     validate_certs: False
+#     method: GET
+#     body_format: json
+#     status_code: 200
+#     body: { "action": "refresh" }
+
