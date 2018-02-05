@@ -18,7 +18,6 @@
     flavor: "{{ osp_flavor }}"
     security_groups: "{{ osp_security_group }}"
     network: "{{ osp_network }}"
-    auto_ip: "{{ osp_floating_ip }}"
     floating_ips:
       -  "{{ infoblox_response.json.ipv4addrs[0].ipv4addr }}"
     wait: true
