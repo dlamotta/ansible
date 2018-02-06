@@ -2,8 +2,7 @@
 osp_server: http://10.9.65.210:5000/v2.0
 osp_tenant: cloudforms
 osp_network: private
-osp_net_id: d19e22ca-741f-4992-aa82-41b109bcfa1e
-osp_key: salab
+osp_key: stack-key
 osp_instance_name: embedded-ansible-instance
 osp_flavor: cirros
 osp_image: d2c83db8-dab6-4b1b-88bb-7383050e8e60
