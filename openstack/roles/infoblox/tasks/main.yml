@@ -15,6 +15,9 @@
 - debug:
     msg: "Network reference id: {{ infoblox_response.json[0]._ref | regex_replace('network/') }}"
 
+- debug:
+    msg: "OpenStack floating IP: {{ instance.openstack.public_v4 }}"    
+
 - name: assign floating ip address from openstack
   uri:
     url: "{{ infoblox_endpoint }}record:host/{{ infoblox_response.json[0]._ref | regex_replace('network/') }}:{{ osp_instance_name}}.{{ infoblox_domain }}/%20"
@@ -26,7 +29,7 @@
     body_format: json
     body:
       {
-        "comment": "IP requested by Ansible for {{ osp_instance_name }}.{{ infoblox_domain }}",
+        "comment": "IP assigned by Ansible for {{ osp_instance_name }}.{{ infoblox_domain }}",
         "name": "{{ osp_instance_name }}.{{ infoblox_domain }}",
         "configure_for_dns": false,
         "ipv4addrs": [
