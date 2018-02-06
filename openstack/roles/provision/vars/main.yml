@@ -1,7 +1,7 @@
 ---
 osp_server: http://10.9.65.210:5000/v2.0
 osp_tenant: cloudforms
-osp_network: private
+osp_network: 3f81a394-429f-47e4-89b5-a6ce68ddfb73
 osp_key: stack-key
 osp_instance_name: embedded-ansible-instance
 osp_flavor: cirros
