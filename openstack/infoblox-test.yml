@@ -1,0 +1,122 @@
+---
+- name: Create an OpenStack instance
+  hosts: all
+  connection: local
+  gather_facts: False
+  remote_user: cloud-user
+
+  vars:
+    control_machine: cfme-w4
+    ansible_ssh_common_args: -o StrictHostKeyChecking=no
+    osp_server: http://10.11.95.20:5000/v2.0/
+    osp_tenant: cloudforms
+    osp_network: private
+    osp_net_id: d19e22ca-741f-4992-aa82-41b109bcfa1e
+    osp_key: salab
+    osp_instance_name: infloblox50
+    osp_flavor: m1.small
+    osp_image: 157e2f64-a397-498e-9a30-33a4ae11e4be
+    osp_public_key: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDKmTjOa+nJQPp8DKpZPxlPyESQRzu+GE2feurA0jVft8Ba+qyoD8FTebpR5o9YK9+uo6GzmhB7ll07k1aUcP4GMj8Ur9umGjiEo3WOv6sIq8TTleNABVdaT50cM+g1p4TzzNFAPmx+f+QDGt3hHHhQlJaLwbCNbggRLeIqb2IIme4+f221NpnPi8m8fXlxY5jCjUjcdnqWowFqQ2IbJFdwm8dzZ9Djtmw982g5rR9bbLz33AgVtNqd+PN7dx0n86iq13b54xB4v/Z/4C40g0CEQm2Ss77K9taTRCrajpKV//uTPVQ3/3GbQzFTptpikFIjQjPbCmxaJ6tpHo6m/ej3 cloud-user@ocp-master.novalocal
+    osp_security_group: wide-open
+    osp_floating_ip: False
+    osp_volume_size: 5
+    osp_volume_name: vol    
+    infoblox_user: admin
+    infoblox_pass: Redhat1!
+    infoblox_endpoint: https://10.9.62.62/wapi/v1.7.3/
+    infoblox_cidr: 10.11.95.0/24
+    infoblox_domain: cloudsalab.com
+
+  tasks:
+  - name: get network reference from infoblox
+    uri:
+      url: "{{ infoblox_endpoint }}network?network_view=default&network={{ infoblox_cidr }}&_return_fields=network_view,network,netmask,ipv4addr,extattrs,comment,options"
+      user: "{{ infoblox_user }}"   
+      password: "{{ infoblox_pass }}"
+      force_basic_auth: true
+      validate_certs: False
+      method: GET
+      body_format: json
+      status_code: 200
+    register: infoblox_response
+    delegate_to: "{{ control_machine }}"
+
+  - debug:
+      msg: "Network reference id: {{ infoblox_response.json[0]._ref | regex_replace('network/') }}"
+
+  - name: generate next available ip address
+    uri:
+      url: "{{ infoblox_endpoint }}record:host/{{ infoblox_response.json[0]._ref | regex_replace('network/') }}:{{ osp_instance_name}}.{{ infoblox_domain }}/%20"
+      user: "{{ infoblox_user }}"   
+      password: "{{ infoblox_pass }}"
+      force_basic_auth: true
+      validate_certs: False
+      method: POST
+      body_format: json
+      body:
+        {
+          "comment": "IP requested by Ansible for {{ osp_instance_name }}.{{ infoblox_domain }}",
+          "name": "{{ osp_instance_name }}.{{ infoblox_domain }}",
+          "configure_for_dns": false,
+          "ipv4addrs": [
+            {
+              "ipv4addr": "func:nextavailableip:{{ infoblox_cidr }},default",
+              "configure_for_dhcp": false
+            }
+          ]
+        }
+      status_code: 201
+    register: infoblox_response
+    delegate_to: "{{ control_machine }}"
+
+  - debug:
+      msg: "Record host: {{ infoblox_response.json }}"
+
+  - name: get ip address
+    uri:
+      url: "{{ infoblox_endpoint }}{{ infoblox_response.json }}"
+      user: "{{ infoblox_user }}"   
+      password: "{{ infoblox_pass }}"
+      force_basic_auth: true
+      validate_certs: False
+      method: GET
+      body_format: json
+      status_code: 200
+    register: infoblox_response
+    delegate_to: "{{ control_machine }}"
+
+  - name: infoblox next available ip
+    debug:
+      msg: "IP address from infoblox is: {{ infoblox_response.json.ipv4addrs[0].ipv4addr }}"
+
+  - name: launch an instance
+    os_server:
+      state: present
+      auth:
+        auth_url: "{{ osp_server }}"
+        username: "{{ osp_user }}"
+        password: "{{ osp_pass }}"
+        project_name: "{{ osp_tenant }}"
+      name: "{{ osp_instance_name }}"
+      image: "{{ osp_image }}"
+      key_name: "{{ osp_key }}"
+      timeout: 200
+      flavor: "{{ osp_flavor }}"
+      security_groups: "{{ osp_security_group }}"
+      floating_ips:
+        - "{{ infoblox_response.json.ipv4addrs[0].ipv4addr }}"
+      nics:
+        - net-id: "{{ osp_net_id }}"
+      wait: true
+      userdata: |
+        #cloud-config
+        ssh_authorized_keys:
+          - "{{ osp_public_key }}"
+    register: instance
+    delegate_to: "{{ control_machine }}"
+
+  - name: add the public IP address as a fact
+    set_fact:
+      ansible_default_ipv4:
+        address: "{{ infoblox_response.json.ipv4addrs[0].ipv4addr }}"
+      cacheable: True
