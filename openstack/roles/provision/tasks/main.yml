@@ -17,15 +17,29 @@
     timeout: 200
     flavor: "{{ osp_flavor }}"
     security_groups: "{{ osp_security_group }}"
-    floating_ips:
-      - "{{ infoblox_response.json.ipv4addrs[0].ipv4addr }}"
     network: "{{ osp_network }}"
-    wait: False
+    auto_ip: "{{ osp_auto_ip }}"
+    wait: True
     userdata: |
       #cloud-config
       ssh_authorized_keys:
         - "{{ osp_public_key }}"
   register: instance
+  delegate_to: "{{ control_machine }}"
+
+- name: set the floating ip address
+  os_floating_ip:
+    state: present
+    auth:
+      auth_url: "{{ osp_server }}"
+      username: "{{ osp_user }}"
+      password: "{{ osp_pass }}"
+      project_name: "{{ osp_tenant }}"
+    server: "{{ osp_instance_name }}"
+    network: "{{ osp_floating_ip_pool }}"
+    floating_ip_address: "{{ infoblox_response.json.ipv4addrs[0].ipv4addr }}"
+    wait: True
+  register: floating_ip
   delegate_to: "{{ control_machine }}"
 
 - name: add the public IP address as a fact

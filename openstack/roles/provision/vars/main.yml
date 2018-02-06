@@ -8,9 +8,10 @@ osp_flavor: cirros
 osp_image: d2c83db8-dab6-4b1b-88bb-7383050e8e60
 osp_public_key: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDKmTjOa+nJQPp8DKpZPxlPyESQRzu+GE2feurA0jVft8Ba+qyoD8FTebpR5o9YK9+uo6GzmhB7ll07k1aUcP4GMj8Ur9umGjiEo3WOv6sIq8TTleNABVdaT50cM+g1p4TzzNFAPmx+f+QDGt3hHHhQlJaLwbCNbggRLeIqb2IIme4+f221NpnPi8m8fXlxY5jCjUjcdnqWowFqQ2IbJFdwm8dzZ9Djtmw982g5rR9bbLz33AgVtNqd+PN7dx0n86iq13b54xB4v/Z/4C40g0CEQm2Ss77K9taTRCrajpKV//uTPVQ3/3GbQzFTptpikFIjQjPbCmxaJ6tpHo6m/ej3 cloud-user@ocp-master.novalocal
 osp_security_group: default
-osp_floating_ip: False
+osp_auto_ip: False
 osp_volume_size: 5
 osp_volume_name: vol
+osp_floating_ip_pool: 9f8bd49a-dde0-450c-a652-3434f3c85132
 
 # osp_server: http://10.11.95.20:5000/v2.0/
 # osp_tenant: cloudforms
