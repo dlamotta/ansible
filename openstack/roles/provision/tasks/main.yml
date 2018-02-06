@@ -1,7 +1,7 @@
 ---
-- name: infoblox next available ip
-  debug:
-    msg: "IP address from infoblox is: {{ infoblox_response.json.ipv4addrs[0].ipv4addr }}"
+# - name: infoblox next available ip
+#   debug:
+#     msg: "IP address from infoblox is: {{ infoblox_response.json.ipv4addrs[0].ipv4addr }}"
 
 - name: launch an instance
   os_server:
@@ -18,8 +18,7 @@
     flavor: "{{ osp_flavor }}"
     security_groups: "{{ osp_security_group }}"
     network: "{{ osp_network }}"
-    floating_ips: 
-      - "{{ infoblox_response.json.ipv4addrs[0].ipv4addr }}"
+    auto_ip: "{{ osp_auto_ip }}"
     wait: True
     userdata: |
       #cloud-config
@@ -31,7 +30,7 @@
 - name: add the public IP address as a fact
   set_fact:
     ansible_default_ipv4:
-      address: "{{ infoblox_response.json.ipv4addrs[0].ipv4addr }}"
+      address: "{{ instance.openstack.public_v4 }}"
     cacheable: True
 
 # - name: create volumes

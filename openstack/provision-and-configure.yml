@@ -8,6 +8,6 @@
     control_machine: cfme-w4
     ansible_ssh_common_args: -o StrictHostKeyChecking=no
   roles:
-    - { role: infoblox }
     - { role: provision }    
+    - { role: infoblox }    
     - { role: updateservice, when: manageiq is defined }    
