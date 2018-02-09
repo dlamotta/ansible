@@ -4,10 +4,9 @@
   connection: local
   remote_user: cloud-user
   vars:
-    ipv4_address: 10.11.95.200
-    hostname: helloworld
-    control_machine: 10.11.95.143
+    control_machine: cfme-w4
     ansible_ssh_common_args: -o StrictHostKeyChecking=no
   roles:
+    - { role: cloudforms-event, when: manageiq is defined }
     - { role: infoblox-find-host }
     - { role: infoblox-assign }
