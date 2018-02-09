@@ -1,0 +1,12 @@
+---
+- name: Registers a host with an IP address in Infoblox
+  hosts: all
+  connection: local
+  remote_user: cloud-user
+  vars:
+    hostname: helloworld
+    control_machine: 10.11.95.143
+    ansible_ssh_common_args: -o StrictHostKeyChecking=no
+  roles:
+    - { role: infoblox-find-host }
+    - { role: infoblox-unassign }
