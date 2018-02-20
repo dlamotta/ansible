@@ -18,7 +18,7 @@
     register: instances    
 
   - debug:
-      msg: "Instance ID: {{ item.instance_id }}"
+      msg: "Instance ID: {{ item }}"
     with_items: instances
 
   - name: Stop instances
