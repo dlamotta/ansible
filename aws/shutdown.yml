@@ -15,11 +15,11 @@
       aws_access_key: "{{ access_key }}"
       aws_secret_key: "{{ secret_key }}"    
       region: "{{ aws_region }}"
-    register: instances    
+    register: inventory    
 
   - debug:
-      msg: "Instance ID: {{ item }}"
-    with_items: instances
+      msg: "Instance ID: {{ item.instance_id }}"
+    with_items: inventory.instances
 
   - name: Stop instances
     ec2:
@@ -30,4 +30,4 @@
       vpc_subnet_id: "{{ subnet }}"
       region: "{{ aws_region }}"
       state: stopped
-    with_items: instances
+    with_items: inventory.instances
