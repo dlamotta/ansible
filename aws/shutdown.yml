@@ -1,0 +1,20 @@
+---
+- name: Provision instance in AWS EC2
+  hosts: aws
+  connection: local
+  gather_facts: False
+  vars:
+    access_key: accesskey
+    secret_key: secretkey
+    subnet: subnet
+    
+  tasks:  
+  - name: Stop instances
+    ec2:
+      aws_access_key: "{{ access_key }}"
+      aws_secret_key: "{{ secret_key }}"
+      instance_ids: "{{ inventory_host }}"
+      wait: True
+      vpc_subnet_id: "{{ subnet }}"
+      region: us-east-1
+      state: stopped
