@@ -1,7 +1,8 @@
 ---
 - name: Provision instance in AWS EC2
-  hosts: all
+  hosts: localhost
   connection: local
+  gather_facts: False
   vars:
     access_key: accesskey
     secret_key: secretkey
@@ -9,14 +10,18 @@
 
   tasks:  
   - name: Gather instance facts
-    action: ec2_facts
+    ec2_instance_facts:
+      aws_access_key: "{{ access_key }}"
+      aws_secret_key: "{{ secret_key }}"    
+    register: instances
 
   - name: Stop instances
     ec2:
       aws_access_key: "{{ access_key }}"
       aws_secret_key: "{{ secret_key }}"
-      instance_ids: "{{ ansible_ec2_instance_id }}"
+      instance_ids: "{{ item.instance_id }}"
       wait: True
       vpc_subnet_id: "{{ subnet }}"
       region: us-east-1
       state: stopped
+    with_items: instances
