@@ -15,7 +15,11 @@
       aws_access_key: "{{ access_key }}"
       aws_secret_key: "{{ secret_key }}"    
       region: "{{ aws_region }}"
-    register: instances
+    register: instances    
+
+  - debug:
+      msg: "Instance ID: {{ item.instance_id }}"
+    with_items: instances
 
   - name: Stop instances
     ec2:
