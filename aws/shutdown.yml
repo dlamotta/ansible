@@ -13,7 +13,7 @@
     ec2:
       aws_access_key: "{{ access_key }}"
       aws_secret_key: "{{ secret_key }}"
-      instance_ids: "{{ inventory_host }}"
+      instance_ids: "{{ inventory_hostname }}"
       wait: True
       vpc_subnet_id: "{{ subnet }}"
       region: us-east-1
