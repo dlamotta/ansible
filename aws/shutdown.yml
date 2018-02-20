@@ -7,12 +7,15 @@
     access_key: accesskey
     secret_key: secretkey
     subnet: subnet
+    aws_region: us-east-1
 
   tasks:  
   - name: Gather instance facts
     ec2_instance_facts:
       aws_access_key: "{{ access_key }}"
       aws_secret_key: "{{ secret_key }}"    
+      region: "{{ aws_region }}"
+      vpc_subnet_id: "{{ subnet }}"
     register: instances
 
   - name: Stop instances
@@ -22,6 +25,6 @@
       instance_ids: "{{ item.instance_id }}"
       wait: True
       vpc_subnet_id: "{{ subnet }}"
-      region: us-east-1
+      region: "{{ aws_region }}"
       state: stopped
     with_items: instances
