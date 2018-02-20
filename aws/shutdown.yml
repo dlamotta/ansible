@@ -2,13 +2,15 @@
 - name: Provision instance in AWS EC2
   hosts: all
   connection: local
-  gather_facts: False
   vars:
     access_key: accesskey
     secret_key: secretkey
     subnet: subnet
 
   tasks:  
+  - name: Gather instance facts
+    action: ec2_facts
+
   - name: Stop instances
     ec2:
       aws_access_key: "{{ access_key }}"
