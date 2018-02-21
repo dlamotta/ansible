@@ -18,7 +18,7 @@
     register: inventory    
 
   - debug:
-      message: "Instance -> {{ item }}"
+      msg: "Instance -> {{ item }}"
     with_items: inventory.instances
 
   - name: Stop instances
