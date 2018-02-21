@@ -5,7 +5,7 @@
 
 - name: get host reference from infoblox
   uri:
-    url: "{{ infoblox_endpoint }}record:host?name={{ hostname }}.{{ infoblox_domain }}"
+    url: "{{ infoblox_endpoint }}record:host?name={{ cfme_instance.json.name }}.{{ infoblox_domain }}"
     user: "{{ infoblox_user }}"   
     password: "{{ infoblox_pass }}"
     force_basic_auth: true

@@ -24,11 +24,12 @@
     msg: "Network reference id: {{ infoblox_response.json[0]._ref | regex_replace('network/') }}"
 
 - debug:
-    msg: "Provided IP address to register: {{ cfme_instance.json.ipaddresses|ipaddr(infoblox_cidr) }}"    
+    msg: "Provided IP address to register: {{ item }}"
+  with_items: "{{ cfme_instance.json.ipaddresses|ipaddr(infoblox_cidr) }}"    
 
 - name: assign ip address in Infoblox
   uri:
-    url: "{{ infoblox_endpoint }}record:host/{{ infoblox_response.json[0]._ref | regex_replace('network/') }}:{{ hostname}}.{{ infoblox_domain }}/%20"
+    url: "{{ infoblox_endpoint }}record:host/{{ infoblox_response.json[0]._ref | regex_replace('network/') }}:{{ cfme_instance.json.name }}.{{ infoblox_domain }}/%20"
     user: "{{ infoblox_user }}"   
     password: "{{ infoblox_pass }}"
     force_basic_auth: true
@@ -38,21 +39,22 @@
     body:
       {
         "comment": "IP assigned by Ansible on {{ ansible_date_time.weekday }}, {{ ansible_date_time.date }} at {{ ansible_date_time.time }}",
-        "name": "{{ hostname }}.{{ infoblox_domain }}",
+        "name": "{{ cfme_instance.json.name }}.{{ infoblox_domain }}",
         "configure_for_dns": false,
         "ipv4addrs": [
           {
-            "ipv4addr": "{{ cfme_instance.json.ipaddresses|ipaddr(infoblox_cidr) }}",
+            "ipv4addr": "{{ item }}",
             "configure_for_dhcp": false
           }
         ]
       }
     status_code: 201
   register: infoblox_response
+  with_items: "{{ cfme_instance.json.ipaddresses|ipaddr(infoblox_cidr) }}"
   delegate_to: "{{ control_machine }}"
 
 - debug:
-    msg: "Infoblox response: {{ infoblox_response.json }}"
+    msg: "Infoblox response: {{ infoblox_response }}"
 
 
 
