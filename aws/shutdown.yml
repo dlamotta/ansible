@@ -16,9 +16,10 @@
       aws_secret_key: "{{ secret_key }}"    
       region: "{{ aws_region }}"
       validate_certs: False
+    register: vms
 
   - debug:
-      var: instances
+      var: vms.instances
 
   - name: Stop instances
     ec2:
@@ -29,4 +30,4 @@
       vpc_subnet_id: "{{ subnet }}"
       region: "{{ aws_region }}"
       state: stopped
-    with_items: instances
+    with_items: vms.instances
