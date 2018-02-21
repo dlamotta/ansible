@@ -5,7 +5,7 @@
 
 - fail:
     msg: "IP address not specified!"
-  when: (ipv4_address is undefined) or (not ipv4_address|ipv4)
+  when: (cfme_instance.json.ipaddresses is undefined)
 
 - name: get network reference from infoblox
   uri:
@@ -24,7 +24,7 @@
     msg: "Network reference id: {{ infoblox_response.json[0]._ref | regex_replace('network/') }}"
 
 - debug:
-    msg: "Provided IP address to register: {{ ipv4_address }}"    
+    msg: "Provided IP address to register: {{ cfme_instance.json.ipaddresses|ipaddr(infoblox_cidr) }}"    
 
 - name: assign ip address in Infoblox
   uri:
@@ -42,7 +42,7 @@
         "configure_for_dns": false,
         "ipv4addrs": [
           {
-            "ipv4addr": "{{ ipv4_address }}",
+            "ipv4addr": "{{ cfme_instance.json.ipaddresses|ipaddr(infoblox_cidr) }}",
             "configure_for_dhcp": false
           }
         ]

@@ -1,135 +1,30 @@
 ---
-# ok: [tower] => {
+# ok: [localhost] => {
 #     "changed": false, 
 #     "manageiq": {
 #         "action": "Provision", 
-#         "api_token": "62dc899737485fc6060d0b05bb068354", 
-#         "api_url": "https://192.168.76.13", 
-#         "group": "groups/1000000000002", 
-#         "service": "services/1000000000036", 
-#         "user": "users/1000000000004"
+#         "api_token": "f25ee2ac6faf3a989716700cf85a8c16", 
+#         "api_url": "https://192.168.76.9", 
+#         "event_name": "vm_create", 
+#         "event_target": "instances/1000000000133", 
+#         "service": "services/1000000000001", 
+#         "user": "users/1000000000001"
 #     }
 # }
 
-- debug:
-    msg: "CloudForms event role executed"
-
-- name: 
+- name: ManageIQ hash 
   debug:
     var: manageiq
-  when: manageiq is defined
 
-# - name: Set the Provider URL
-#   set_fact:
-#     cf_provider_url: "{{ cf_server }}/api/providers/{{ cf_provider_id }}"
-
-# - name: update cloudforms provider
-#   uri:
-#     url: "{{ cf_provider_url }}"
-#     user: "{{ cf_user }}"   
-#     password: "{{ cf_pass }}"
-#     force_basic_auth: true
-#     validate_certs: False
-#     method: POST
-#     body_format: json
-#     body:
-#       action: refresh
-#     status_code: 200
-#   register: refresh_task
-#   delegate_to: "{{ control_machine }}"
-
-# - name: Set the task href
-#   set_fact:
-#     task_url: "{{ refresh_task.json.task_href }}"
-
-# - name:
-#   debug:
-#     var: task_url
-
-# - name: Wait for the provider refresh to end
-#   uri:
-#     url: "{{ task_url }}"
-#     method: GET
-#     validate_certs: False
-#     user: "{{ cf_user }}"   
-#     password: "{{ cf_pass }}"
-#     force_basic_auth: true    
-#     body_format: json
-#     status_code: 200
-#   register: task_result
-#   until: task_result.json.state == 'Finished' or task_result.json.status == 'Error'
-#   failed_when: task_result.json.status == 'Error'
-#   retries: "{{ cf_max_retries }}"
-#   delay: "{{ cf_retry_interval }}"
-#   delegate_to: "{{ control_machine }}"
-
-# - name: Lookup instance href
-#   uri:
-#     url: "{{ cf_server }}/api/vms?filter[]=name={{ osp_instance_name }}&expand=resources"
-#     validate_certs: False
-#     method: GET
-#     user: "{{ cf_user }}"   
-#     password: "{{ cf_pass }}"
-#     force_basic_auth: true  
-#     body_format: json
-#     body: { "action": "refresh" }
-#     status_code: 200
-#   register: result
-#   delegate_to: "{{ control_machine }}"
-
-# - debug:
-#     var: result
-
-# - name: Set the Service URL
-#   set_fact:
-#     svc_url: "/api/{{ manageiq.service }}"
-
-# - name: Lookup instance href
-#   uri:
-#     url: "{{ cf_server }}/api/vms?filter[]=name={{ osp_instance_name }}&expand=resources"
-#     validate_certs: False
-#     method: GET
-#     user: "{{ cf_user }}"   
-#     password: "{{ cf_pass }}"
-#     force_basic_auth: true 
-#     body_format: json
-#     body: { "action": "refresh" }
-#     status_code: 200
-#   register: result    
-#   delegate_to: "{{ control_machine }}"
-
-# - name: debug resources
-#   debug:
-#     var: item
-#   with_items: "{{ result.json.resources }}"
-
-# - name: Initialize an empty list for vms
-#   set_fact:
-#     vms: []  
-
-# - name: Append resource href to vms list
-#   set_fact:
-#     vms: "{{ vms }} + [ { 'href': svc_url, 'resource': { 'href': '/api/vms/{{ item.id }}' } } ]"
-#   with_items: "{{ result.json.resources }}"
-
-# - debug: 
-#     var: vms
-
-# - name: Register vms with the service
-#   uri:
-#     url: "{{ cf_server }}/api/services"
-#     validate_certs: False
-#     user: "{{ cf_user }}"   
-#     password: "{{ cf_pass }}"
-#     force_basic_auth: true
-#     method: POST
-#     body_format: json
-#     body:
-#       action: add_resource
-#       resources: "{{ vms }}"
-#     status_code: 200
-#   register: registration
-#   delegate_to: "{{ control_machine }}"
-
-# - debug: 
-#     var: registration.json.results[0].success
+- name: Lookup instance IP addresses
+  uri:
+    url: "{{ cf_server }}/api/{{ manageiq.event_target }}?expand=resources&attributes=name,ipaddresses"
+    validate_certs: False
+    method: GET
+    user: "{{ cf_user }}"   
+    password: "{{ cf_pass }}"
+    force_basic_auth: true
+    body_format: json
+    status_code: 200
+  register: cfme_instance
+  delegate_to: "{{ control_machine }}"

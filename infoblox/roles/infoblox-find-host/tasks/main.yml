@@ -1,7 +1,7 @@
 ---
 - fail:
     msg: "Hostname not specified!"
-  when: hostname is undefined
+  when: cfme_instance.json.name is undefined
 
 - name: get host reference from infoblox
   uri:

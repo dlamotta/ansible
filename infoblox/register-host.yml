@@ -4,7 +4,7 @@
   connection: local
   remote_user: cloud-user
   vars:
-    control_machine: cfme-w4
+    control_machine: 192.168.76.9
     ansible_ssh_common_args: -o StrictHostKeyChecking=no
   roles:
     - { role: cloudforms-event, when: manageiq is defined }
