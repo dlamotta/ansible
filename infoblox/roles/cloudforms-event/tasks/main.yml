@@ -11,6 +11,9 @@
 #     }
 # }
 
+- debug:
+    msg: "CloudForms event role executed"
+
 - name: 
   debug:
     var: manageiq
