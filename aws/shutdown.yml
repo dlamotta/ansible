@@ -17,8 +17,7 @@
       region: "{{ aws_region }}"
 
   - debug:
-      msg: "Instance -> {{ item }}"
-    with_items: instances
+      var: instances
 
   - name: Stop instances
     ec2:
