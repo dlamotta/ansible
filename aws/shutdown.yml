@@ -18,7 +18,8 @@
     register: inventory    
 
   - debug:
-      var: inventory
+      message: "Instance -> {{ item }}"
+    with_items: inventory.instances
 
   - name: Stop instances
     ec2:
