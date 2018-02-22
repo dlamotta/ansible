@@ -18,7 +18,7 @@
 
 - name: Lookup instance IP addresses
   uri:
-    url: "{{ cf_server }}/api/instances/1000000000137?expand=resources&attributes=name,ipaddresses"
+    url: "{{ cf_server }}/api/{{ manageiq.event_target }}?expand=resources&attributes=name,ipaddresses"
     validate_certs: False
     method: GET
     user: "{{ cf_user }}"   
