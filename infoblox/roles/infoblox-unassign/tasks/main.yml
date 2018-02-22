@@ -1,6 +1,6 @@
 ---
 - fail:
-    msg: "{{ hostname }}.{{ infoblox_domain }} is not registered in Infoblox"    
+    msg: "{{ cfme_instance.json.name }}.{{ infoblox_domain }} is not registered in Infoblox"    
   when: infoblox_host.json|length == 0
 
 - debug:
@@ -18,7 +18,7 @@
   delegate_to: "{{ control_machine }}"
 
 - debug:
-    msg: "Infoblox response: {{ infoblox_response.json }}"
+    msg: "Infoblox response: {{ infoblox_response }}"
 
 
 
