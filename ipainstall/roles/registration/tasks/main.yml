@@ -1,6 +1,7 @@
 ---
 - name: subscribe the host to rhn
   vars:
+    file: group_vars/creds.yml
   hosts: "{{ ipa_host }}"  
   redhat_subscription:
     state: present

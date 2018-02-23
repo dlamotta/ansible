@@ -1,11 +1,16 @@
 ---
-- name: 
+- name: horse_with_no
+  hosts: all
   remote_user: devops
-  hosts: ipa_host
   become: True
   vars:
-    ipa_host: 192.168.144.233
-    ipa_hostname: ipa.lab.example.com 
+    # network_segment: 192.168.144
+    reverse_route_table: "144.168.192.in-addr.arpa."
+    ipa_realm: LAB.EXAMPLE.COM
+    ipa_domain: lab.example.com
+    ipa_hostname: ipa.lab.example.com
+    ipa_admin_password: "RedHat123!"
+    ipa_dns_forwarder: "8.8.8.8" 
   roles:
     - { role: registration }
-    - { role: installation, ipa_hostname = ipa.lab.example.com }  
+    - { role: installation } 
