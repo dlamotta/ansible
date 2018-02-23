@@ -1,0 +1,13 @@
+---
+- name: Update clocks via ntpdate
+  become: true
+  hosts: all
+  vars:
+    time_server: 0.pool.ntp.org
+  tasks:
+  - name: make sure ntpdate is installed
+    yum:
+      name: ntpdate
+      state: latest
+  - name: sync clock
+    shell: "ntpdate {{ time_server }}"

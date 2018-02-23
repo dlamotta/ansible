@@ -1,0 +1,14 @@
+---
+- name: Install one or more packages
+  become: true
+  yum:
+    name: "{{ package }}"
+  delegate_to: "{{ osp_instance_name }}"
+
+- name: Start a service
+  become: true
+  service:
+    state: started
+    name: "{{ service }}"
+    enabled: yes      
+  delegate_to: "{{ osp_instance_name }}"  

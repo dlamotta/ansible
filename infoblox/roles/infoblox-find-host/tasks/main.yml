@@ -1,0 +1,22 @@
+---
+- fail:
+    msg: "Hostname not specified!"
+  when: cfme_instance.json.name is undefined
+
+- name: get host reference from infoblox
+  uri:
+    url: "{{ infoblox_endpoint }}record:host?name={{ cfme_instance.json.name }}.{{ infoblox_domain }}"
+    user: "{{ infoblox_user }}"   
+    password: "{{ infoblox_pass }}"
+    force_basic_auth: true
+    validate_certs: False
+    method: GET
+    body_format: json
+    status_code: 200
+  register: infoblox_host
+  delegate_to: "{{ control_machine }}"
+
+- debug:
+    msg: "Host reference id: {{ infoblox_host }}"
+  when: infoblox_host.json|length > 0
+

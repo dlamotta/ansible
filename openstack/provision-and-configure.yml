@@ -1,0 +1,13 @@
+---
+- name: Create an OpenStack instance
+  hosts: all
+  connection: local
+  gather_facts: False
+  remote_user: cloud-user
+  vars:
+    control_machine: cfme-w4
+    ansible_ssh_common_args: -o StrictHostKeyChecking=no
+  roles:
+    - { role: provision }    
+    - { role: infoblox }    
+    - { role: updateservice, when: manageiq is defined }    

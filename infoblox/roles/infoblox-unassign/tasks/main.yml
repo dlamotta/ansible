@@ -1,0 +1,24 @@
+---
+- fail:
+    msg: "{{ cfme_instance.json.name }}.{{ infoblox_domain }} is not registered in Infoblox"    
+  when: infoblox_host.json|length == 0
+
+- debug:
+    msg: "Network reference id: {{ infoblox_host.json[0]._ref }}"   
+
+- name: unassign ip address for {{ infoblox_host.json[0].ipv4addrs[0].host }}
+  uri:
+    url: "{{ infoblox_endpoint }}{{ infoblox_host.json[0]._ref }}"
+    user: "{{ infoblox_user }}"   
+    password: "{{ infoblox_pass }}"
+    force_basic_auth: true
+    validate_certs: False
+    method: DELETE
+  register: infoblox_response
+  delegate_to: "{{ control_machine }}"
+
+- debug:
+    msg: "Infoblox response: {{ infoblox_response }}"
+
+
+

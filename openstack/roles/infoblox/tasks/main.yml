@@ -1,0 +1,88 @@
+---
+- name: get network reference from infoblox
+  uri:
+    url: "{{ infoblox_endpoint }}network?network_view=default&network={{ infoblox_cidr }}&_return_fields=network_view,network,netmask,ipv4addr,extattrs,comment,options"
+    user: "{{ infoblox_user }}"   
+    password: "{{ infoblox_pass }}"
+    force_basic_auth: true
+    validate_certs: False
+    method: GET
+    body_format: json
+    status_code: 200
+  register: infoblox_response
+  delegate_to: "{{ control_machine }}"
+
+- debug:
+    msg: "Network reference id: {{ infoblox_response.json[0]._ref | regex_replace('network/') }}"
+
+- debug:
+    msg: "OpenStack floating IP: {{ instance.openstack.public_v4 }}"    
+
+- name: assign floating ip address from openstack
+  uri:
+    url: "{{ infoblox_endpoint }}record:host/{{ infoblox_response.json[0]._ref | regex_replace('network/') }}:{{ osp_instance_name}}.{{ infoblox_domain }}/%20"
+    user: "{{ infoblox_user }}"   
+    password: "{{ infoblox_pass }}"
+    force_basic_auth: true
+    validate_certs: False
+    method: POST
+    body_format: json
+    body:
+      {
+        "comment": "IP assigned by Ansible for {{ osp_instance_name }}.{{ infoblox_domain }}",
+        "name": "{{ osp_instance_name }}.{{ infoblox_domain }}",
+        "configure_for_dns": false,
+        "ipv4addrs": [
+          {
+            "ipv4addr": "{{ instance.openstack.public_v4 }}",
+            "configure_for_dhcp": false
+          }
+        ]
+      }
+    status_code: 201
+  register: infoblox_response
+  delegate_to: "{{ control_machine }}"
+
+# - name: generate next available ip address
+#   uri:
+#     url: "{{ infoblox_endpoint }}record:host/{{ infoblox_response.json[0]._ref | regex_replace('network/') }}:{{ osp_instance_name}}.{{ infoblox_domain }}/%20"
+#     user: "{{ infoblox_user }}"   
+#     password: "{{ infoblox_pass }}"
+#     force_basic_auth: true
+#     validate_certs: False
+#     method: POST
+#     body_format: json
+#     body:
+#       {
+#         "comment": "IP requested by Ansible for {{ osp_instance_name }}.{{ infoblox_domain }}",
+#         "name": "{{ osp_instance_name }}.{{ infoblox_domain }}",
+#         "configure_for_dns": false,
+#         "ipv4addrs": [
+#           {
+#             "ipv4addr": "func:nextavailableip:{{ infoblox_cidr }},default",
+#             "configure_for_dhcp": false
+#           }
+#         ]
+#       }
+#     status_code: 201
+#   register: infoblox_response
+#   delegate_to: "{{ control_machine }}"
+
+- debug:
+    msg: "Record host: {{ infoblox_response.json }}"
+
+- name: get ip address
+  uri:
+    url: "{{ infoblox_endpoint }}{{ infoblox_response.json }}"
+    user: "{{ infoblox_user }}"   
+    password: "{{ infoblox_pass }}"
+    force_basic_auth: true
+    validate_certs: False
+    method: GET
+    body_format: json
+    status_code: 200
+  register: infoblox_response
+  delegate_to: "{{ control_machine }}"
+
+
+

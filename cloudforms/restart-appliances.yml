@@ -1,0 +1,7 @@
+---
+- name: Reboot CF worker appliances
+  become: true
+  hosts: all
+  tasks:
+  - name: reboot the machine
+    shell: nohup bash -c "sleep 2s && systemctl reboot" &

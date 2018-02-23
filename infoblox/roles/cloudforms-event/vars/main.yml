@@ -1,0 +1,4 @@
+---
+cf_server: https://192.168.76.9
+cf_user: admin  
+cf_pass: smartvm

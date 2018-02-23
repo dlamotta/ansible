@@ -1,0 +1,6 @@
+---
+infoblox_user: admin
+infoblox_pass: Redhat1!
+infoblox_endpoint: https://10.9.62.62/wapi/v1.7.3/
+infoblox_cidr: 10.3.71.0/24
+infoblox_domain: cloudsalab.com

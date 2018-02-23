@@ -1,0 +1,33 @@
+---
+# ok: [localhost] => {
+#     "changed": false, 
+#     "manageiq": {
+#         "action": "Provision", 
+#         "api_token": "f25ee2ac6faf3a989716700cf85a8c16", 
+#         "api_url": "https://192.168.76.9", 
+#         "event_name": "vm_create", 
+#         "event_target": "instances/1000000000133", 
+#         "service": "services/1000000000001", 
+#         "user": "users/1000000000001"
+#     }
+# }
+
+- name: ManageIQ hash 
+  debug:
+    var: manageiq
+
+- name: Lookup instance IP addresses
+  uri:
+    url: "{{ cf_server }}/api/{{ manageiq.event_target }}?expand=resources&attributes=name,ipaddresses"
+    validate_certs: False
+    method: GET
+    user: "{{ cf_user }}"   
+    password: "{{ cf_pass }}"
+    force_basic_auth: true
+    body_format: json
+    status_code: 200
+  register: cfme_instance
+  delegate_to: "{{ control_machine }}"
+
+- debug:
+    var: cfme_instance

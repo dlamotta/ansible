@@ -1,11 +1,12 @@
 ---
 - name: Enforces a given number of application instances in OpenStack to exist
-  hosts: localhost
-  gather_facts: false
-  vars_files:
-    - openstack.yaml
-    - sla.yaml
-    - gmail.yaml
+  hosts: all
+  gather_facts: false  
+  vars:
+    prefix: application-sla-test
+    sla: 1
+    control_machine: tower
+    msg: "The number of instances that will be created to meet the application SLA is"
   
   tasks:
   - name: Get instances that start with '{{ prefix }}'
@@ -16,6 +17,7 @@
         password: "{{ osp_pass }}"
         project_name: "{{ osp_tenant }}"
       server: "{{ prefix }}*"
+    delegate_to: "{{ control_machine }}"  
 
   - debug:
       var: openstack_servers      
@@ -24,31 +26,29 @@
     vars:
       powered_on_instances: "[?power_state==`{{ osp_state}}`]"
       instances: "{{ openstack_servers|json_query(powered_on_instances) }}"
-      required_instances: "4"
+      required_instances: "{{ sla - instances|length }}"
     set_fact:
       count: "{{ required_instances }}"
     register: instances
-    notify:
-      - send email
-      - create instances
-      - configure instances
     changed_when: instances.ansible_facts.count|int > 0
 
-  handlers:
-  - name: send email
-    mail:
-      host: smtp.gmail.com
-      port: 587
-      username: "{{ gmail_user }}"
-      password: "{{ gmail_pass }}"
-      to: "{{ email_recipients }}"
-      subject: Application SLA Alert
-      body: "The number of instances that will be created to meet the application SLA is: {{ instances.ansible_facts.count }}"
+  - name: cache instance name
+    set_fact:
+      instance_name: "{{ prefix }}-{{ 999 | random | to_uuid }}"
+    register: osp
+    changed_when: true
 
-  - name: create instances
-    debug:
-      msg: Configuring instances...    
+  - name: provision instances
+    vars:
+      osp_instance_name: "{{ osp.ansible_facts.instance_name }}"
+    include_role:
+      name: provision
+    when: instances.ansible_facts.count|int > 0    
 
-  - name: configure instances
-    debug:
-      msg: Configuring instances...
+  - name: update cloudforms service
+    vars:
+        osp_instance_name: "{{ osp.ansible_facts.instance_name }}"
+    include_role:
+      name: updateservice
+    when: (manageiq is defined) and (instances.ansible_facts.count|int > 0)
+      
