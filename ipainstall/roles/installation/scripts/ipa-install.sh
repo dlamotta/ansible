@@ -1,0 +1,11 @@
+ipa-server-install \
+--setup-dns \
+--hostname=ipa.lab.example.com \
+--ip-address=192.168.144.196 \
+--reverse-zone="144.168.192.in-addr.arpa." \
+--realm=LAB.EXAMPLE.COM \
+--ds-password='RedHat123' \
+--admin-password='RedHat123!' \
+--domain='lab.example.com' \
+--forwarder=8.8.8.8
+--forwarder=8.8.4.4

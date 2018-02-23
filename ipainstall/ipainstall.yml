@@ -1,0 +1,11 @@
+---
+- name: 
+  remote_user: devops
+  hosts: ipa_host
+  become: True
+  vars:
+    ipa_host: 192.168.144.233
+    ipa_hostname: ipa.lab.example.com 
+  roles:
+    - { role: registration }
+    - { role: installation, ipa_hostname = ipa.lab.example.com }  

@@ -1,0 +1,5 @@
+#ipa_host = 192.168.144.196
+#rhn_password: seevault
+#rhn_username: seevault
+#pool_id: seevault
+~                        

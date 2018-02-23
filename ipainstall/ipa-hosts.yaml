@@ -1,9 +1,0 @@
----
-- name: launch a compute instance
-  hosts: all
-  vars:
-    instances: ipa22
-    osp_flavor: 
-    control_machine: tower
-  roles:
-    - create-instances

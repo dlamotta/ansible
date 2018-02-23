@@ -1,0 +1,65 @@
+---
+- name: remove the improper repositories
+  hosts: "{{ ipa_host }}"
+  shell:
+    subscription-manager repos --disable=*
+#  with_items:
+#    - rhel-7-rc-rpms
+#    - rhel-7-server-aus-rpms
+#    - rhel-7-server-htb-rpms
+#    - rhel-7-server-nfv-rpms
+#    - rhel-7-server-rt-rpms
+#    - rhel-7-server-tus-rpms
+- name: identify the host
+  debug:
+    var: ipa_host
+- name: enable the proper repositores
+  shell:
+    subscription-manager repos --enable={{ item }}
+  with_items:
+    - rhel-7-server-rpms
+    - rhel-7-server-extras-rpms
+- name: set the ipa_hostname
+  hostname:
+    name: "{{ ipa_hostname }}"
+- debug: var = "{{ ipa_hostname }}"
+- name: Install the ipa packages
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - ipa-server 
+    - bind-dyndb-ldap 
+    - ipa-server-dns
+- name: Prepend the DNS server to /etc/resolv.conf using dhclient.conf
+  template:
+    src: templates/dhclient.conf.j2
+    dest: /etc/dhcp/dhclient.conf
+    mode: 644
+    owner: root
+    group: root
+
+- name: enter the item into its host file
+  lineinfile:
+    path: /etc/hosts
+    state: present
+    line: "{{ ansible_default_ipv4.address }}   {{ ansible_hostname }}.{{ansible_domain}}  {{ ansible_hostname}} " 
+
+- name: Restart the network
+  service:
+    name: network
+    state: restarted
+
+- name: Insert a temporary resolv.conf with 8.8.8.8
+  copy: 
+    src:  files/temp.resolv.conf
+    dest: /etc/resolv.conf
+    force: True  
+
+- name: Install the ipa-server
+  become: True
+  command:  ipa-server-install --setup-dns --hostname=ipa.lab.example.com --ip-address={{ ipa_host }} --reverse-zone="144.168.192.in-addr.arpa." --realm=LAB.EXAMPLE.COM --ds-password='RedHat123!' --admin-password='RedHat123!' --domain='lab.example.com' --forwarder=8.8.8.8 --unattended
+
+
+  
+
