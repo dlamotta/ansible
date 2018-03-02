@@ -1,5 +1,5 @@
 ---
-- name: horse_with_no
+- name: install a single non-replicated ipa server
   hosts: all
   remote_user: devops
   become: True

@@ -47,7 +47,7 @@
     dest: /etc/resolv.conf
     force: True  
 
-- name: Install the ipa-server
+- name: Install the ipa-server install_cmd
   become: True
   command: |
             ipa-server-install 
@@ -61,5 +61,5 @@
             --domain={{ ipa_domain }}
             --forwarder={{ ipa_dns_forwarder }} 
             --unattended
-
-
+  register: install_cmd
+  debug: var=install_cmd 
