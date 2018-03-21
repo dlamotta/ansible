@@ -10,7 +10,7 @@
     region: us-east-1
     
   tasks:
-  - name: Provision
+  - name: Destroy
     ec2:
       aws_access_key: "{{ access_key }}"
       aws_secret_key: "{{ secret_key }}"    
