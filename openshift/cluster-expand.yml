@@ -6,8 +6,7 @@
   vars:
     control_machine: tower
     ansible_ssh_common_args: -o StrictHostKeyChecking=no
-    domain: cloudsalab.com    
-    version: 3.7
+    domain: cloudsalab.com
   roles:
     # deploy in target platform. if other platforms are required, create a role for that
     # platform and add another line. Destination provider is defined as a group variable.

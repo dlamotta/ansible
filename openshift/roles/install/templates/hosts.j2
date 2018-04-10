@@ -4,6 +4,7 @@ masters
 nodes
 etcd
 nfs
+glusterfs
 
 # Set variables common for all OSEv3 hosts
 [OSEv3:vars]
@@ -19,17 +20,48 @@ openshift_release=v{{ version }}
 openshift_clock_enabled=true
 openshift_deployment_type=openshift-enterprise
 openshift_master_default_subdomain=apps.{{ domain }}
-openshift_docker_insecure_registries=172.30.0.0/16
+
+# Cockpit
 osm_use_cockpit=true
 osm_cockpit_plugins=['cockpit-kubernetes']
-osm_default_node_selector="region={{ hostvars[groups['nodes'][0]]['region'] }}"
-openshift_logging_fluentd_audit_container_engine=true
-openshift_enable_service_catalog=true
-openshift_hosted_prometheus_deploy=true
-template_service_broker_install=true
-openshift_template_service_broker_namespaces=['openshift']
 
-# uncomment the following to enable htpasswd authentication; defaults to DenyAllPasswordIdentityProvider
+# Enable cluster metrics
+openshift_metrics_install_metrics=true
+openshift_metrics_cassandra_storage_type=dynamic
+openshift_metrics_hawkular_hostname=hawkular-metrics.apps.{{ domain }}
+openshift_metrics_image_version=v3.9.14
+openshift_metrics_hawkular_nodeselector={'region': 'infra'}
+openshift_metrics_cassandra_nodeselector={'region': 'infra'}
+openshift_metrics_heapster_nodeselector={'region': 'infra'}
+
+# Prometheus
+openshift_prometheus_namespace=openshift-metrics
+openshift_hosted_prometheus_deploy=true
+openshift_prometheus_storage_kind=none
+
+# Logging
+openshift_logging_install_logging=true
+openshift_logging_es_cluster_size=1
+openshift_logging_es_memory_limit=2Gi
+
+# Registry
+openshift_hosted_manage_router=true
+openshift_hosted_manage_registry=true
+
+# Service broker
+openshift_template_service_broker_namespaces=['openshift']
+openshift_enable_service_catalog=true
+template_service_broker_install=true
+ansible_service_broker_local_registry_whitelist=['.*-apb$']
+
+# Default selectors
+openshift_hosted_router_selector='region=infra'
+openshift_hosted_registry_selector='region=infra'
+osm_default_node_selector="region={{ hostvars[groups['nodes'][0]]['region'] }}"
+openshift_install_examples=true
+openshift_docker_insecure_registries=172.30.0.0/16
+
+# Htpasswd authentication
 openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider', 'filename': '/etc/origin/master/htpasswd'}]
 
 # we are going to iterate over the volumes of the first master since that is what we are using in the [nfs] group below
@@ -44,6 +76,9 @@ openshift_{{ vol.name }}_storage_labels={'storage': '{{ vol.label }}'}
 {% if vol.type is defined %}
 openshift_{{ vol.name }}_storage_type='{{ vol.type }}'
 {% endif %}
+{% if vol.class is defined %}
+openshift_{{ vol.name }}_storage_class='{{ vol.class }}'
+{% endif %}
 
 {% endfor %}
 
@@ -54,13 +89,18 @@ openshift_{{ vol.name }}_storage_type='{{ vol.type }}'
 {% endfor %}
 
 [nfs]
-{% for master in groups['masters'] %}
+{% for master in groups['nfs'] %}
 {{ master }}.{{ domain }}
 {% endfor %}
 
 [etcd]
-{% for master in groups['masters'] %}
-{{ master }}.{{ domain }}
+{% for etcd in groups['etcd'] %}
+{{ etcd }}.{{ domain }}
+{% endfor %}
+
+[glusterfs]
+{% for brick in groups['gluster'] %}
+{{ brick }}.{{ domain }}
 {% endfor %}
 
 # host group for nodes, includes region info
