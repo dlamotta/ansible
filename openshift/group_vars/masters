@@ -4,12 +4,16 @@ osp_flavor: cfme
 osp_security_group: wide-open
 osp_floating_ip: True
 
+# Azure-specific variables
+azure_flavor: Standard_A8_v2
+
 # Docker storage is kept separate for easy consumption
 docker-volumes:
   - name: docker
     size: 70
     device: /dev/vdb
     mountpoint:
+    lun: 0
 
 # OpenShift volumes that will be NFS-mounted. Size is specified in Gi
 # A volume can have other attributes (see hosts.j2 in the install role)
@@ -29,18 +33,21 @@ nfs-volumes:
     mountpoint: /exports/metrics
     label: metrics
     dir: data
+    lun: 1
   - name: logging
     size: 15
     device: /dev/vdd
     mountpoint: /exports/logging
     label: logging
     dir: data
+    lun: 2
   - name: hosted_etcd
     size: 10
     device: /dev/vde
     mountpoint: /exports/hosted_etcd
     label: etcd
     dir: data
+    lun: 3
   - name: prometheus
     size: 10
     device: /dev/vdf
@@ -48,6 +55,7 @@ nfs-volumes:
     label: prometheus
     dir: data
     type: pvc
+    lun: 4
   - name: prometheus_alertmanager
     size: 10
     device: /dev/vdg
@@ -55,6 +63,7 @@ nfs-volumes:
     label: prometheus_alertmanager
     dir: data
     type: pvc
+    lun: 5
   - name: prometheus_alertbuffer
     size: 10
     device: /dev/vdh
@@ -62,3 +71,4 @@ nfs-volumes:
     label: prometheus_alertbuffer
     dir: data
     type: pvc
+    lun: 6

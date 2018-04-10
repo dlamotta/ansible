@@ -4,7 +4,7 @@
   gather_facts: False
   remote_user: cloud-user
   vars:
-    control_machine: tower
+    control_machine: localhost
     ansible_ssh_common_args: -o StrictHostKeyChecking=no
     domain: cloudsalab.com    
     version: 3.7
@@ -12,18 +12,19 @@
     # deploy in target platform. if other platforms are required, create a role for that
     # platform and add another line. Destination provider is defined as a group variable.
     - { role: openstack, when: "hostvars[inventory_hostname]['provider'] == 'openstack'" }
+    - { role: azure, when: "hostvars[inventory_hostname]['provider'] == 'azure'" }
 
-    # create and add DNS entries
-    - { role: ipa}
+    # # create and add DNS entries
+    # - { role: ipa}
 
-    # create and copy SSH keys
-    - { role: keys }    
+    # # create and copy SSH keys
+    # - { role: keys }    
 
-    # register with subscription manager
-    - { role: rhn }
+    # # register with subscription manager
+    # - { role: rhn }
 
-    # prepare all hosts for installation
-    - { role: prepare } 
+    # # prepare all hosts for installation
+    # - { role: prepare } 
 
-    # let it rip!
-    - { role: install }
+    # # let it rip!
+    # - { role: install }

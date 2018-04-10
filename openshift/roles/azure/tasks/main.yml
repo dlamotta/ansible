@@ -1,0 +1,128 @@
+---
+# Create a resource group
+- name: Azure | Create a resource group
+  azure_rm_resourcegroup:
+    client_id: "{{ azure_client_id }}"
+    secret: "{{ azure_secret }}"
+    subscription_id: "{{ azure_subscription_id }}"
+    tenant: "{{ azure_tenant }}"  
+    name: "{{ azure_resource_group }}"
+    location: "{{ azure_location }}"
+    state: present
+  delegate_to: "{{ control_machine }}"    
+  run_once: True
+
+# Create a storage account
+- name: Azure | Create a storage account
+  azure_rm_storageaccount:
+    client_id: "{{ azure_client_id }}"
+    secret: "{{ azure_secret }}"
+    subscription_id: "{{ azure_subscription_id }}"
+    tenant: "{{ azure_tenant }}"    
+    resource_group: "{{ azure_resource_group }}"
+    name: "{{ azure_storage_account }}"
+    account_type: "{{ azure_storage_account_type }}"
+    state: present
+  delegate_to: "{{ control_machine }}"      
+  run_once: True
+
+# Create a virtual network
+- name: Azure | Create virtual network
+  azure_rm_virtualnetwork:
+    client_id: "{{ azure_client_id }}"
+    secret: "{{ azure_secret }}"
+    subscription_id: "{{ azure_subscription_id }}"
+    tenant: "{{ azure_tenant }}"    
+    resource_group: "{{ azure_resource_group }}"  
+    name: "{{ azure_virtual_network }}" 
+    address_prefixes_cidr:
+        - "{{ azure_network_cidr }}"
+    dns_servers:
+        - "8.8.8.8"
+  delegate_to: "{{ control_machine }}"      
+  run_once: True
+
+# Create a subnet and associate with the virtual network
+- name: Create a subnet
+  azure_rm_subnet:
+    client_id: "{{ azure_client_id }}"
+    secret: "{{ azure_secret }}"
+    subscription_id: "{{ azure_subscription_id }}"
+    tenant: "{{ azure_tenant }}"    
+    resource_group: "{{ azure_resource_group }}"    
+    name: "{{ azure_virtual_subnet }}"
+    virtual_network_name: "{{ azure_virtual_network }}"
+    address_prefix_cidr: "{{ azure_network_cidr }}"
+  delegate_to: "{{ control_machine }}"            
+  run_once: True
+
+# Provision instances
+- name: Launch an instance 
+  azure_rm_virtualmachine:
+    client_id: "{{ azure_client_id }}"
+    secret: "{{ azure_secret }}"
+    subscription_id: "{{ azure_subscription_id }}"
+    tenant: "{{ azure_tenant }}"
+    resource_group: "{{ azure_resource_group }}"
+    name: "{{ inventory_hostname }}"
+    vm_size: "{{ azure_flavor }}"
+    storage_account_name: "{{ azure_storage_account }}"
+    storage_container: "{{ inventory_hostname }}-container"
+    storage_blob: "{{ inventory_hostname }}.vhd"
+    admin_username: "{{ azure_admin_user }}"
+    ssh_public_keys:
+      - path: /home/{{ azure_admin_user }}/.ssh/authorized_keys
+        key_data: "{{ azure_ssh_key }}"
+    started: True
+    state: present
+    public_ip_allocation_method: Dynamic
+    virtual_network_name: "{{ azure_virtual_network }}"
+    subnet_name: "{{ azure_virtual_subnet }}"
+    open_ports:
+      - 22
+      - 53
+      - 8053
+      - 1936
+      - 4001
+      - 2379
+      - 2380
+      - 4001
+      - 4789
+      - 8443
+      - 9090
+      - 9200
+      - 9300
+      - 10250
+    image:
+      publisher: "{{ azure_rhel_publisher }}"
+      offer: "{{ azure_rhel_offer }}"
+      version: "{{ azure_rhel_version }}"
+      sku: "{{ azure_rhel_sku }}"
+    data_disks:
+      - lun: "{{ item['lun'] }}"
+        disk_size_gb: "{{ item['size'] }}"
+        managed_disk_type: "{{ azure_storage_account_type }}"
+        storage_container: "{{ inventory_hostname }}-{{ item['name'] }}-container"
+        storage_blob_name: "{{ inventory_hostname }}-{{ item['name'] }}.vhd"
+  register: instance
+  with_flattened: 
+    - "{{ hostvars[inventory_hostname]['docker-volumes'] }}"
+    - "{{ hostvars[inventory_hostname]['nfs-volumes'] }}"  
+  delegate_to: "{{ control_machine }}"
+
+- name: add the public IP address as a fact for masters
+  set_fact:
+    ansible_default_ipv4:
+      address: "{{ instance.ansible_facts.azure_vm.properties.networkProfile.networkInterfaces[0].properties.ipConfigurations[0].properties.publicIPAddress.properties.ipAddress }}"
+    cacheable: True
+  when: inventory_hostname in groups['masters']
+
+- name: add the private IP address as a fact for nodes
+  set_fact:
+    ansible_default_ipv4:
+      address: "{{ instance.ansible_facts.azure_vm.properties.networkProfile.networkInterfaces[0].properties.ipConfigurations[0].properties.privateIPAddress }}"
+    cacheable: True
+  when: inventory_hostname not in groups['masters']
+
+- debug:
+    msg: IP address is {{ ansible_default_ipv4.address }}
