@@ -1,0 +1,13 @@
+---
+- name: register with red hat network
+  become: True
+  shell: |
+    subscription-manager register --username={{ rhn_user }} --password={{ rhn_pass }} --force
+    subscription-manager refresh
+    subscription-manager attach --pool={{ rhn_pool }}
+  ignore_errors: yes
+  retries: 3
+  delay: 5
+  register: result
+  no_log: true
+  until: result.rc == 0
