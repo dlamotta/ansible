@@ -1,0 +1,25 @@
+---
+- name: firewall services config
+  firewalld:
+    state: enabled
+    immediate: True
+    permanent: True
+    port: "{{ item }}"
+  with_items:
+    - 80/tcp
+    - 443/tcp
+    - 88/tcp
+    - 464/tcp
+    - 389/tcp
+    - 636/tcp
+    - 53/tcp
+    - 88/udp
+    - 464/udp
+    - 53/udp
+    - 123/udp
+
+- name: restart firewalld
+  service:
+    name: firewalld
+    state: restarted
+...

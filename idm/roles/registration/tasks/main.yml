@@ -1,0 +1,8 @@
+---
+- name: subscribe the host to rhn
+  hosts: "{{ ipa_host }}"  
+  redhat_subscription:
+    state: present
+    username: "{{ rhn_user }}"
+    password: "{{ rhn_pass }}"
+    pool_ids: "{{ rhn_pool }}"
