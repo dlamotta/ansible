@@ -14,7 +14,7 @@
     ipa_dns_forwarder: "8.8.8.8" 
   roles:
     # Register with subscription manager
-    - { role: ../openshift/roles/rhn }
+    - { role: rhn }
 
     # Install IPA
     - { role: installation } 
