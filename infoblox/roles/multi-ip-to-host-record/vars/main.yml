@@ -1,0 +1,3 @@
+---
+ip_cidr: 10.11.95.0/24
+placement_descr: "Ansible Rulez"

@@ -1,2 +1,5 @@
 [all]
 localhost
+
+[nios]
+10.9.62.62

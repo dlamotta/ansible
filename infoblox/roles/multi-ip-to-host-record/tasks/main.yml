@@ -1,0 +1,50 @@
+---
+- name: configure a network
+  nios_network:
+    network: "{{ ip_cidr }}"
+    comment: "{{ placement_descr }}"
+    state: present
+    provider:
+      host: "{{ inventory_hostname }}"
+      username: "{{ infoblox_user }}"
+      password: "{{ infoblox_pass }}"
+
+- name: return the IP addresses for the specified network
+  set_fact:
+    ipaddr: "{{ lookup('nios_next_ip', ip_cidr, num=3, provider={'host': inventory_hostname, 'username': infoblox_user, 'password': infoblox_pass}) }}"
+
+- name: Print out the New Network Info
+  debug:
+    var: ipaddr
+
+- name: get an existing host record
+  set_fact:
+    ip_exist: "{{ lookup('nios', 'record:host', return_fields=['ipv4addr'], provider={'host': inventory_hostname, 'username': infoblox_user, 'password': infoblox_pass}, filter={'name': 'helloworld.cloudsalab.com'}) }}"
+
+- name: Print out the New Network Info
+  debug: msg="Current IP addr is {{ ip_exist }}"
+
+# - name: Get Host Records
+#   infoblox:
+#     server: "{{ inventory_hostname }}"
+#     username: "{{ infoblox_user }}"
+#     password: "{{ infoblox_pass }}"
+#     action: get_host
+#     dns_view: corporate
+#     net_view: default
+#     api_version: 1.6.1
+#     host: some-record.bcbssc.com
+#   delegate_to: localhost
+#   register: response
+
+# - name: configure an ipv4 host record
+#   nios_host_record:
+#     name: a70kpcrpcdc1005-simplified.network.bcbssc.com
+#     ipv4:
+#       - address: "{{ ipaddr[0] }}"
+#     state: present
+#     view: corporate
+#     provider:
+#       host: "{{ inventory_hostname }}"
+#       username: "{{ infoblox_user }}"
+#       password: "{{ infoblox_pass }}"

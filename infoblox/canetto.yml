@@ -1,0 +1,6 @@
+- hosts: nios
+  connection: local
+  gather_facts: false
+  
+  roles:
+    - { role: multi-ip-to-host-record }
