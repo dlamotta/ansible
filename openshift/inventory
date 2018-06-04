@@ -7,9 +7,6 @@ ocp-n1    provider=openstack     region=primary    zone=east
 [nfs]
 ocp-m1
 
-[etcd]
-ocp-m1
-
 # Uncomment if a new node is needed in the cluster
 # [newnodes]
 # ocp-n2    provider=openstack     region=primary    zone=west     ocp-master=ocp-m1

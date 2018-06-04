@@ -93,16 +93,6 @@ openshift_{{ vol.name }}_storage_class='{{ vol.class }}'
 {{ master }}.{{ domain }}
 {% endfor %}
 
-[etcd]
-{% for etcd in groups['etcd'] %}
-{{ etcd }}.{{ domain }}
-{% endfor %}
-
-[glusterfs]
-{% for brick in groups['gluster'] %}
-{{ brick }}.{{ domain }}
-{% endfor %}
-
 # host group for nodes, includes region info
 [nodes]
 {% for node in groups['all'] %}
