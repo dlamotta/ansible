@@ -3,4 +3,5 @@
   hosts: all
   
   tasks:
-  - ping
+  - name: Ping
+    ping:
