@@ -3,5 +3,5 @@
   hosts: all
   
   tasks:
-  - name: Ping
-    ping:
+  - debug:
+      var: ansible_facts
