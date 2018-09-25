@@ -1,5 +1,5 @@
 ---
-- name: Ping machines
+- name: Show OS and kernel information
   hosts: all
   
   tasks:
