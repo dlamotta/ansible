@@ -1,7 +1,0 @@
----
-- name: Ping machines
-  hosts: all
-  
-  tasks:
-  - debug:
-      var: hostvars[inventory_hostname]
