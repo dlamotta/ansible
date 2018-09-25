@@ -5,12 +5,9 @@
   tasks:
   - debug:
       var: hostvars[inventory_hostname]
-      
+            
   - debug:
-      var: hostvars[inventory_hostname]['ansible_lsb']['description']
-      
-  - debug:
-      var: hostvars[inventory_hostname]['ansible_lsb']['description']
+      msg: "OS: {{ hostvars[inventory_hostname]['ansible_lsb']['description'] }}"
       
   - debug:
       msg: "Kernel: {{ hostvars[inventory_hostname]['ansible_kernel'] }}"
