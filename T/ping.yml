@@ -4,4 +4,4 @@
   
   tasks:
   - debug:
-      var: ansible_facts
+      var: hostvars[inventory_hostname]
