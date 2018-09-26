@@ -1,0 +1,28 @@
+---
+- name: Show OS and kernel information
+  hosts: all
+  gather_facts: no
+  remote_user: cloud-user
+  vars:
+    file: /tmp/rhel.csv
+
+  tasks:
+    - name: Create file
+      shell: |
+        rm {{ file }}
+        touch {{ file }}
+      delegate_to: localhost
+      run_once: true
+
+    - name: Get Red Hat version
+      raw: cat /etc/redhat-release ; uname -r       
+      register: version
+
+    - debug:
+        msg: "{{ inventory_hostname }},{{ version.stdout_lines[0] }},{{ version.stdout_lines[1] }}"
+
+    - name: Write to file
+      shell: |
+        cat << EOF >> {{ file }}
+        {{ inventory_hostname }},{{ version.stdout_lines[0] }},{{ version.stdout_lines[1] }}
+      delegate_to: 127.0.0.1
