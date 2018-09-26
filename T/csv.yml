@@ -2,7 +2,6 @@
 - name: Show OS and kernel information
   hosts: all
   gather_facts: no
-  remote_user: cloud-user
   vars:
     file: /tmp/rhel.csv
 
