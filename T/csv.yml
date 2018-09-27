@@ -1,7 +1,6 @@
 ---
 - name: Show OS and kernel information
   hosts: all
-  gather_facts: no
 
   tasks:
     - name: Get Red Hat version
