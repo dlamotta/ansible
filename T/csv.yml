@@ -1,11 +1,7 @@
 ---
 - name: Show OS and kernel information
   hosts: all
-
-  tasks:
-    - name: Get Red Hat version
-      raw: cat /etc/redhat-release ; uname -r       
-      register: version
-
-    - debug:
-        msg: "{{ inventory_hostname }},{{ version.stdout_lines[0] }},{{ version.stdout_lines[1] }}"
+  
+  tasks:            
+  - debug:
+      msg: "{{ hostvars[inventory_hostname]}},{{ hostvars[inventory_hostname]['ansible_distribution_version'] }},{{ hostvars[inventory_hostname]['ansible_distribution_release'] }},{{ hostvars[inventory_hostname]['ansible_kernel'] }}"     
