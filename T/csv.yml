@@ -4,4 +4,4 @@
   
   tasks:            
   - debug:
-      msg: "{{ hostvars[inventory_hostname]}},{{ hostvars[inventory_hostname]['ansible_distribution_version'] }},{{ hostvars[inventory_hostname]['ansible_distribution_release'] }},{{ hostvars[inventory_hostname]['ansible_kernel'] }}"     
+      msg: "{{ inventory_hostname }},{{ hostvars[inventory_hostname]['ansible_distribution_version'] }},{{ hostvars[inventory_hostname]['ansible_distribution_release'] }},{{ hostvars[inventory_hostname]['ansible_kernel'] }}"     
