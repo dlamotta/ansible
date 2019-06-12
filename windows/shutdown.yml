@@ -1,0 +1,7 @@
+---
+- name: Shutdown Windows servers
+  hosts: all 
+  gather_facts: false
+  tasks:
+  - name: Shutdown
+    win_shell: Stop-Computer -full
