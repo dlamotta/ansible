@@ -4,4 +4,4 @@
   gather_facts: false
   tasks:
   - name: Shutdown
-    win_shell: Stop-Computer -full
+    win_shell: Stop-Computer -Force
