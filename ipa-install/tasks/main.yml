@@ -1,0 +1,65 @@
+---
+- hosts: "{{ ipa_host }}"
+  shell:
+    subscription-manager repos --disable=*
+- name: enable the proper repositores
+  shell:
+    subscription-manager repos --enable={{ item }}
+  with_items:
+    - rhel-7-server-rpms
+    - rhel-7-server-extras-rpms
+- name: set the ipa_hostname
+  hostname:
+    name: "{{ ipa_hostname }}"
+- debug:
+    var: ipa_hostname
+         
+- name: Install the ipa packages
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - ipa-server 
+    - bind-dyndb-ldap 
+    - ipa-server-dns
+- name: Prepend the DNS server to /etc/resolv.conf using dhclient.conf
+  template:
+    src: templates/dhclient.conf.j2
+    dest: /etc/dhcp/dhclient.conf
+    mode: 644
+    owner: root
+    group: root
+
+- name: enter the item into its host file
+  lineinfile:
+    path: /etc/hosts
+    state: present
+    line: "{{ ansible_default_ipv4.address }}   {{ ansible_hostname }}.{{ansible_domain}}  {{ ansible_hostname}} " 
+
+- name: Restart the network
+  service:
+    name: network
+    state: restarted
+
+- name: Insert a temporary resolv.conf with 8.8.8.8
+  copy: 
+    src:  files/temp.resolv.conf
+    dest: /etc/resolv.conf
+    force: True  
+
+- name: Install the ipa-server install_cmd
+  become: True
+  command: |
+            ipa-server-install 
+            --setup-dns 
+            --hostname={{ ipa_hostname }}
+            --ip-address={{ ansible_default_ipv4.address }} 
+            --reverse-zone={{ reverse_route_table }}
+            --realm={{ ipa_realm }} 
+            --ds-password={{ ipa_admin_password }} 
+            --admin-password={{ ipa_admin_password }} 
+            --domain={{ ipa_domain }}
+            --forwarder={{ ipa_dns_forwarder }} 
+            --unattended
+  register: install_cmd
+  debug: var=install_cmd 

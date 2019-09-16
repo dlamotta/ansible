@@ -1,0 +1,16 @@
+---
+- name: install a single non-replicated ipa server
+  hosts: all
+  remote_user: devops
+  become: True
+  vars:
+    # network_segment: 192.168.144
+    reverse_route_table: "144.168.192.in-addr.arpa."
+    ipa_realm: LAB.EXAMPLE.COM
+    ipa_domain: lab.example.com
+    ipa_hostname: ipa.lab.example.com
+    ipa_admin_password: "RedHat123!"
+    ipa_dns_forwarder: "8.8.8.8" 
+  roles:
+    - { role: registration }
+    - { role: installation } 

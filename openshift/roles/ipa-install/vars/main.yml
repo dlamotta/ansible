@@ -1,0 +1,8 @@
+---
+network_segment: 192.168.76
+reverse_route_table: "76.168.192.in-addr.arpa."
+ipa_realm: CLOUDSALAB.COM
+ipa_domain: cloudsalab.com
+ipa_hostname: ipa.cloudsalab.com
+ipa_admin_password: "RedHat123!"
+ipa_dns_forwarder: "8.8.8.8" 

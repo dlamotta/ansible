@@ -1,0 +1,2 @@
+tower ansible_connection=local
+ipa_host ansible_ssh_private_key_file=~/salab.pem
