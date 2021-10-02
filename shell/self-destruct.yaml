@@ -1,0 +1,7 @@
+---
+- name: Shutdown Datacenter!
+  hosts: all 
+  gather_facts: false
+  tasks:
+  - name: Shutdown
+    ansible.builtin.shell: shutdown -h now
