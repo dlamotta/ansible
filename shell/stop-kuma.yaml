@@ -4,4 +4,4 @@
   gather_facts: false
   tasks:
   - name: Shutdown
-    ansible.builtin.shell: shutdown -h now
+    ansible.builtin.shell: systemctl stop kuma-dp
