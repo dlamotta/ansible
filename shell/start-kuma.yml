@@ -1,0 +1,7 @@
+---
+- name: Start datacenter
+  hosts: all 
+  gather_facts: false
+  tasks:
+  - name: Start
+    ansible.builtin.shell: systemctl start kuma-dp
